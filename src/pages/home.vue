@@ -14,15 +14,17 @@
       <f7-link>Right Link</f7-link>
     </f7-toolbar>
     <f7-block strong>
-      <h1>This is a title</h1>
-      <p>Here is your blank Framework7 app. Let's see what we have here.</p>
-      <p>Count: {{this.$root.count}}</p>
-      <f7-row tag="p">
-        <f7-button fill raised @click="this.$root.increment" color="green">Increment</f7-button>
+
+      <h1>Workouts</h1>
+
+      <f7-row tag="p" v-for="workout in workouts">
+        <f7-button class="col" big outline>{{ workout }}</f7-button>
       </f7-row>
+
       <f7-row tag="p">
-        <f7-button fill raised @click="this.$root.decrement" color="red">Decrement</f7-button>
+        <f7-button href="/form/" class="col" big fill raised color="green">New Workout</f7-button>
       </f7-row>
+
     </f7-block>
     <f7-block-title>Navigation</f7-block-title>
     <f7-list>
@@ -58,5 +60,11 @@
   </f7-page>
 </template>
 <script>
-export default {}
+export default {
+  computed: {
+    workouts () {
+      return this.$store.state.workouts
+    }
+  }
+}
 </script>

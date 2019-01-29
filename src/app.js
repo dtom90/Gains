@@ -23,6 +23,15 @@ import App from './app.vue';
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
 
+// Declare the store before initializing the App
+const store = new Vuex.Store({
+  state: {
+    workouts: ['Circuit', 'HIIT']
+  },
+  mutations: {
+  }
+});
+
 // Init App
 new Vue({
   el: '#app',
@@ -33,11 +42,7 @@ new Vue({
     app: App
   },
 
-  computed: {
-    count () {
-      return store.state.count
-    }
-  },
+  store,
 
   methods: {
     increment () {
@@ -49,12 +54,3 @@ new Vue({
   }
 });
 
-const store = new Vuex.Store({
-  state: {
-    count: 0
-  },
-  mutations: {
-    increment (state) { state.count++ },
-    decrement (state) { state.count-- }
-  }
-});
