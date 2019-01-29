@@ -1,5 +1,8 @@
 // Import Vue
 import Vue from 'vue';
+import Vuex from 'vuex'
+
+Vue.use(Vuex);
 
 // Import F7
 import Framework7 from 'framework7/framework7.esm.bundle.js';
@@ -18,7 +21,7 @@ import AppStyles from './css/app.css';
 import App from './app.vue';
 
 // Init F7 Vue Plugin
-Framework7.use(Framework7Vue)
+Framework7.use(Framework7Vue);
 
 // Init App
 new Vue({
@@ -28,5 +31,30 @@ new Vue({
   // Register App Component
   components: {
     app: App
+  },
+
+  computed: {
+    count () {
+      return store.state.count
+    }
+  },
+
+  methods: {
+    increment () {
+      store.commit('increment')
+    },
+    decrement () {
+      store.commit('decrement')
+    }
+  }
+});
+
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) { state.count++ },
+    decrement (state) { state.count-- }
   }
 });
