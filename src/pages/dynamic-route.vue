@@ -4,6 +4,7 @@
 
     <f7-block strong>
       <h1>{{ workout.name }}</h1>
+      <p>{{ $f7route.path }}</p>
     </f7-block>
 
   </f7-page>

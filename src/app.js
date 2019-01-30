@@ -38,6 +38,12 @@ const store = new Vuex.Store({
     ]
   },
   mutations: {
+    addWorkout (state, newWorkout) {
+      state.workouts.push({
+        id: newWorkout.name.replace(/[^a-z0-9]/gi, '_').toLowerCase(),
+        name: newWorkout.name
+      })
+    }
   }
 });
 
@@ -54,12 +60,9 @@ new Vue({
   store,
 
   methods: {
-    increment () {
-      store.commit('increment')
+    addWorkout (newWorkout) {
+      store.commit('addWorkout', newWorkout)
     },
-    decrement () {
-      store.commit('decrement')
-    }
   }
 });
 
