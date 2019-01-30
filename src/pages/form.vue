@@ -1,6 +1,5 @@
 <template>
   <f7-page>
-
     <f7-navbar title="New Workout" back-link="Back"></f7-navbar>
 
     <f7-block strong>
@@ -11,7 +10,23 @@
           type="text"
           :value="name"
           @input="name = $event.target.value"
-          placeholder="Name"
+          placeholder="Workout Name"
+        ></f7-list-input>
+
+        <f7-list-input
+          v-for="(ex, i) in exercises"
+          :label="'Exercise '+(i+1)"
+          type="text"
+          :value="ex"
+          @input="modifyExercise(i, $event.target.value)"
+          placeholder="Exercise Name"
+        ></f7-list-input>
+
+        <f7-list-input
+          label="Rounds"
+          type="number"
+          :value="rounds"
+          @input="rounds = $event.target.value"
         ></f7-list-input>
       </f7-list>
 
@@ -29,11 +44,21 @@
 <script>
 export default {
   data: () => ({
-    name: ''
+    name: '',
+    exercises: [''],
+    rounds: 1
   }),
   methods: {
+
+    modifyExercise(i, val) {
+      this.$set(this.exercises, i, val);
+
+      if (this.exercises[this.exercises.length - 1] !== '')
+        this.exercises.push('')
+    },
+
     addWorkout() {
-      this.$root.addWorkout({name: this.name});
+      this.$root.addWorkout(this.$data);
       this.$f7router.navigate('/');
     }
   }

@@ -39,10 +39,11 @@ const store = new Vuex.Store({
   },
   mutations: {
     addWorkout (state, newWorkout) {
-      state.workouts.push({
-        id: newWorkout.name.replace(/[^a-z0-9]/gi, '_').toLowerCase(),
-        name: newWorkout.name
-      })
+      state.workouts.push(
+        Object.assign(
+          {id: newWorkout.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}, newWorkout
+        )
+      )
     }
   }
 });

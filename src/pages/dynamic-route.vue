@@ -1,10 +1,20 @@
 <template>
   <f7-page>
     <f7-navbar title="Dynamic Route" back-link="Back"></f7-navbar>
+    <p>{{ $f7route.path }}</p>
+    <p>{{ workout }}</p>
 
     <f7-block strong>
       <h1>{{ workout.name }}</h1>
-      <p>{{ $f7route.path }}</p>
+
+      <f7-block>
+        <h2>Exercises: </h2>
+        <f7-list>
+          <f7-list-item v-for="exercise in workout.exercises">{{ exercise }}</f7-list-item>
+        </f7-list>
+        <h4>x {{ workout.rounds }} Round{{ workout.rounds === 1 ? '' : 's' }}</h4>
+      </f7-block>
+
     </f7-block>
 
   </f7-page>
