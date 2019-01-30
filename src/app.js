@@ -26,7 +26,16 @@ Framework7.use(Framework7Vue);
 // Declare the store before initializing the App
 const store = new Vuex.Store({
   state: {
-    workouts: ['Circuit', 'HIIT']
+    workouts: [
+      {
+        id: 'circuit',
+        name: 'Circuit'
+      },
+      {
+        id: 'hiit',
+        name: 'HIIT'
+      }
+    ]
   },
   mutations: {
   }

@@ -29,7 +29,7 @@ export default [
     component: FormPage,
   },
   {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
+    path: '/workout/:workoutId',
     component: DynamicRoutePage,
   },
   {
