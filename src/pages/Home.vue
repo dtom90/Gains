@@ -16,7 +16,7 @@
       </f7-row>
 
       <f7-row tag="p">
-        <f7-button href="/form/" class="col" big fill raised color="green">New Workout</f7-button>
+        <f7-button href="/newWorkout/" class="col" big fill raised color="green">New Workout</f7-button>
       </f7-row>
 
     </f7-block>

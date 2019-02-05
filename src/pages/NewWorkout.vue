@@ -1,11 +1,11 @@
 <template>
   <f7-page>
     <f7-navbar title="New Workout" back-link="Back"></f7-navbar>
-    <p>{{this.$data}}</p>
 
     <f7-block strong>
 
       <f7-list form ref="newWorkout">
+
         <f7-list-input
           label="Name"
           type="text"
@@ -38,6 +38,7 @@
           pattern="[0-9]*"
         >
         </f7-list-input>
+
       </f7-list>
 
       <f7-row tag="p">
