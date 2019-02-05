@@ -2,7 +2,7 @@
   <f7-page>
     <f7-navbar title="New Workout" back-link="Back"></f7-navbar>
 
-    <f7-block strong>
+    <f7-block>
 
       <f7-list form ref="newWorkout">
 
@@ -17,7 +17,7 @@
         ></f7-list-input>
 
         <f7-list-input
-          v-for="(ex, i) in exercises"
+          v-for="(ex, i) in exercises" :key="i"
           :label="'Exercise '+(i+1)"
           type="text"
           :value="ex"
@@ -32,9 +32,10 @@
           type="number"
           :value="rounds"
           @input="rounds = parseInt($event.target.value)"
-          error-message="Only numbers please!"
+          error-message="Only positive numbers please!"
           required
           validate
+          min="1"
           pattern="[0-9]*"
         >
         </f7-list-input>

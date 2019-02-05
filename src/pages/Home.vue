@@ -5,21 +5,27 @@
       <f7-nav-title>Gainzz</f7-nav-title>
     </f7-navbar>
 
+    <f7-block-title>
+      <h2>
+        Workouts
+      </h2>
+    </f7-block-title>
+
     <f7-block strong>
 
-      <h1>Workouts</h1>
-
-      <f7-row tag="p" v-for="workout in workouts">
-        <f7-button class="col" :href="'/workout/'+workout.id" big outline>
+      <f7-row tag="p" v-for="(workout, i) in workouts" :key="i">
+        <f7-button class="col" :href="'/workout/'+workout.id" big fill raised>
           {{ workout.name }}
         </f7-button>
       </f7-row>
 
+    </f7-block>
+
+    <f7-block-footer>
       <f7-row tag="p">
         <f7-button href="/newWorkout/" class="col" big fill raised color="green">New Workout</f7-button>
       </f7-row>
-
-    </f7-block>
+    </f7-block-footer>
 
   </f7-page>
 </template>
