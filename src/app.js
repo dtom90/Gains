@@ -18,7 +18,7 @@ import IconsStyles from './css/icons.css';
 import AppStyles from './css/app.css';
 
 // Import App Component
-import App from './app.vue';
+import App from './App.vue';
 
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
@@ -29,11 +29,15 @@ const store = new Vuex.Store({
     workouts: [
       {
         id: 'circuit',
-        name: 'Circuit'
+        name: 'Circuit',
+        exercises: [ "Push-Ups", "Pull-Ups", "Dips", "Squats" ],
+        rounds: 4
       },
       {
         id: 'hiit',
-        name: 'HIIT'
+        name: 'HIIT',
+        exercises: [ "High Knees", "Burpees", "Jumping Jacks" ],
+        rounds: 3
       }
     ]
   },
@@ -61,9 +65,15 @@ new Vue({
   store,
 
   methods: {
+
     addWorkout (newWorkout) {
+
+      // filter out blank (unfilled) exercises
+      newWorkout.exercises = newWorkout.exercises.filter(ex => ex);
+
       store.commit('addWorkout', newWorkout)
     },
+
   }
 });
 

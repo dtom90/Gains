@@ -1,16 +1,19 @@
 <template>
   <f7-page>
     <f7-navbar title="New Workout" back-link="Back"></f7-navbar>
+    <p>{{this.$data}}</p>
 
     <f7-block strong>
 
-      <f7-list form>
+      <f7-list form ref="newWorkout">
         <f7-list-input
           label="Name"
           type="text"
           :value="name"
           @input="name = $event.target.value"
           placeholder="Workout Name"
+          required
+          validate
         ></f7-list-input>
 
         <f7-list-input
@@ -20,14 +23,21 @@
           :value="ex"
           @input="modifyExercise(i, $event.target.value)"
           placeholder="Exercise Name"
+          :required="i===0"
+          validate
         ></f7-list-input>
 
         <f7-list-input
           label="Rounds"
           type="number"
           :value="rounds"
-          @input="rounds = $event.target.value"
-        ></f7-list-input>
+          @input="rounds = parseInt($event.target.value)"
+          error-message="Only numbers please!"
+          required
+          validate
+          pattern="[0-9]*"
+        >
+        </f7-list-input>
       </f7-list>
 
       <f7-row tag="p">
@@ -58,8 +68,11 @@ export default {
     },
 
     addWorkout() {
-      this.$root.addWorkout(this.$data);
-      this.$f7router.navigate('/');
+      if (this.$refs.newWorkout.$el.checkValidity()) {
+
+        this.$root.addWorkout(this.$data);
+        this.$f7router.navigate('/');
+      }
     }
   }
 }

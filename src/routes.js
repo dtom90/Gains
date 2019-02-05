@@ -1,17 +1,12 @@
-import HomePage from './pages/home.vue';
-import AboutPage from './pages/about.vue';
-import FormPage from './pages/form.vue';
-import WorkoutPage from './pages/workout.vue';
+import HomePage from './pages/Home.vue';
+import FormPage from './pages/NewWorkout.vue';
+import WorkoutPage from './pages/Workout.vue';
 import NotFoundPage from './pages/not-found.vue';
 
 export default [
   {
     path: '/',
     component: HomePage,
-  },
-  {
-    path: '/about/',
-    component: AboutPage,
   },
   {
     path: '/form/',
