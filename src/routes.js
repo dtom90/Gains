@@ -2,7 +2,7 @@ import HomePage from './pages/Home.vue';
 import FormPage from './pages/NewWorkout.vue';
 import WorkoutPage from './pages/Workout.vue';
 import ActiveWorkout from './pages/ActiveWorkout.vue';
-import NotFoundPage from './pages/not-found.vue';
+import NotFoundPage from './pages/NotFound.vue';
 
 export default [
   {

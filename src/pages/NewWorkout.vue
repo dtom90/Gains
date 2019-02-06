@@ -10,10 +10,10 @@
           label="Name"
           type="text"
           :value="name"
-          @input="name = $event.target.value"
+          @input="nameInputHandler"
           placeholder="Workout Name"
-          required
-          validate
+          :error-message-force="nameError"
+          :error-message="nameErrorMessage"
         ></f7-list-input>
 
         <f7-list-input
@@ -58,7 +58,9 @@ export default {
   data: () => ({
     name: '',
     exercises: [''],
-    rounds: 1
+    rounds: 1,
+    nameError: false,
+    nameErrorMessage: ''
   }),
   methods: {
 
@@ -70,12 +72,29 @@ export default {
     },
 
     addWorkout() {
-      if (this.$refs.newWorkout.$el.checkValidity()) {
 
+      if (!this.name) {
+        this.nameError = true;
+        this.nameErrorMessage = 'Please fill out this field.';
+        this.$refs.newWorkout.$el.checkValidity();
+      } else if ( this.$store.state.workouts.filter(w => w.name === this.name).length > 0 ) {
+        this.nameError = true;
+        this.nameErrorMessage = 'Workout name already exists.';
+        this.$refs.newWorkout.$el.checkValidity();
+      } else if (this.$refs.newWorkout.$el.checkValidity()) {
         this.$root.addWorkout(this.$data);
         this.$f7router.navigate('/');
       }
+    },
+
+    nameInputHandler(event) {
+      this.name = event.target.value;
+      if (this.name) {
+        this.nameError = false;
+        this.nameErrorMessage = '';
+      }
     }
+
   }
 }
 </script>
