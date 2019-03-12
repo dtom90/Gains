@@ -3,18 +3,12 @@
     <f7-navbar :title="'Active Workout: '+workout.name" back-link="Back"></f7-navbar>
 
     <f7-block strong>
-      <h3>Active Workout: {{ workout.name }}</h3>
-      <p>{{workout.exercises}} x {{workout.rounds}}</p>
 
-      <f7-block>
-        <h1>{{ rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</h1>
-        <h1>{{ rest ? 'Next' : 'Current' }} Exercise: {{ currentExercise }}</h1>
-        <p>Rest: {{ countdown }}</p>
-      </f7-block>
+      <rest-panel v-if="rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>
+      <exercise-panel :currentRound="currentRound" :currentExercise="currentExercise"
+                      :rest="rest" :finishInterval="finishInterval"/>
+      <rest-panel v-if="!rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>
 
-      <f7-button v-if="!done" class="col" big fill raised color="green" @click="next">
-        {{ rest ? 'Skip Rest' : 'Complete' }}
-      </f7-button>
       <h1 v-if="done">DONE!!!</h1>
 
     </f7-block>
@@ -23,9 +17,17 @@
 </template>
 
 <script>
-const interval = 3;
+import ExercisePanel from './ActiveWorkout/ExercisePanel.vue';
+import RestPanel from './ActiveWorkout/RestPanel.vue';
+
+const interval = 10;
 
 export default {
+
+  components: {
+    'exercise-panel': ExercisePanel,
+    'rest-panel': RestPanel,
+  },
 
   data: () => ({
     workout: {},
@@ -48,7 +50,7 @@ export default {
 
   methods: {
 
-    next() {
+    finishInterval() {
 
       if(!this.rest) {
 
@@ -64,6 +66,8 @@ export default {
           if (this.currentExerciseIndex === 0)
             this.currentRound += 1
         }
+      } else {
+        this.finishRest();
       }
     },
 
@@ -71,10 +75,14 @@ export default {
       if(this.countdown > 1) {
         this.countdown -= 1;
       } else {
-        this.countdown -= 1;
-        this.rest = false;
-        clearInterval(this.timer);
+        this.finishRest();
       }
+    },
+
+    finishRest() {
+      this.countdown = 0;
+      this.rest = false;
+      clearInterval(this.timer);
     }
 
   }
