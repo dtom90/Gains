@@ -1,7 +1,8 @@
 <template>
   <f7-block>
-    <h1>{{ rest ? 'Next' : 'Current' }} Round: {{ this.currentRound }}</h1>
-    <h1>{{ rest ? 'Next' : 'Current' }} Exercise: {{ this.currentExercise }}</h1>
+    <p :class="(rest ? '' : 'large-text')+' text-align-center'">
+      {{ rest ? 'Next' : 'Current' }} Exercise: {{ this.currentExercise }}
+    </p>
     <f7-button v-if="!rest" class="col" big fill raised @click="finishInterval">
       Complete
     </f7-button>

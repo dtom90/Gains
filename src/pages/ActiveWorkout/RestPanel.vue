@@ -1,7 +1,7 @@
 <template>
   <f7-block>
-    <p v-if="!rest">Next Up: Rest</p>
-    <h1 v-if="rest">Rest: {{ countdown }}</h1>
+    <p v-if="!rest" class="text-align-center">Next Up: Rest</p>
+    <p v-if="rest" class="large-text text-align-center">Rest: {{ countdown }}</p>
     <f7-button v-if="rest" class="col" big fill raised color="yellow" @click="finishInterval">
       Skip Rest
     </f7-button>
