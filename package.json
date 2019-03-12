@@ -33,11 +33,11 @@
   },
   "homepage": "http://framework7.io/vue/",
   "dependencies": {
-    "framework7": "^3.6.5",
-    "framework7-icons": "^0.9.1",
-    "framework7-vue": "^3.6.5",
+    "framework7": "^4.1.0",
+    "framework7-icons": "2.2.0",
+    "framework7-vue": "^4.1.0",
     "material-design-icons": "^3.0.1",
-    "vue": "^2.5.17",
+    "vue": "^2.6.8",
     "vuex": "^3.1.0"
   },
   "devDependencies": {
@@ -65,9 +65,9 @@
     "stylus-loader": "^3.0.2",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.1.1",
-    "vue-loader": "^15.4.2",
+    "vue-loader": "^15.7.0",
     "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler": "^2.6.8",
     "webpack": "^4.20.0",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.1.2",

@@ -1,9 +1,7 @@
 <template>
   <f7-page>
 
-    <f7-navbar>
-      <f7-nav-title>Gainzz</f7-nav-title>
-    </f7-navbar>
+    <f7-navbar title="Gainzz" large/>
 
     <f7-block-title>
       <h2>
@@ -21,11 +19,11 @@
 
     </f7-block>
 
-    <f7-block-footer>
+    <f7-block>
       <f7-row tag="p">
         <f7-button href="/newWorkout/" class="col" big fill raised color="green">New Workout</f7-button>
       </f7-row>
-    </f7-block-footer>
+    </f7-block>
 
   </f7-page>
 </template>
