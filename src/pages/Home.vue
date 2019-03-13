@@ -12,7 +12,7 @@
     <f7-block strong>
 
       <f7-row tag="p" v-for="(workout, i) in workouts" :key="i">
-        <f7-button class="col" :href="'/workout/'+workout.id" big fill raised>
+        <f7-button class="col no-caps" :href="'/workout/'+workout.id" big fill raised>
           {{ workout.name }}
         </f7-button>
       </f7-row>

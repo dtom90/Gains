@@ -1,7 +1,15 @@
 /* Your app styles here */
+:root {
+  --f7-button-height: 44px;
+}
+
 .md .button {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.no-caps {
   text-transform: none;
-  font-size: 16px;
 }
 
 .large-text {
