@@ -4,9 +4,7 @@
     <f7-navbar title="Gainzz" large/>
 
     <f7-block-title>
-      <h2>
-        Workouts
-      </h2>
+      Workouts
     </f7-block-title>
 
     <f7-block strong>

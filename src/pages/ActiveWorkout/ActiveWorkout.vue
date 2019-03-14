@@ -6,9 +6,8 @@
       <p>{{ firstExercise && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
 
       <rest-panel v-if="rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>
-      <exercise-panel :currentRound="currentRound" :currentExercise="currentExercise"
-                      :rest="rest" :finishInterval="finishInterval"/>
-      <rest-panel v-if="!rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>
+      <exercise-panel :currentExercise="currentExercise" :rest="rest" :finishInterval="finishInterval"/>
+      <rest-panel v-if="!rest" :countdown="countdown" :rest="rest" :restTime="restTime"/>
 
       <h1 v-if="done">DONE!!!</h1>
 
@@ -18,8 +17,8 @@
 </template>
 
 <script>
-import ExercisePanel from './ActiveWorkout/ExercisePanel.vue';
-import RestPanel from './ActiveWorkout/RestPanel.vue';
+import ExercisePanel from './ExercisePanel.vue';
+import RestPanel from './RestPanel.vue';
 
 const interval = 10;
 
@@ -34,6 +33,7 @@ export default {
     workout: {},
     currentExerciseIndex: 0,
     currentRound: 1,
+    restTime: interval,
     countdown: interval,
     timer: null,
     started: false,

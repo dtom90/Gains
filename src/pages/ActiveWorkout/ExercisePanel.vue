@@ -13,7 +13,6 @@
   export default {
     name: "ExercisePanel",
     props: {
-      currentRound: Number,
       currentExercise: String,
       rest: Boolean,
       finishInterval: Function,
