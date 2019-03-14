@@ -6,7 +6,7 @@
 
       <p>{{ firstExercise && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
 
-      <exercise-panel v-if="rest && !firstExercise" :exercise="previousExercise" :target="10"
+      <exercise-panel v-if="rest && !firstExercise" :exercise="previousExercise""
                       :rest="rest" :completed="true" :enterReps="enterReps"/>
 
       <rest-panel v-if="rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>

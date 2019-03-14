@@ -5,12 +5,12 @@
     </p>
     <f7-input
       v-if="completed"
-      label="Reps"
+      placeholder="Reps"
       type="number"
-      :value="target"
-      @input="enterReps(exercise, $event.target.value)"
+      :value="reps"
+      @input="reps = parseInt($event.target.value)"
+      @keypress.native.enter="enterReps(exercise, reps)"
       error-message="Only positive numbers please!"
-      required
       validate
       min="1"
       pattern="[0-9]*"
@@ -27,7 +27,6 @@
     name: "ExercisePanel",
     props: {
       exercise: String,
-      target: Number,
       rest: Boolean,
       completed: {
         type: Boolean,
@@ -40,6 +39,9 @@
       adjective() { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' },
       dispExercise() { return this.completed ? '' : ' Exercise' }
     },
+    data: () => ({
+      reps: null
+    }),
   }
 </script>
 
@@ -47,5 +49,6 @@
   .exercise-block {
     border-radius: 5px;
     padding: 16px;
+    font-size: 18px;
   }
 </style>
