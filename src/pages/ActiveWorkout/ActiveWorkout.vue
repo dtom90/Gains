@@ -3,10 +3,16 @@
     <f7-navbar :title="'Active Workout: '+workout.name" back-link="Back"></f7-navbar>
 
     <f7-block strong>
+
       <p>{{ firstExercise && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
 
+      <exercise-panel v-if="rest && !firstExercise" :exercise="previousExercise" :target="10"
+                      :rest="rest" :completed="true" :enterReps="enterReps"/>
+
       <rest-panel v-if="rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>
-      <exercise-panel :currentExercise="currentExercise" :rest="rest" :finishInterval="finishInterval"/>
+
+      <exercise-panel :exercise="currentExercise" :rest="rest" :finishInterval="finishInterval"/>
+
       <rest-panel v-if="!rest" :countdown="countdown" :rest="rest" :restTime="restTime"/>
 
       <h1 v-if="done">DONE!!!</h1>
@@ -20,7 +26,7 @@
 import ExercisePanel from './ExercisePanel.vue';
 import RestPanel from './RestPanel.vue';
 
-const interval = 10;
+const interval = 30;
 
 export default {
 
@@ -46,6 +52,7 @@ export default {
   },
 
   computed: {
+    previousExercise() { return this.workout.exercises[this.currentExerciseIndex-1] },
     currentExercise() { return this.workout.exercises[this.currentExerciseIndex] },
     firstExercise() { return this.currentExerciseIndex === 0 },
     lastExercise() { return this.currentExerciseIndex === this.workout.exercises.length-1 },
@@ -72,6 +79,10 @@ export default {
       } else {
         this.finishRest();
       }
+    },
+
+    enterReps(exercise, reps) {
+      console.log(exercise, reps)
     },
 
     decrementCountdown() {
