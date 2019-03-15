@@ -1,7 +1,7 @@
 <template>
   <f7-block class="exercise-block" :style="{backgroundColor: completed ? 'green' : 'blue'}">
     <p :class="(rest ? '' : 'large-text')+' text-align-center'">
-      {{ adjective }}{{ dispExercise }}: {{ this.exercise }}
+      {{ adjective }}{{ dispExercise }}: {{ exercise }}
     </p>
     <f7-input
       v-if="completed"

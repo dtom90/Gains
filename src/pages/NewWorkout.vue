@@ -43,7 +43,7 @@
       </f7-list>
 
       <f7-row tag="p">
-        <f7-button class="col" big fill raised color="green" @click="addWorkout">
+        <f7-button class="col" big fill raised color="green" @click="createWorkout">
           Create Workout
         </f7-button>
       </f7-row>
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   data: () => ({
     name: '',
@@ -64,6 +66,8 @@ export default {
   }),
   methods: {
 
+    ...mapMutations(['addWorkout']),
+
     modifyExercise(i, val) {
       this.$set(this.exercises, i, val);
 
@@ -71,7 +75,7 @@ export default {
         this.exercises.push('')
     },
 
-    addWorkout() {
+    createWorkout() {
 
       if (!this.name) {
         this.nameError = true;
@@ -82,7 +86,8 @@ export default {
         this.nameErrorMessage = 'Workout name already exists.';
         this.$refs.newWorkout.$el.checkValidity();
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
-        this.$root.addWorkout(this.$data);
+        this.exercises = this.exercises.filter(ex => ex); // filter out blank (unfilled) exercises
+        this.addWorkout(this.$data);
         this.$f7router.navigate('/');
       }
     },

@@ -39,7 +39,8 @@ const store = new Vuex.Store({
         exercises: [ "High Knees", "Burpees", "Jumping Jacks" ],
         rounds: 3
       }
-    ]
+    ],
+    completed: {}
   },
   mutations: {
     addWorkout (state, newWorkout) {
@@ -48,6 +49,14 @@ const store = new Vuex.Store({
           {id: newWorkout.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}, newWorkout
         )
       )
+    },
+    addCompletedExercise (state, {exercise, completedTime}) {
+      state.completed[completedTime] = {
+        exercise
+      }
+    },
+    addCompletedReps(state, {time, reps}) {
+      state.completed[time].reps = reps
     }
   }
 });
@@ -62,18 +71,7 @@ new Vue({
     app: App
   },
 
+  // Use Vuex store
   store,
-
-  methods: {
-
-    addWorkout (newWorkout) {
-
-      // filter out blank (unfilled) exercises
-      newWorkout.exercises = newWorkout.exercises.filter(ex => ex);
-
-      store.commit('addWorkout', newWorkout)
-    },
-
-  }
 });
 

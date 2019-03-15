@@ -6,7 +6,7 @@
 
       <p>{{ firstExercise && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
 
-      <exercise-panel v-if="rest && !firstExercise" :exercise="previousExercise""
+      <exercise-panel v-if="rest && !firstExercise" :exercise="previousExercise"
                       :rest="rest" :completed="true" :enterReps="enterReps"/>
 
       <rest-panel v-if="rest" :countdown="countdown" :rest="rest" :finishInterval="finishInterval"/>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import ExercisePanel from './ExercisePanel.vue';
 import RestPanel from './RestPanel.vue';
 
@@ -39,6 +40,7 @@ export default {
     workout: {},
     currentExerciseIndex: 0,
     currentRound: 1,
+    lastCompletedExerciseTime: null,
     restTime: interval,
     countdown: interval,
     timer: null,
@@ -55,21 +57,30 @@ export default {
     previousExercise() { return this.workout.exercises[this.currentExerciseIndex-1] },
     currentExercise() { return this.workout.exercises[this.currentExerciseIndex] },
     firstExercise() { return this.currentExerciseIndex === 0 },
-    lastExercise() { return this.currentExerciseIndex === this.workout.exercises.length-1 },
-    lastRound() { return this.currentRound === this.workout.rounds }
+    lastExerciseOfRound() { return this.currentExerciseIndex === this.workout.exercises.length-1 },
+    lastRound() { return this.currentRound === this.workout.rounds },
+    completed() { return this.$store.state.completed }
   },
 
   methods: {
+
+    ...mapMutations(['addCompletedExercise', 'addCompletedReps']),
 
     finishInterval() {
 
       if(!this.rest) {
 
+        this.lastCompletedExerciseTime = Date.now();
+        this.addCompletedExercise({
+          exercise: this.currentExercise,
+          completedTime: this.lastCompletedExerciseTime
+        });
+
         this.rest = true;
         this.countdown = interval;
         this.timer = setInterval(this.decrementCountdown, 1000);
 
-        if (this.lastExercise && this.lastRound) {
+        if (this.lastExerciseOfRound && this.lastRound) {
           this.done = true
         } else {
           this.currentExerciseIndex = (this.currentExerciseIndex + 1) % this.workout.exercises.length;
@@ -82,7 +93,8 @@ export default {
     },
 
     enterReps(exercise, reps) {
-      console.log(exercise, reps)
+      if (this.$store.state.completed[this.lastCompletedExerciseTime].exercise === exercise)
+        this.addCompletedReps({time: this.lastCompletedExerciseTime, reps})
     },
 
     decrementCountdown() {
