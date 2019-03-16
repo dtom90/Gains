@@ -38,6 +38,12 @@ const store = new Vuex.Store({
         name: 'HIIT',
         exercises: [ "High Knees", "Burpees", "Jumping Jacks" ],
         rounds: 3
+      },
+      {
+        id: 'test',
+        name: 'Test',
+        exercises: ['A', 'B'],
+        rounds: 2
       }
     ],
     completed: {}
