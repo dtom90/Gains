@@ -1,27 +1,27 @@
 // Import Vue
-import Vue from 'vue';
+import Vue from 'vue'
 import Vuex from 'vuex'
 
-Vue.use(Vuex);
-
 // Import F7
-import Framework7 from 'framework7/framework7.esm.bundle.js';
+import Framework7 from 'framework7'
 
 // Import F7 Vue Plugin
-import Framework7Vue from 'framework7-vue/framework7-vue.esm.bundle.js';
+import Framework7Vue from 'framework7-vue'
 
 // Import F7 Styles
-import Framework7Styles from 'framework7/css/framework7.bundle.min.css';
+import 'framework7/css/framework7.bundle.min.css'
 
 // Import Icons and App Custom Styles
-import IconsStyles from './css/icons.css';
-import AppStyles from './css/app.css';
+import './css/icons.css'
+import './css/app.css'
 
 // Import App Component
-import App from './App.vue';
+import App from './App.vue'
+
+Vue.use(Vuex)
 
 // Init F7 Vue Plugin
-Framework7.use(Framework7Vue);
+Framework7.use(Framework7Vue)
 
 // Declare the store before initializing the App
 const store = new Vuex.Store({
@@ -30,13 +30,13 @@ const store = new Vuex.Store({
       {
         id: 'circuit',
         name: 'Circuit',
-        exercises: [ "Push-Ups", "Pull-Ups", "Dips", "Squats" ],
+        exercises: [ 'Push-Ups', 'Pull-Ups', 'Dips', 'Squats' ],
         rounds: 4
       },
       {
         id: 'hiit',
         name: 'HIIT',
-        exercises: [ "High Knees", "Burpees", "Jumping Jacks" ],
+        exercises: [ 'High Knees', 'Burpees', 'Jumping Jacks' ],
         rounds: 3
       },
       {
@@ -52,23 +52,23 @@ const store = new Vuex.Store({
     addWorkout (state, newWorkout) {
       state.workouts.push(
         Object.assign(
-          {id: newWorkout.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}, newWorkout
+          { id: newWorkout.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() }, newWorkout
         )
       )
     },
-    addCompletedExercise (state, {exercise, completedTime}) {
+    addCompletedExercise (state, { exercise, completedTime }) {
       state.completed[completedTime] = {
         exercise
       }
     },
-    addCompletedReps(state, {time, reps}) {
+    addCompletedReps (state, { time, reps }) {
       state.completed[time].reps = reps
     }
   }
-});
+})
 
 // Init App
-new Vue({
+Vue({
   el: '#app',
   template: '<app/>',
 
@@ -78,6 +78,5 @@ new Vue({
   },
 
   // Use Vuex store
-  store,
-});
-
+  store
+})

@@ -1,28 +1,28 @@
-import HomePage from './pages/Home.vue';
-import FormPage from './pages/NewWorkout.vue';
-import WorkoutPage from './pages/Workout.vue';
-import ActiveWorkout from './pages/ActiveWorkout/ActiveWorkout.vue';
-import NotFoundPage from './pages/NotFound.vue';
+import HomePage from './pages/Home.vue'
+import FormPage from './pages/NewWorkout.vue'
+import WorkoutPage from './pages/Workout.vue'
+import ActiveWorkout from './pages/ActiveWorkout/ActiveWorkout.vue'
+import NotFoundPage from './pages/NotFound.vue'
 
 export default [
   {
     path: '/',
-    component: HomePage,
+    component: HomePage
   },
   {
     path: '/newWorkout/',
-    component: FormPage,
+    component: FormPage
   },
   {
     path: '/workout/:workoutId',
-    component: WorkoutPage,
+    component: WorkoutPage
   },
   {
     path: '/workout/:workoutId/go',
-    component: ActiveWorkout,
+    component: ActiveWorkout
   },
   {
     path: '(.*)',
-    component: NotFoundPage,
-  },
-];
+    component: NotFoundPage
+  }
+]
