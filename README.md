@@ -1,15 +1,16 @@
-# Framework7 Vue + Webpack App Template
+# Gains
+#### A workout mobile app
 
-A full-featured Framework7 Vue with Webpack setup with hot-reload & css extraction. Based on [Vue Webpack Boilerplate](https://github.com/vuejs-templates/webpack)
+[![Build Status](https://travis-ci.org/dtom90/Gains.svg?branch=master)](https://travis-ci.org/dtom90/Gains)
 
 ## Usage
 
 ### 1. Download this repository
 ```
-git clone https://github.com/framework7io/framework7-template-vue-webpack my-app
+git clone https://github.com/dtom90/Gains
 ```
 
-Repository will be downloaded into `my-app/` folder
+Repository will be downloaded into `Gains/` folder
 
 ### 2. Instal dependencies
 
