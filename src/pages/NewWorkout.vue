@@ -1,62 +1,73 @@
 <template>
   <f7-page>
-    <f7-navbar title="New Workout" back-link="Back"></f7-navbar>
+    <f7-navbar
+      title="New Workout"
+      back-link="Back"
+    />
 
     <f7-block>
-
-      <f7-list form ref="newWorkout">
-
+      <f7-list
+        ref="newWorkout"
+        form
+      >
         <f7-list-input
           label="Name"
           type="text"
           :value="name"
-          @input="nameInputHandler"
           placeholder="Workout Name"
           :error-message-force="nameError"
           :error-message="nameErrorMessage"
-        ></f7-list-input>
+          @input="nameInputHandler"
+        />
 
         <f7-list-input
-          v-for="(ex, i) in exercises" :key="i"
+          v-for="(ex, i) in exercises"
+          :key="i"
           :label="'Exercise '+(i+1)"
           type="text"
           :value="ex"
-          @input="modifyExercise(i, $event.target.value)"
           placeholder="Exercise Name"
           :required="i===0"
           validate
-        ></f7-list-input>
+          @input="modifyExercise(i, $event.target.value)"
+        />
 
         <f7-list-input
           label="Rounds"
           type="number"
           :value="rounds"
-          @input="rounds = parseInt($event.target.value)"
           error-message="Only positive numbers please!"
           required
           validate
           min="1"
           pattern="[0-9]*"
-        >
-        </f7-list-input>
-
+          @input="rounds = parseInt($event.target.value)"
+        />
       </f7-list>
 
       <f7-row tag="p">
-        <f7-button class="col" big fill raised color="green" @click="createWorkout">
+        <f7-button
+          class="col"
+          big
+          fill
+          raised
+          color="green"
+          @click="createWorkout"
+        >
           Create Workout
         </f7-button>
       </f7-row>
-
     </f7-block>
-
   </f7-page>
 </template>
 
 <script>
+import { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
 
 export default {
+  components: { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button },
+
   data: () => ({
     name: '',
     exercises: [''],
@@ -68,35 +79,33 @@ export default {
 
     ...mapMutations(['addWorkout']),
 
-    modifyExercise(i, val) {
-      this.$set(this.exercises, i, val);
+    modifyExercise (i, val) {
+      this.$set(this.exercises, i, val)
 
-      if (this.exercises[this.exercises.length - 1] !== '')
-        this.exercises.push('')
+      if (this.exercises[this.exercises.length - 1] !== '') { this.exercises.push('') }
     },
 
-    createWorkout() {
-
+    createWorkout () {
       if (!this.name) {
-        this.nameError = true;
-        this.nameErrorMessage = 'Please fill out this field.';
-        this.$refs.newWorkout.$el.checkValidity();
-      } else if ( this.$store.state.workouts.filter(w => w.name === this.name).length > 0 ) {
-        this.nameError = true;
-        this.nameErrorMessage = 'Workout name already exists.';
-        this.$refs.newWorkout.$el.checkValidity();
+        this.nameError = true
+        this.nameErrorMessage = 'Please fill out this field.'
+        this.$refs.newWorkout.$el.checkValidity()
+      } else if (this.$store.state.workouts.filter(w => w.name === this.name).length > 0) {
+        this.nameError = true
+        this.nameErrorMessage = 'Workout name already exists.'
+        this.$refs.newWorkout.$el.checkValidity()
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
-        this.exercises = this.exercises.filter(ex => ex); // filter out blank (unfilled) exercises
-        this.addWorkout(this.$data);
-        this.$f7router.navigate('/');
+        this.exercises = this.exercises.filter(ex => ex) // filter out blank (unfilled) exercises
+        this.addWorkout(this.$data)
+        this.$f7router.navigate('/')
       }
     },
 
-    nameInputHandler(event) {
-      this.name = event.target.value;
+    nameInputHandler (event) {
+      this.name = event.target.value
       if (this.name) {
-        this.nameError = false;
-        this.nameErrorMessage = '';
+        this.nameError = false
+        this.nameErrorMessage = ''
       }
     }
 
