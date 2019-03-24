@@ -68,14 +68,15 @@ const store = new Vuex.Store({
 })
 
 // Init App
-Vue({
+export default new Vue({
   el: '#app',
-  template: '<app/>',
 
   // Register App Component
   components: {
     app: App
   },
+
+  template: '<app/>',
 
   // Use Vuex store
   store

@@ -11,19 +11,19 @@
     >
       <p>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
 
+      <rest-panel
+        v-if="rest"
+        :countdown="countdown"
+        :rest="rest"
+        :finish-interval="finishInterval"
+      />
+
       <exercise-panel
         v-if="rest && !firstExerciseOfWorkout"
         :exercise="previousExercise"
         :rest="rest"
         :completed="true"
         :enter-reps="enterReps"
-      />
-
-      <rest-panel
-        v-if="rest"
-        :countdown="countdown"
-        :rest="rest"
-        :finish-interval="finishInterval"
       />
 
       <exercise-panel
