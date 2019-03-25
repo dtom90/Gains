@@ -15,7 +15,7 @@
         no-hairlines-md
       >
         <f7-list-input
-          class="input"
+          class="input-item color-white"
           inline-label
           label="Reps"
           type="number"
@@ -44,6 +44,7 @@
 
 <script>
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
+import { mapMutations } from 'vuex'
 
 export default {
 
@@ -59,13 +60,13 @@ export default {
       type: Boolean,
       default: false
     },
+    lastCompletedExerciseTime: {
+      type: Number,
+      default: 0
+    },
     finishInterval: {
       type: Function,
       default: () => null
-    },
-    enterReps: {
-      type: Function,
-      default: (exercise, reps) => console.log(exercise, reps)
     }
   },
   data: () => ({
@@ -73,6 +74,14 @@ export default {
   }),
   computed: {
     adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' }
+  },
+  methods: {
+
+    ...mapMutations(['addCompletedReps']),
+
+    enterReps (exercise, reps) {
+      this.addCompletedReps({ time: this.lastCompletedExerciseTime, reps })
+    }
   }
 }
 </script>
@@ -91,8 +100,7 @@ export default {
     margin: 0;
     max-width: 200px;
   }
-  .input {
-    border-radius: 5px;
+  .input-item {
     background-color: #1B9A59;
   }
 </style>

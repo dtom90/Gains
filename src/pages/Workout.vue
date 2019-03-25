@@ -35,6 +35,9 @@
         Start Workout
       </f7-button>
     </f7-block>
+    <f7-block>
+      {{ completedExercises }}
+    </f7-block>
   </f7-page>
 </template>
 
@@ -47,6 +50,9 @@ export default {
   computed: {
     workout () {
       return this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+    },
+    completedExercises () {
+      return Object.values(this.$store.state.completed).filter(e => e.workout === this.workout.id)
     }
   }
 }

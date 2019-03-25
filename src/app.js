@@ -56,13 +56,19 @@ const store = new Vuex.Store({
         )
       )
     },
-    addCompletedExercise (state, { exercise, completedTime }) {
+    addCompletedExercise (state, { workout, exercise, completedTime }) {
       state.completed[completedTime] = {
-        exercise
+        exercise,
+        workout
       }
     },
     addCompletedReps (state, { time, reps }) {
-      state.completed[time].reps = reps
+      if (time in state.completed) {
+        state.completed[time].reps = reps
+      } else {
+        console.error(`Exercise with completed time ${time} could not be found.`)
+      }
+      console.log(state.completed)
     }
   }
 })

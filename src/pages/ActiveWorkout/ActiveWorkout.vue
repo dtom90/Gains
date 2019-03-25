@@ -23,7 +23,7 @@
         :exercise="previousExercise"
         :rest="rest"
         :completed="true"
-        :enter-reps="enterReps"
+        :last-completed-exercise-time="lastCompletedExerciseTime"
       />
 
       <exercise-panel
@@ -99,12 +99,13 @@ export default {
 
   methods: {
 
-    ...mapMutations(['addCompletedExercise', 'addCompletedReps']),
+    ...mapMutations(['addCompletedExercise']),
 
     finishInterval () {
       if (!this.rest) {
         this.lastCompletedExerciseTime = Date.now()
         this.addCompletedExercise({
+          workout: this.workout.id,
           exercise: this.currentExercise,
           completedTime: this.lastCompletedExerciseTime
         })
@@ -123,10 +124,6 @@ export default {
       } else {
         this.finishRest()
       }
-    },
-
-    enterReps (exercise, reps) {
-      if (this.$store.state.completed[this.lastCompletedExerciseTime].exercise === exercise) { this.addCompletedReps({ time: this.lastCompletedExerciseTime, reps }) }
     },
 
     decrementCountdown () {
