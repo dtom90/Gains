@@ -36,7 +36,17 @@
       </f7-button>
     </f7-block>
     <f7-block>
-      {{ completedExercises }}
+      <f7-block-title>
+        Completed Exercises:
+      </f7-block-title>
+      <f7-list>
+        <f7-list-item
+          v-for="(exercise, i) in completedExercises"
+          :key="i"
+        >
+          {{ exercise.exercise }} {{ exercise.reps && (': '+exercise.reps + ' reps') }}
+        </f7-list-item>
+      </f7-list>
     </f7-block>
   </f7-page>
 </template>

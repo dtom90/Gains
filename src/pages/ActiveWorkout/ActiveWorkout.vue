@@ -68,6 +68,7 @@ export default {
 
   data: () => ({
     workout: {},
+    exerciseSequence: [],
     startTime: null,
     endTime: null,
     currentExerciseIndex: 0,
@@ -82,18 +83,21 @@ export default {
   }),
 
   computed: {
-    previousExercise () { return this.workout.exercises[mod((this.currentExerciseIndex - 1), this.workout.exercises.length)] },
-    currentExercise () { return this.workout.exercises[this.currentExerciseIndex] },
-    firstExerciseOfRound () { return this.currentExerciseIndex === 0 },
-    lastExerciseOfRound () { return this.currentExerciseIndex === this.workout.exercises.length - 1 },
+    previousExercise () { return this.exerciseSequence[this.currentExerciseIndex - 1] },
+    currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     firstExerciseOfWorkout () { return this.currentRound === 0 && this.currentExerciseIndex === 0 },
-    lastRound () { return this.currentRound === this.workout.rounds },
+    firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
+    lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
     totalWorkoutTime () { return toHumanTime(this.endTime - this.startTime) }
   },
 
   created: function () {
     this.workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+    this.exerciseSequence = []
+    for (let i = 0; i < this.workout.rounds; i++) {
+      this.exerciseSequence.push(...this.workout.exercises)
+    }
     this.startTime = Date.now()
   },
 
@@ -104,6 +108,7 @@ export default {
     finishInterval () {
       if (!this.rest) {
         this.lastCompletedExerciseTime = Date.now()
+
         this.addCompletedExercise({
           workout: this.workout.id,
           exercise: this.currentExercise,
@@ -114,12 +119,14 @@ export default {
         this.countdown = interval
         this.timer = setInterval(this.decrementCountdown, 1000)
 
-        if (this.lastExerciseOfRound && this.lastRound) {
+        if (this.lastExerciseOfWorkout) {
           this.done = true
           this.endTime = Date.now()
         } else {
-          this.currentExerciseIndex = (this.currentExerciseIndex + 1) % this.workout.exercises.length
-          if (this.currentExerciseIndex === 0) { this.currentRound += 1 }
+          this.currentExerciseIndex++
+          if (this.firstExerciseOfRound) {
+            this.currentRound += 1
+          }
         }
       } else {
         this.finishRest()
@@ -141,10 +148,6 @@ export default {
     }
 
   }
-}
-
-function mod (a, b) {
-  return ((a % b) + b) % b
 }
 
 function toHumanTime (ms) {

@@ -68,7 +68,6 @@ const store = new Vuex.Store({
       } else {
         console.error(`Exercise with completed time ${time} could not be found.`)
       }
-      console.log(state.completed)
     }
   }
 })
