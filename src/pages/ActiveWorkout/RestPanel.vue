@@ -19,7 +19,7 @@
       fill
       raised
       color="red"
-      @click="finishInterval"
+      @click="finishRest"
     >
       Skip Rest
     </f7-button>
@@ -38,7 +38,10 @@ export default {
     countdown: Number,
     restTime: Number,
     rest: Boolean,
-    finishInterval: Function
+    finishRest: {
+      type: Function,
+      default: () => console.error('Rest completion method not passed in')
+    }
   }
 }
 </script>

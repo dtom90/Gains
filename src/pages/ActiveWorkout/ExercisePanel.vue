@@ -35,7 +35,7 @@
       big
       fill
       raised
-      @click="finishInterval"
+      @click="finishExercise"
     >
       Done
     </f7-button>
@@ -64,7 +64,7 @@ export default {
       type: Number,
       default: 0
     },
-    finishInterval: {
+    finishExercise: {
       type: Function,
       default: () => null
     }

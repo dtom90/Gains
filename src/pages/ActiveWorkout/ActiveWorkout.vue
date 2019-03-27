@@ -6,16 +6,15 @@
     />
 
     <f7-block
-      v-if="!done"
       strong
     >
       <p>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
 
       <rest-panel
-        v-if="rest"
+        v-if="rest && !done"
         :countdown="countdown"
         :rest="rest"
-        :finish-interval="finishInterval"
+        :finish-rest="finishRest"
       />
 
       <exercise-panel
@@ -27,29 +26,40 @@
       />
 
       <exercise-panel
+        v-if="!done"
         :exercise="currentExercise"
         :rest="rest"
-        :finish-interval="finishInterval"
+        :finish-exercise="finishExercise"
       />
 
       <rest-panel
-        v-if="!rest"
+        v-if="!rest && !done"
         :countdown="countdown"
         :rest="rest"
         :rest-time="restTime"
       />
     </f7-block>
 
-    <f7-block v-if="done">
-      <h1>DONE!!!</h1>
-
+    <f7-block
+      v-if="done"
+    >
       <p><strong>Total Workout Time:</strong> {{ totalWorkoutTime }}</p>
+      <f7-button
+        :href="`/workout/${workout.id}`"
+        class="col"
+        big
+        fill
+        raised
+        color="green"
+      >
+        Finish Workout
+      </f7-button>
     </f7-block>
   </f7-page>
 </template>
 
 <script>
-import { f7Page, f7Navbar, f7Block } from 'framework7-vue'
+import { f7Page, f7Navbar, f7Block, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
 import ExercisePanel from './ExercisePanel.vue'
 import RestPanel from './RestPanel.vue'
@@ -63,7 +73,8 @@ export default {
     'rest-panel': RestPanel,
     f7Page,
     f7Navbar,
-    f7Block
+    f7Block,
+    f7Button
   },
 
   data: () => ({
@@ -105,31 +116,36 @@ export default {
 
     ...mapMutations(['addCompletedExercise']),
 
-    finishInterval () {
-      if (!this.rest) {
-        this.lastCompletedExerciseTime = Date.now()
+    // Handle completed exercise
+    finishExercise () {
+      // Record completed time of exercise
+      this.lastCompletedExerciseTime = Date.now()
 
-        this.addCompletedExercise({
-          workout: this.workout.id,
-          exercise: this.currentExercise,
-          completedTime: this.lastCompletedExerciseTime
-        })
+      // Record completed exercise
+      this.addCompletedExercise({
+        workout: this.workout.id,
+        exercise: this.currentExercise,
+        completedTime: this.lastCompletedExerciseTime
+      })
 
-        this.rest = true
+      // Mark that we're resting
+      this.rest = true
+
+      // If this is the last exercise of the workout
+      if (this.lastExerciseOfWorkout) {
+        // Mark that we're done and record the end time of the workout
+        this.done = true
+        this.endTime = Date.now()
+      } else {
+        // Otherwise, start the rest timer and start the countdown
         this.countdown = interval
         this.timer = setInterval(this.decrementCountdown, 1000)
 
-        if (this.lastExerciseOfWorkout) {
-          this.done = true
-          this.endTime = Date.now()
-        } else {
-          this.currentExerciseIndex++
-          if (this.firstExerciseOfRound) {
-            this.currentRound += 1
-          }
+        // Increment the currentExerciseIndex
+        this.currentExerciseIndex++
+        if (this.firstExerciseOfRound) {
+          this.currentRound += 1
         }
-      } else {
-        this.finishRest()
       }
     },
 
@@ -156,9 +172,9 @@ function toHumanTime (ms) {
   let minutes = Math.floor((secNum - (hours * 3600)) / 60)
   let seconds = secNum - (hours * 3600) - (minutes * 60)
 
-  if (hours > 0) { hours = hours + ' hours' }
-  if (minutes > 0) { minutes = minutes + ' minutes' }
-  if (seconds > 0) { seconds = seconds + ' seconds' }
+  hours = hours > 0 ? hours + ' hours' : ''
+  minutes = minutes > 0 ? minutes + ' minutes' : ''
+  seconds = seconds + ' seconds'
   return hours + minutes + seconds
 }
 </script>
