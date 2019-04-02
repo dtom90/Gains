@@ -26,6 +26,7 @@ Framework7.use(Framework7Vue)
 // Declare the store before initializing the App
 const store = new Vuex.Store({
   state: {
+    // TODO: Add customizable rest time
     workouts: [
       {
         id: 'circuit',
@@ -56,15 +57,24 @@ const store = new Vuex.Store({
         )
       )
     },
-    addCompletedExercise (state, { workout, exercise, completedTime }) {
-      state.completed[completedTime] = {
-        exercise,
-        workout
+    startActiveWorkout (state, { workoutId, startTime }) {
+      if (!(workoutId in state.completed)) {
+        state.completed[workoutId] = {}
       }
+      state.completed[workoutId][startTime] = { exercises: [] }
+      state.completed[workoutId].lastWorkoutTime = startTime
     },
-    addCompletedReps (state, { time, reps }) {
-      if (time in state.completed) {
-        state.completed[time].reps = reps
+    addCompletedExercise (state, { workoutId, startTime, exercise, round, completedTime }) {
+      state.completed[workoutId][startTime].exercises.push({
+        exercise,
+        round,
+        completedTime
+      })
+    },
+    addCompletedReps (state, { workoutId, workoutTime, time, reps }) {
+      const matching = state.completed[workoutId][workoutTime].exercises.filter(ex => ex.completedTime === time)
+      if (matching.length > 0) {
+        matching[0].reps = reps
       } else {
         console.error(`Exercise with completed time ${time} could not be found.`)
       }

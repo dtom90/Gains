@@ -35,13 +35,14 @@
         Start Workout
       </f7-button>
     </f7-block>
-    <f7-block>
+    <f7-block v-if="lastWorkout">
       <f7-block-title>
-        Completed Exercises:
+        Last Workout:
       </f7-block-title>
+      <p>{{ (new Date(lastWorkout.lastWorkoutTime)).toLocaleString() }}</p>
       <f7-list>
         <f7-list-item
-          v-for="(exercise, i) in completedExercises"
+          v-for="(exercise, i) in lastWorkout.exercises"
           :key="i"
         >
           {{ exercise.exercise }} {{ exercise.reps && (': '+exercise.reps + ' reps') }}
@@ -61,8 +62,14 @@ export default {
     workout () {
       return this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
-    completedExercises () {
-      return Object.values(this.$store.state.completed).filter(e => e.workout === this.workout.id)
+    lastWorkout () {
+      if (this.workout.id in this.$store.state.completed) {
+        const allCompleted = this.$store.state.completed[this.workout.id]
+        const lastWorkoutTime = allCompleted.lastWorkoutTime
+        const lastCompleted = allCompleted[lastWorkoutTime]
+        return { lastWorkoutTime, exercises: lastCompleted.exercises }
+      }
+      return null
     }
   }
 }

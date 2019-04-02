@@ -25,7 +25,7 @@
           min="1"
           pattern="[0-9]*"
           @input="reps = parseInt($event.target.value)"
-          @keypress.native.enter="enterReps(exercise, reps)"
+          @keypress.native.enter="enterReps(reps)"
         />
       </f7-list>
     </f7-block>
@@ -60,6 +60,18 @@ export default {
       type: Boolean,
       default: false
     },
+    workoutId: {
+      type: String,
+      default: 'Workout'
+    },
+    workoutTime: {
+      type: Number,
+      default: 0
+    },
+    startTime: {
+      type: Number,
+      default: 0
+    },
     lastCompletedExerciseTime: {
       type: Number,
       default: 0
@@ -75,12 +87,22 @@ export default {
   computed: {
     adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' }
   },
+  watch: {
+    exercise: function (newVal, oldVal) { // watch it
+      this.reps = null
+    }
+  },
   methods: {
 
     ...mapMutations(['addCompletedReps']),
 
-    enterReps (exercise, reps) {
-      this.addCompletedReps({ time: this.lastCompletedExerciseTime, reps })
+    enterReps (reps) {
+      this.addCompletedReps({
+        workoutId: this.workoutId,
+        workoutTime: this.workoutTime,
+        time: this.lastCompletedExerciseTime,
+        reps
+      })
     }
   }
 }

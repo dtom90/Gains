@@ -8,8 +8,10 @@
     <f7-block
       strong
     >
-      <p>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</p>
+      <!-- Round Counter -->
+      <h3>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</h3>
 
+      <!-- Active Rest -->
       <rest-panel
         v-if="rest && !done"
         :countdown="countdown"
@@ -17,21 +19,26 @@
         :finish-rest="finishRest"
       />
 
+      <!-- Completed Exercise -->
       <exercise-panel
         v-if="rest && !firstExerciseOfWorkout"
-        :exercise="previousExercise"
+        :exercise="currentExercise"
         :rest="rest"
         :completed="true"
+        :workout-id="workout.id"
+        :workout-time="startTime"
         :last-completed-exercise-time="lastCompletedExerciseTime"
       />
 
+      <!-- Current / Next Exercise -->
       <exercise-panel
         v-if="!done"
-        :exercise="currentExercise"
+        :exercise="rest ? nextExercise : currentExercise"
         :rest="rest"
         :finish-exercise="finishExercise"
       />
 
+      <!-- Next Up: Rest -->
       <rest-panel
         v-if="!rest && !done"
         :countdown="countdown"
@@ -94,8 +101,8 @@ export default {
   }),
 
   computed: {
-    previousExercise () { return this.exerciseSequence[this.currentExerciseIndex - 1] },
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
+    nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
     firstExerciseOfWorkout () { return this.currentRound === 0 && this.currentExerciseIndex === 0 },
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
@@ -110,11 +117,15 @@ export default {
       this.exerciseSequence.push(...this.workout.exercises)
     }
     this.startTime = Date.now()
+    this.startActiveWorkout({
+      workoutId: this.workout.id,
+      startTime: this.startTime
+    })
   },
 
   methods: {
 
-    ...mapMutations(['addCompletedExercise']),
+    ...mapMutations(['addCompletedExercise', 'startActiveWorkout']),
 
     // Handle completed exercise
     finishExercise () {
@@ -123,8 +134,10 @@ export default {
 
       // Record completed exercise
       this.addCompletedExercise({
-        workout: this.workout.id,
+        workoutId: this.workout.id,
+        startTime: this.startTime,
         exercise: this.currentExercise,
+        round: this.currentRound,
         completedTime: this.lastCompletedExerciseTime
       })
 
@@ -140,15 +153,10 @@ export default {
         // Otherwise, start the rest timer and start the countdown
         this.countdown = interval
         this.timer = setInterval(this.decrementCountdown, 1000)
-
-        // Increment the currentExerciseIndex
-        this.currentExerciseIndex++
-        if (this.firstExerciseOfRound) {
-          this.currentRound += 1
-        }
       }
     },
 
+    // Countdown function during rest
     decrementCountdown () {
       if (this.countdown > 1) {
         this.countdown -= 1
@@ -157,10 +165,18 @@ export default {
       }
     },
 
+    // Handle finished rest
     finishRest () {
+      // Finish countdown, end rest flag, clear timer
       this.countdown = 0
       this.rest = false
       clearInterval(this.timer)
+
+      // Increment the currentExerciseIndex
+      this.currentExerciseIndex++
+      if (this.firstExerciseOfRound) {
+        this.currentRound += 1
+      }
     }
 
   }
