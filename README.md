@@ -1,7 +1,23 @@
 # Gains
-#### A workout mobile app
+A workout tracker mobile app
 
 [![Build Status](https://travis-ci.org/dtom90/Gains.svg?branch=master)](https://travis-ci.org/dtom90/Gains)
+
+## Software Requirements Specification
+
+### Purpose
+
+#### Background
+
+I do weight / resistance training several times per week. Each time that I do it, I have a specific workout routine that I follow. As I continue working out from week to week, I would like to be able to record the progress that I am making for each exercise. I would also like to be able to visualize the progress that I am making over time.
+
+### Solution
+
+This application allows a user to:
+
+1. Create a workout consisting of a sequence of exercises with target reps, sets, & rounds
+2. Start and record performance during workout
+3. Visualize workout / exercise performance & progress over time
 
 ## Usage
 
@@ -12,7 +28,7 @@ git clone https://github.com/dtom90/Gains
 
 Repository will be downloaded into `Gains/` folder
 
-### 2. Instal dependencies
+### 2. Install dependencies
 
 Go to the downloaded repository folder and run:
 ```
