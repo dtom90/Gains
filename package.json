@@ -1,7 +1,11 @@
 {
-  "name": "framework7-template-vue-webpack",
-  "version": "2.0.0",
-  "description": "Framework7 Vue Webpack starter app template",
+  "name": "gains",
+  "version": "0.1.0",
+  "description": "Workout tracker app",
+  "homepage": "https://github.com/dtom90/Gains",
+  "repository": "https://github.com/dtom90/Gains",
+  "author": "David Thomason",
+  "license": "MIT",
   "scripts": {
     "build-dev": "node ./build/dev.js",
     "build-prod": "node ./build/prod.js",
@@ -10,29 +14,10 @@
     "start": "npm run dev",
     "copy-fonts": "cpy node_modules/framework7-icons/fonts/*.* src/fonts && cpy node_modules/material-design-icons/iconfont/*.{eot,ttf,woff,woff2} src/fonts",
     "postinstall": "npm run copy-fonts",
-    "lint": "./node_modules/.bin/eslint --ext .js,.vue src"
+    "audit:packages": "yarn audit || test $? -eq 0",
+    "lint": "./node_modules/.bin/eslint --ext .js,.vue src",
+    "test": "yarn audit:packages && yarn lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/framework7io/framework7-template-vue-webpack.git"
-  },
-  "keywords": [
-    "ios",
-    "webpack",
-    "framework7",
-    "vue",
-    "vuejs",
-    "material",
-    "mobile",
-    "app",
-    "f7"
-  ],
-  "author": "Vladimir Kharlampidi",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/framework7io/framework7-template-vue-webpack/issues"
-  },
-  "homepage": "http://framework7.io/vue/",
   "dependencies": {
     "framework7": "^4.1.0",
     "framework7-icons": "2.2.0",
