@@ -40,7 +40,7 @@
                 label="Target weight:"
                 inline-label
                 type="number"
-                placeholder="0 (bodyweight)"
+                :value="0"
                 error-message="Weight must be non-negative"
                 validate
                 min="0"
@@ -54,7 +54,7 @@
                 label="Target reps:"
                 inline-label
                 type="number"
-                placeholder="(unset)"
+                :value="1"
                 error-message="Target reps must be positive"
                 validate
                 min="1"
