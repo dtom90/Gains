@@ -30,7 +30,39 @@
           :required="i===0"
           validate
           @input="modifyExercise(i, $event.target.value)"
-        />
+        >
+          <div
+            v-if="exercises.length > (i+1)"
+            slot="root"
+          >
+            <ul>
+              <f7-list-input
+                label="Target weight:"
+                inline-label
+                type="number"
+                placeholder="0 (bodyweight)"
+                error-message="Weight must be non-negative"
+                validate
+                min="0"
+                pattern="[0-9]*"
+              >
+                <div slot="inner">
+                  lbs.
+                </div>
+              </f7-list-input>
+              <f7-list-input
+                label="Target reps:"
+                inline-label
+                type="number"
+                placeholder="(unset)"
+                error-message="Target reps must be positive"
+                validate
+                min="1"
+                pattern="[0-9]*"
+              />
+            </ul>
+          </div>
+        </f7-list-input>
 
         <f7-list-input
           label="Rounds"
