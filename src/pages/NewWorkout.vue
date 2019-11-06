@@ -25,11 +25,11 @@
           :key="i"
           :label="'Exercise '+(i+1)"
           type="text"
-          :value="ex"
+          :value="ex.name"
           placeholder="Exercise Name"
           :required="i===0"
           validate
-          @input="modifyExercise(i, $event.target.value)"
+          @input="modifyExercise(i, 'name', $event.target.value)"
         >
           <div
             v-if="exercises.length > (i+1)"
@@ -40,11 +40,12 @@
                 label="Target weight:"
                 inline-label
                 type="number"
-                :value="0"
+                :value="ex.weight"
                 error-message="Weight must be non-negative"
                 validate
                 min="0"
                 pattern="[0-9]*"
+                @input="modifyExercise(i, 'weight', $event.target.value)"
               >
                 <div slot="inner">
                   lbs.
@@ -54,11 +55,12 @@
                 label="Target reps:"
                 inline-label
                 type="number"
-                :value="1"
+                :value="ex.reps"
                 error-message="Target reps must be positive"
                 validate
                 min="1"
                 pattern="[0-9]*"
+                @input="modifyExercise(i, 'reps', $event.target.value)"
               />
             </ul>
           </div>
@@ -97,12 +99,20 @@
 import { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 
+const newExercise = () => Object.assign({}, {
+  name: '',
+  weight: 0,
+  reps: 1
+})
+
 export default {
+  name: 'NewWorkout',
+
   components: { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button },
 
   data: () => ({
     name: '',
-    exercises: [''],
+    exercises: [newExercise()],
     rounds: 1,
     nameError: false,
     nameErrorMessage: ''
@@ -114,10 +124,9 @@ export default {
 
     ...mapMutations(['addWorkout']),
 
-    modifyExercise (i, val) {
-      this.$set(this.exercises, i, val)
-
-      if (this.exercises[this.exercises.length - 1] !== '') { this.exercises.push('') }
+    modifyExercise (i, key, val) {
+      this.$set(this.exercises[i], key, val)
+      if (this.exercises[this.exercises.length - 1].name !== '') { this.exercises.push(newExercise()) }
     },
 
     createWorkout () {
@@ -130,7 +139,7 @@ export default {
         this.nameErrorMessage = 'Workout name already exists.'
         this.$refs.newWorkout.$el.checkValidity()
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
-        this.exercises = this.exercises.filter(ex => ex) // filter out blank (unfilled) exercises
+        this.exercises = this.exercises.filter(ex => ex.name) // filter out blank (unfilled) exercises
         this.addWorkout(this.$data)
         this.$f7router.navigate('/workout/' + this.workouts[this.workouts.length - 1].id)
       }

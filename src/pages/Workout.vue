@@ -14,8 +14,17 @@
         <f7-list-item
           v-for="(exercise, i) in workout.exercises"
           :key="i"
+          class="workout-exercise"
         >
-          {{ exercise }}
+          <f7-list-item-cell>
+            {{ exercise.name }}
+          </f7-list-item-cell>
+          <f7-list-item-cell>
+            Weight: {{ exercise.weight }} lbs.
+          </f7-list-item-cell>
+          <f7-list-item-cell>
+            Reps: {{ exercise.reps }}
+          </f7-list-item-cell>
         </f7-list-item>
       </f7-list>
 
@@ -53,10 +62,10 @@
 </template>
 
 <script>
-import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7List, f7BlockFooter, f7ListItem, f7Button } from 'framework7-vue'
+import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7List, f7BlockFooter, f7ListItem, f7ListItemCell, f7Button } from 'framework7-vue'
 
 export default {
-  components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7Button },
+  components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
 
   computed: {
     workout () {
