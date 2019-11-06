@@ -1,15 +1,15 @@
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const path = require('path');
+const path = require('path')
 
-function resolvePath(dir) {
-  return path.join(__dirname, '..', dir);
+function resolvePath (dir) {
+  return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
@@ -26,16 +26,16 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolvePath('src'),
+      '@': resolvePath('src')
     }
   },
   devServer: {
-    hot: true,
-    open: true,
+    hot: false,
+    open: false,
     compress: true,
     contentBase: '/www/',
     watchOptions: {
-      poll: true
+      poll: false
     }
   },
   module: {
@@ -49,35 +49,35 @@ module.exports = {
           resolvePath('node_modules/framework7-vue'),
           resolvePath('node_modules/template7'),
           resolvePath('node_modules/dom7'),
-          resolvePath('node_modules/ssr-window'),
-        ],
+          resolvePath('node_modules/ssr-window')
+        ]
       },
       {
         test: /\.vue$/,
-        use: 'vue-loader',
+        use: 'vue-loader'
       },
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
+          'css-loader'
+        ]
       },
       {
         test: /\.styl(us)?$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'stylus-loader',
-        ],
+          'stylus-loader'
+        ]
       },
       {
         test: /\.less$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'less-loader',
-        ],
+          'less-loader'
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -107,13 +107,11 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify('production'),
+      'process.env': JSON.stringify('production')
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
-        compress: {
-          warnings: false
-        }
+        warnings: false
       },
       sourceMap: true,
       parallel: true
@@ -134,8 +132,8 @@ module.exports = {
       minify: {
         removeComments: true,
         collapseWhitespace: true,
-        removeAttributeQuotes: true,
-      },
+        removeAttributeQuotes: true
+      }
     }),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
@@ -144,7 +142,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin([{
       from: resolvePath('static'),
-      to: resolvePath('www/static'),
-    }]),
+      to: resolvePath('www/static')
+    }])
   ]
 }

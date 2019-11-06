@@ -35,8 +35,14 @@ export default {
   components: { f7Block, f7Button },
 
   props: {
-    countdown: Number,
-    restTime: Number,
+    countdown: {
+      type: Number,
+      default: 30
+    },
+    restTime: {
+      type: Number,
+      default: 30
+    },
     rest: Boolean,
     finishRest: {
       type: Function,

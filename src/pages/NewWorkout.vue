@@ -63,7 +63,7 @@
 
 <script>
 import { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button } from 'framework7-vue'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button },
@@ -75,6 +75,9 @@ export default {
     nameError: false,
     nameErrorMessage: ''
   }),
+  computed: {
+    ...mapState(['workouts'])
+  },
   methods: {
 
     ...mapMutations(['addWorkout']),
@@ -90,14 +93,14 @@ export default {
         this.nameError = true
         this.nameErrorMessage = 'Please fill out this field.'
         this.$refs.newWorkout.$el.checkValidity()
-      } else if (this.$store.state.workouts.filter(w => w.name === this.name).length > 0) {
+      } else if (this.workouts.filter(w => w.name === this.name).length > 0) {
         this.nameError = true
         this.nameErrorMessage = 'Workout name already exists.'
         this.$refs.newWorkout.$el.checkValidity()
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
         this.exercises = this.exercises.filter(ex => ex) // filter out blank (unfilled) exercises
         this.addWorkout(this.$data)
-        this.$f7router.navigate('/')
+        this.$f7router.navigate('/workout/' + this.workouts[this.workouts.length - 1].id)
       }
     },
 
