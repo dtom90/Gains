@@ -120,6 +120,7 @@ test('Create a workout', async t => {
     .typeText(inputGroup('Weight', { type: 'number' }), '5', { replace: true })
     .typeText(inputGroup('Reps', { type: 'number' }), '10', { replace: true })
     .click(button('Submit'))
+    .expect(Selector('div.input-info').withExactText('Set numbers updated!').visible).ok()
     //
     // Skip the rest, expect the next workout to be active
     .click(skipRestButton)

@@ -57,6 +57,12 @@
         >
           Submit
         </f7-button>
+        <div
+          id="set-update-alert"
+          class="input-info text-align-center"
+        >
+          &nbsp;{{ updated ? 'Set numbers updated!' : '' }}&nbsp;
+        </div>
       </f7-list>
     </f7-block>
     <f7-button
@@ -112,7 +118,8 @@ export default {
     }
   },
   data: () => ({
-    reps: null
+    reps: null,
+    updated: false
   }),
   computed: {
     adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' }
@@ -141,6 +148,7 @@ export default {
         weight: this.weight,
         reps: this.reps
       })
+      this.updated = true
     }
   }
 }
@@ -162,5 +170,10 @@ export default {
   }
   .input-item {
     background-color: #1B9A59;
+  }
+  #set-update-alert {
+    position: static;
+    margin-top: 10px;
+    color: white;
   }
 </style>
