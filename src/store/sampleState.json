@@ -6,14 +6,14 @@
       "exercises": [
         {
           "name": "Push-ups",
-          "reps": 1,
           "weight": 0,
+          "reps": 1,
           "rest": 3
         },
         {
           "name": "Pull-ups",
-          "reps": 6,
           "weight": 15,
+          "reps": 6,
           "rest": 3
         }
       ],
@@ -23,9 +23,24 @@
       "id": "hiit",
       "name": "HIIT",
       "exercises": [
-        "High Knees",
-        "Burpees",
-        "Jumping Jacks"
+        {
+          "name": "High Knees",
+          "weight": 0,
+          "reps": 40,
+          "rest": 20
+        },
+        {
+          "name": "Burpees",
+          "weight": 0,
+          "reps": 10,
+          "rest": 20
+        },
+        {
+          "name": "Jumping Jacks",
+          "weight": 0,
+          "reps": 40,
+          "rest": 20
+        }
       ],
       "rounds": 3
     }

@@ -1,29 +1,14 @@
 import { Selector } from 'testcafe'
 
 import {
-  title, blockTitle, blockText, button, inputGroup, listItem, listCell,
-  doneButton, skipRestButton
+  title, blockTitle, blockText, button, inputGroup, listItem,
+  doneButton, skipRestButton,
+  expectCircuitWorkout, startCircuitWorkout
 } from './elements'
 
 const hostname = 'localhost'
 const port = process.env.PORT || '8080'
 const page = `http://${hostname}:${port}`
-
-async function expectCircuitWorkout (t) {
-  await t
-    .expect(blockTitle('Exercises:').visible).ok()
-    .expect(Selector('li.workout-exercise').count).eql(2)
-    .expect(listCell('Push-ups').visible).ok()
-    .expect(listCell('Weight: 0 lbs.').visible).ok()
-    .expect(listCell('Reps: 1').visible).ok()
-    .expect(listItem('Rest: 3 seconds').visible).ok()
-    .expect(listCell('Pull-ups').visible).ok()
-    .expect(listCell('Weight: 15 lbs.').visible).ok()
-    .expect(listCell('Reps: 6').visible).ok()
-    .expect(listItem('Rest: 3 seconds').count).eql(2)
-    .expect(Selector('p').withExactText('x 2 Rounds').visible).ok()
-    .expect(button('Start Workout').visible).ok()
-}
 
 fixture(`Testing Gains`)
   .page(page)
@@ -106,16 +91,10 @@ test('Start Circuit workout', async t => {
     .click(button('Circuit'))
     .expect(title('Workout: Circuit').visible).ok()
   expectCircuitWorkout(t)
+  //
+  // Start the workout
+  startCircuitWorkout(t)
   await t
-    //
-    // Click the 'Start Workout' button
-    .click(button('Start Workout'))
-    .expect(title('Active Workout: Circuit').visible).ok()
-    .expect(Selector('h3').withExactText('Current Round: 1').visible).ok()
-    .expect(blockText('Current Exercise: Push-ups').visible).ok()
-    .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
-    .expect(doneButton.visible).ok()
-    .expect(blockText('Next Up: 3s Rest').visible).ok()
     //
     // Click 'Done', expect the reps input to be filled with the target value
     .click(doneButton)
@@ -172,4 +151,26 @@ test('Start Circuit workout', async t => {
     .expect(listItem('Pull-ups: 15 lbs. x 6 reps').visible).ok()
     .expect(listItem('Push-ups: 0 lbs. x 1 rep').visible).ok()
     .expect(listItem('Pull-ups: 15 lbs. x 6 reps').visible).ok()
+})
+
+test('Rest countdown', async t => {
+  await t
+  //
+  // Navigate to the Circuit workout and expect the correct sequence
+    .click(button('Circuit'))
+    .expect(title('Workout: Circuit').visible).ok()
+  expectCircuitWorkout(t)
+  //
+  // Start the workout
+  startCircuitWorkout(t)
+  await t
+    //
+    // Click 'Done', expect the reps input to be filled with the target value
+    .click(doneButton)
+    .expect(skipRestButton.visible).ok()
+    .expect(blockText('Rest: 3').visible).ok()
+    .expect(blockText('Rest: 2').visible).ok()
+    .expect(blockText('Rest: 1').visible).ok()
+    .expect(blockText('Rest: 0').visible).ok()
+    .expect(Selector('div.rest-block > a.button').withExactText('Proceed to next exercise').visible).ok()
 })

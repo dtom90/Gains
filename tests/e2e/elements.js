@@ -14,6 +14,37 @@ const listCell = text => Selector('div.item-cell').withExactText(text)
 const doneButton = Selector('div.exercise-block > a.button').withExactText('Done')
 const skipRestButton = Selector('div.rest-block > a.button').withExactText('Skip Rest')
 
+async function expectCircuitWorkout (t) {
+  await t
+    .expect(blockTitle('Exercises:').visible).ok()
+    .expect(Selector('li.workout-exercise').count).eql(2)
+    .expect(listCell('Push-ups').visible).ok()
+    .expect(listCell('Weight: 0 lbs.').visible).ok()
+    .expect(listCell('Reps: 1').visible).ok()
+    .expect(listItem('Rest: 3 seconds').visible).ok()
+    .expect(listCell('Pull-ups').visible).ok()
+    .expect(listCell('Weight: 15 lbs.').visible).ok()
+    .expect(listCell('Reps: 6').visible).ok()
+    .expect(listItem('Rest: 3 seconds').count).eql(2)
+    .expect(Selector('p').withExactText('x 2 Rounds').visible).ok()
+    .expect(button('Start Workout').visible).ok()
+}
+
+async function startCircuitWorkout (t) {
+  /**
+   * Click the 'Start Workout' button,
+   * expect the Active Workout page with the first exercise
+   */
+  await t
+    .click(button('Start Workout'))
+    .expect(title('Active Workout: Circuit').visible).ok()
+    .expect(Selector('h3').withExactText('Current Round: 1').visible).ok()
+    .expect(blockText('Current Exercise: Push-ups').visible).ok()
+    .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
+    .expect(doneButton.visible).ok()
+    .expect(blockText('Next Up: 3s Rest').visible).ok()
+}
+
 export {
   title,
   blockTitle,
@@ -23,5 +54,7 @@ export {
   listItem,
   listCell,
   doneButton,
-  skipRestButton
+  skipRestButton,
+  expectCircuitWorkout,
+  startCircuitWorkout
 }
