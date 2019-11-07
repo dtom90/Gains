@@ -60,7 +60,7 @@
           v-for="(exercise, i) in lastWorkout.exercises"
           :key="i"
         >
-          {{ exercise.exercise }} {{ exercise.reps && (': '+exercise.reps + ' reps') }}
+          {{ exercise.exercise }}: {{ exercise.weight }} lbs. x {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}
         </f7-list-item>
       </f7-list>
     </f7-block>

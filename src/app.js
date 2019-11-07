@@ -66,14 +66,17 @@ const store = new Vuex.Store({
     },
     addCompletedExercise (state, { workoutId, startTime, exercise, round, completedTime }) {
       state.completed[workoutId][startTime].exercises.push({
-        exercise,
+        exercise: exercise.name,
+        weight: exercise.weight,
+        reps: exercise.reps,
         round,
         completedTime
       })
     },
-    addCompletedReps (state, { workoutId, workoutTime, time, reps }) {
+    addCompletedSet (state, { workoutId, workoutTime, time, weight, reps }) {
       const matching = state.completed[workoutId][workoutTime].exercises.filter(ex => ex.completedTime === time)
       if (matching.length > 0) {
+        matching[0].weight = weight
         matching[0].reps = reps
       } else {
         console.error(`Exercise with completed time ${time} could not be found.`)

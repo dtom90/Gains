@@ -20,6 +20,25 @@
         <f7-list-input
           class="input-item color-white"
           inline-label
+          label="Weight"
+          type="number"
+          :value="weight"
+          error-message="Only positive numbers please!"
+          validate
+          min="0"
+          pattern="[0-9]*"
+          @input="weight = parseInt($event.target.value)"
+        >
+          <div
+            slot="inner"
+            class="item-label"
+          >
+            &nbsp;lbs.
+          </div>
+        </f7-list-input>
+        <f7-list-input
+          class="input-item color-white"
+          inline-label
           label="Reps"
           type="number"
           :value="reps"
@@ -28,8 +47,16 @@
           min="1"
           pattern="[0-9]*"
           @input="reps = parseInt($event.target.value)"
-          @keypress.native.enter="enterReps"
         />
+        <f7-button
+          big
+          fill
+          raised
+          color="green"
+          @click="enterSet"
+        >
+          Submit
+        </f7-button>
       </f7-list>
     </f7-block>
     <f7-button
@@ -92,21 +119,26 @@ export default {
   },
   watch: {
     exercise: function (newExercise) {
+      this.weight = newExercise.weight
       this.reps = newExercise.reps
     }
   },
   mounted () {
-    this.reps = this.exercise ? this.exercise.reps : null
+    if (this.exercise) {
+      this.weight = this.exercise.weight
+      this.reps = this.exercise.reps
+    }
   },
   methods: {
 
-    ...mapMutations(['addCompletedReps']),
+    ...mapMutations(['addCompletedSet']),
 
-    enterReps (reps) {
-      this.addCompletedReps({
+    enterSet () {
+      this.addCompletedSet({
         workoutId: this.workoutId,
         workoutTime: this.workoutTime,
         time: this.lastCompletedExerciseTime,
+        weight: this.weight,
         reps: this.reps
       })
     }
