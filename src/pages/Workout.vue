@@ -25,6 +25,12 @@
           <f7-list-item-cell>
             Reps: {{ exercise.reps }}
           </f7-list-item-cell>
+          <f7-list-item
+            v-if="'rest' in exercise"
+            slot="root"
+          >
+            Rest: {{ exercise.rest }} seconds
+          </f7-list-item>
         </f7-list-item>
       </f7-list>
 

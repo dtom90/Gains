@@ -12,6 +12,7 @@ const inputGroup = (label, { type, placeholder }) => Selector('li')
   .find('div.item-label').withExactText(label)
   .sibling('div.item-input-wrap')
   .child(`input[type="${type}"]${placeholder ? `[placeholder="${placeholder}"]` : ''}`)
+const listItem = text => Selector('div.item-inner').withExactText(text)
 const listCell = text => Selector('div.item-cell').withExactText(text)
 
 fixture(`Testing Gains`)
@@ -27,6 +28,7 @@ test('Create a workout', async t => {
   const exerciseNameInput = i => inputGroup('Exercise ' + i, { type: 'text', placeholder: 'Exercise Name' })
   const targetWeightInput = inputGroup('Target weight:', { type: 'number' })
   const targetRepsInput = inputGroup('Target reps:', { type: 'number' })
+  const restInput = inputGroup('Rest:', { type: 'number' })
   const roundsInput = inputGroup('Rounds', { type: 'number' })
 
   await t
@@ -54,9 +56,12 @@ test('Create a workout', async t => {
     .expect(exerciseNameInput('2').visible).ok()
     //
     // Type the second exercise name
+    .expect(restInput.exists).notOk()
     .expect(targetWeightInput.nth(1).exists).notOk()
     .expect(targetRepsInput.nth(1).exists).notOk()
     .typeText(exerciseNameInput('2'), 'Pull-ups')
+    .expect(restInput.visible).ok()
+    .expect(restInput.value).eql('30')
     .expect(targetWeightInput.nth(1).visible).ok()
     .expect(targetRepsInput.nth(1).visible).ok()
     .expect(targetWeightInput.value).eql('0')
@@ -74,9 +79,11 @@ test('Create a workout', async t => {
     .expect(listCell('Push-ups').visible).ok()
     .expect(listCell('Weight: 0 lbs.').visible).ok()
     .expect(listCell('Reps: 1').visible).ok()
+    .expect(listItem('Rest: 30 seconds').visible).ok()
     .expect(listCell('Pull-ups').visible).ok()
     .expect(listCell('Weight: 15 lbs.').visible).ok()
     .expect(listCell('Reps: 6').visible).ok()
+    .expect(listItem('Rest: 30 seconds').count).eql(1)
     .expect(Selector('p').withExactText('x 1 Round').visible).ok()
     .expect(button('Start Workout').visible).ok()
 })

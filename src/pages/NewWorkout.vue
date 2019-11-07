@@ -33,7 +33,7 @@
         >
           <div
             v-if="exercises.length > (i+1)"
-            slot="root"
+            slot="inner"
           >
             <ul>
               <f7-list-input
@@ -47,7 +47,10 @@
                 pattern="[0-9]*"
                 @input="modifyExercise(i, 'weight', $event.target.value)"
               >
-                <div slot="inner">
+                <div
+                  slot="inner"
+                  class="item-label"
+                >
                   lbs.
                 </div>
               </f7-list-input>
@@ -61,8 +64,38 @@
                 min="1"
                 pattern="[0-9]*"
                 @input="modifyExercise(i, 'reps', $event.target.value)"
-              />
+              >
+                <div
+                  slot="inner"
+                  class="item-label"
+                >
+                  reps
+                </div>
+              </f7-list-input>
             </ul>
+          </div>
+          <div
+            v-if="'rest' in ex"
+            slot="inner"
+          >
+            <f7-list-input
+              label="Rest:"
+              inline-label
+              type="number"
+              :value="ex.rest"
+              error-message="Rest must be non-negative"
+              validate
+              min="0"
+              pattern="[0-9]*"
+              @input="modifyExercise(i, 'rest', $event.target.value)"
+            >
+              <div
+                slot="inner"
+                class="item-label"
+              >
+                seconds
+              </div>
+            </f7-list-input>
           </div>
         </f7-list-input>
 
@@ -114,6 +147,7 @@ export default {
     name: '',
     exercises: [newExercise()],
     rounds: 1,
+    defaultRest: 30,
     nameError: false,
     nameErrorMessage: ''
   }),
@@ -125,8 +159,19 @@ export default {
     ...mapMutations(['addWorkout']),
 
     modifyExercise (i, key, val) {
+      if (key !== 'name') {
+        val = parseInt(val)
+      }
       this.$set(this.exercises[i], key, val)
-      if (this.exercises[this.exercises.length - 1].name !== '') { this.exercises.push(newExercise()) }
+      if (key === 'rest') {
+        this.defaultRest = val
+      }
+      if (this.exercises[this.exercises.length - 1].name !== '') {
+        this.exercises.push(newExercise())
+        if (this.exercises.length >= 3) {
+          this.$set(this.exercises[this.exercises.length - 3], 'rest', this.defaultRest)
+        }
+      }
     },
 
     createWorkout () {
