@@ -43,7 +43,7 @@
         v-if="!rest && !done"
         :countdown="countdown"
         :rest="rest"
-        :rest-time="restTime"
+        :rest-time="currentExercise.rest"
       />
     </f7-block>
 
@@ -71,8 +71,6 @@ import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 
-const interval = 30
-
 export default {
 
   components: {
@@ -92,8 +90,7 @@ export default {
     currentExerciseIndex: 0,
     currentRound: 1,
     lastCompletedExerciseTime: null,
-    restTime: interval,
-    countdown: interval,
+    countdown: null,
     timer: null,
     started: false,
     rest: false,
@@ -151,7 +148,7 @@ export default {
         this.endTime = Date.now()
       } else {
         // Otherwise, start the rest timer and start the countdown
-        this.countdown = interval
+        this.countdown = this.currentExercise.rest
         this.timer = setInterval(this.decrementCountdown, 1000)
       }
     },

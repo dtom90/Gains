@@ -71,6 +71,10 @@ test('Create a workout', async t => {
     .expect(targetWeightInput.value).eql('0')
     .expect(targetRepsInput.value).eql('1')
     //
+    // Modify the rest period between exercises
+    .typeText(restInput, '3', { replace: true })
+    .expect(restInput.value).eql('3')
+    //
     // Modify the second exercise weight and reps
     .typeText(targetWeightInput.nth(1), '15', { replace: true })
     .typeText(targetRepsInput.nth(1), '6', { replace: true })
@@ -79,6 +83,7 @@ test('Create a workout', async t => {
     .expect(restInput.count).eql(1)
     .typeText(roundsInput, '2', { replace: true })
     .expect(restInput.count).eql(2)
+    .expect(restInput.nth(1).value).eql('3')
     //
     // Create the workout, should navigate to the workout page
     .click(button('Create Workout'))
@@ -88,11 +93,11 @@ test('Create a workout', async t => {
     .expect(listCell('Push-ups').visible).ok()
     .expect(listCell('Weight: 0 lbs.').visible).ok()
     .expect(listCell('Reps: 1').visible).ok()
-    .expect(listItem('Rest: 30 seconds').visible).ok()
+    .expect(listItem('Rest: 3 seconds').visible).ok()
     .expect(listCell('Pull-ups').visible).ok()
     .expect(listCell('Weight: 15 lbs.').visible).ok()
     .expect(listCell('Reps: 6').visible).ok()
-    .expect(listItem('Rest: 30 seconds').count).eql(2)
+    .expect(listItem('Rest: 3 seconds').count).eql(2)
     .expect(Selector('p').withExactText('x 2 Rounds').visible).ok()
     .expect(button('Start Workout').visible).ok()
     //
@@ -103,11 +108,11 @@ test('Create a workout', async t => {
     .expect(blockText('Current Exercise: Push-ups').visible).ok()
     .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
     .expect(doneButton.visible).ok()
-    .expect(blockText('Next Up: 30s Rest').visible).ok()
+    .expect(blockText('Next Up: 3s Rest').visible).ok()
     //
     // Click 'Done', expect the reps input to be filled with the target value
     .click(doneButton)
-    .expect(blockText('Rest: 30').visible).ok()
+    .expect(blockText('Rest: 3').visible).ok()
     .expect(skipRestButton.visible).ok()
     .expect(blockText('Completed Exercise: Push-ups').visible).ok()
     .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
@@ -127,11 +132,11 @@ test('Create a workout', async t => {
     .expect(blockText('Current Exercise: Pull-ups').visible).ok()
     .expect(blockText('Target: 6 reps of 15 lbs.').visible).ok()
     .expect(doneButton.visible).ok()
-    .expect(blockText('Next Up: 30s Rest').visible).ok()
+    .expect(blockText('Next Up: 3s Rest').visible).ok()
     //
     // Click 'Done', leave default weight & rep values
     .click(doneButton)
-    .expect(blockText('Rest: 30').visible).ok()
+    .expect(blockText('Rest: 3').visible).ok()
     .expect(skipRestButton.visible).ok()
     .expect(blockText('Completed Exercise: Pull-ups').visible).ok()
     .expect(blockText('Target: 6 reps of 15 lbs.').visible).ok()
@@ -142,6 +147,7 @@ test('Create a workout', async t => {
     // Continue until the end of the exercise
     .expect(blockText('Current Exercise: Push-ups').visible).ok()
     .click(doneButton)
+    .expect(blockText('Rest: 3').visible).ok()
     .expect(blockText('Completed Exercise: Push-ups').visible).ok()
     .expect(inputGroup('Weight', { type: 'number' }).value).eql('0')
     .expect(inputGroup('Reps', { type: 'number' }).value).eql('1')
@@ -149,6 +155,7 @@ test('Create a workout', async t => {
     .expect(blockText('Current Exercise: Pull-ups').visible).ok()
     .click(doneButton)
     .expect(blockText('Completed Exercise: Pull-ups').visible).ok()
+    .expect(Selector('p').withText(/Total Workout Time: [0-9]+ seconds/).visible).ok()
     .click(button('Finish Workout'))
     //
     // Expect the workout screen with the last exercise
