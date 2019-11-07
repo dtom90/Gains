@@ -4,7 +4,10 @@
     :style="{backgroundColor: completed ? 'green' : 'blue'}"
   >
     <p :class="(rest ? '' : 'large-text')+' text-align-center'">
-      {{ adjective }} Exercise: {{ exercise }}
+      {{ adjective }} Exercise: {{ exercise.name }}
+    </p>
+    <p class="text-align-center">
+      Target: {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }} of {{ exercise.weight }} lbs.
     </p>
     <f7-block
       v-if="completed"
@@ -25,7 +28,7 @@
           min="1"
           pattern="[0-9]*"
           @input="reps = parseInt($event.target.value)"
-          @keypress.native.enter="enterReps(reps)"
+          @keypress.native.enter="enterReps"
         />
       </f7-list>
     </f7-block>
@@ -52,8 +55,8 @@ export default {
   components: { f7Block, f7List, f7ListInput, f7Button },
   props: {
     exercise: {
-      type: String,
-      default: 'Exercise'
+      type: Object,
+      default: () => null
     },
     rest: Boolean,
     completed: {
@@ -88,9 +91,12 @@ export default {
     adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' }
   },
   watch: {
-    exercise: function (newVal, oldVal) { // watch it
-      this.reps = null
+    exercise: function (newExercise) {
+      this.reps = newExercise.reps
     }
+  },
+  mounted () {
+    this.reps = this.exercise ? this.exercise.reps : null
   },
   methods: {
 
@@ -101,7 +107,7 @@ export default {
         workoutId: this.workoutId,
         workoutTime: this.workoutTime,
         time: this.lastCompletedExerciseTime,
-        reps
+        reps: this.reps
       })
     }
   }

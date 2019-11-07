@@ -68,16 +68,16 @@
 <script>
 import { f7Page, f7Navbar, f7Block, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
-import ExercisePanel from './ExercisePanel.vue'
-import RestPanel from './RestPanel.vue'
+import ExercisePanel from '@/components/ExercisePanel.vue'
+import RestPanel from '@/components/RestPanel.vue'
 
 const interval = 30
 
 export default {
 
   components: {
-    'exercise-panel': ExercisePanel,
-    'rest-panel': RestPanel,
+    ExercisePanel,
+    RestPanel,
     f7Page,
     f7Navbar,
     f7Block,

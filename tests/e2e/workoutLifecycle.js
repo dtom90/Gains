@@ -31,6 +31,10 @@ test('Create a workout', async t => {
   const restInput = inputGroup('Rest:', { type: 'number' })
   const roundsInput = inputGroup('Rounds', { type: 'number' })
 
+  const blockText = text => Selector('div.block > p').withExactText(text)
+  const doneButton = Selector('div.exercise-block > a.button').withExactText('Done')
+  const restButton = Selector('div.rest-block > a.button').withExactText('Skip Rest')
+
   await t
     //
     // Open the New Workout page, expect the right content
@@ -91,4 +95,22 @@ test('Create a workout', async t => {
     .expect(listItem('Rest: 30 seconds').count).eql(2)
     .expect(Selector('p').withExactText('x 3 Rounds').visible).ok()
     .expect(button('Start Workout').visible).ok()
+    //
+    // Click the 'Start Workout' button
+    .click(button('Start Workout'))
+    .expect(title('Active Workout: My Workout').visible).ok()
+    .expect(Selector('h3').withExactText('Current Round: 1').visible).ok()
+    .expect(blockText('Current Exercise: Push-ups').visible).ok()
+    .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
+    .expect(doneButton.visible).ok()
+    .expect(blockText('Next Up: 30s Rest').visible).ok()
+    //
+    // Click 'Done', expect the reps input to be filled with the target value
+    .click(doneButton)
+    .expect(blockText('Rest: 30').visible).ok()
+    .expect(restButton.visible).ok()
+    .expect(blockText('Completed Exercise: Push-ups').visible).ok()
+    .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
+    .expect(inputGroup('Reps', { type: 'number' }).visible).ok()
+    .expect(inputGroup('Reps', { type: 'number' }).value).eql('1')
 })
