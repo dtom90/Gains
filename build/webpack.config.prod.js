@@ -109,6 +109,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': JSON.stringify('production')
     }),
+    new webpack.EnvironmentPlugin({
+      LOAD_SAMPLE_STATE: ''
+    }),
     new UglifyJsPlugin({
       uglifyOptions: {
         warnings: false

@@ -1,0 +1,35 @@
+{
+  "workouts": [
+    {
+      "id": "circuit",
+      "name": "Circuit",
+      "exercises": [
+        "Push-Ups",
+        "Pull-Ups",
+        "Dips",
+        "Squats"
+      ],
+      "rounds": 4
+    },
+    {
+      "id": "hiit",
+      "name": "HIIT",
+      "exercises": [
+        "High Knees",
+        "Burpees",
+        "Jumping Jacks"
+      ],
+      "rounds": 3
+    },
+    {
+      "id": "test",
+      "name": "Test",
+      "exercises": [
+        "A",
+        "B"
+      ],
+      "rounds": 2
+    }
+  ],
+  "completed": {}
+}

@@ -2,32 +2,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import sampleState from './sampleState'
+
 Vue.use(Vuex)
 
+console.log('process.env.LOAD_SAMPLE_STATE')
+console.log(process.env.LOAD_SAMPLE_STATE)
+const state = process.env.LOAD_SAMPLE_STATE ? sampleState : {
+  workouts: [],
+  completed: {}
+}
+
 const store = new Vuex.Store({
-  state: {
-    workouts: [
-      {
-        id: 'circuit',
-        name: 'Circuit',
-        exercises: [ 'Push-Ups', 'Pull-Ups', 'Dips', 'Squats' ],
-        rounds: 4
-      },
-      {
-        id: 'hiit',
-        name: 'HIIT',
-        exercises: [ 'High Knees', 'Burpees', 'Jumping Jacks' ],
-        rounds: 3
-      },
-      {
-        id: 'test',
-        name: 'Test',
-        exercises: ['A', 'B'],
-        rounds: 2
-      }
-    ],
-    completed: {}
-  },
+  state,
   mutations: {
     addWorkout (state, { name, exercises, rounds }) {
       state.workouts.push(

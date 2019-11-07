@@ -20,6 +20,9 @@ fixture(`Testing Gains`)
   .beforeEach(async t => {
     await t.expect(Selector('div.title-large-text').withText('Gainzz').visible).ok()
       .expect(blockTitle('Workouts').visible).ok()
+      .expect(button('Circuit').visible).ok()
+      .expect(button('HIIT').visible).ok()
+      .expect(button('Test').visible).ok()
       .expect(button('New Workout').visible).ok()
   })
 
