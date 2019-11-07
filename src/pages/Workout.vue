@@ -63,6 +63,39 @@
           {{ exercise.exercise }}: {{ exercise.weight }} lbs. x {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}
         </f7-list-item>
       </f7-list>
+
+      <f7-block-title>
+        Workout History:
+      </f7-block-title>
+      <div class="data-table card">
+        <table>
+          <thead>
+            <tr>
+              <th />
+              <th
+                v-for="(_, time) in displayCompleted"
+                :key="time"
+              >
+                {{ (new Date(parseInt(time))).toLocaleString() }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(exercise, i) in lastWorkout.exercises"
+              :key="i"
+            >
+              <td>{{ exercise.exercise }} Round {{ exercise.round }}</td>
+              <td
+                v-for="(sequence, time) in displayCompleted"
+                :key="time"
+              >
+                {{ sequence.exercises[i].weight }} lbs. x {{ sequence.exercises[i].reps }} rep{{ sequence.exercises[i].reps > 1 ? 's' : '' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </f7-block>
   </f7-page>
 </template>
@@ -77,11 +110,25 @@ export default {
     workout () {
       return this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
-    lastWorkout () {
+    allCompleted () {
       if (this.workout.id in this.$store.state.completed) {
-        const allCompleted = this.$store.state.completed[this.workout.id]
-        const lastWorkoutTime = allCompleted.lastWorkoutTime
-        const lastCompleted = allCompleted[lastWorkoutTime]
+        return this.$store.state.completed[this.workout.id]
+      }
+      return null
+    },
+    displayCompleted () {
+      return Object.keys(this.allCompleted)
+        .filter(key => key !== 'lastWorkoutTime')
+        .slice().sort()
+        .reduce((obj, key) => ({
+          ...obj,
+          [key]: this.allCompleted[key]
+        }), {})
+    },
+    lastWorkout () {
+      if (this.allCompleted) {
+        const lastWorkoutTime = this.allCompleted.lastWorkoutTime
+        const lastCompleted = this.allCompleted[lastWorkoutTime]
         return { lastWorkoutTime, exercises: lastCompleted.exercises }
       }
       return null
