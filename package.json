@@ -24,6 +24,7 @@
     "framework7": "^4.1.0",
     "framework7-icons": "2.2.0",
     "framework7-vue": "^4.1.0",
+    "humanize-duration": "^3.21.0",
     "material-design-icons": "^3.0.1",
     "vue": "^2.6.8",
     "vuex": "^3.1.0"

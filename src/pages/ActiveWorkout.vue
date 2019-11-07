@@ -70,6 +70,7 @@ import { f7Page, f7Navbar, f7Block, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
+import humanizeDuration from 'humanize-duration'
 
 export default {
 
@@ -104,7 +105,7 @@ export default {
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
-    totalWorkoutTime () { return toHumanTime(this.endTime - this.startTime) }
+    totalWorkoutTime () { return humanizeDuration(this.endTime - this.startTime + 60000, { round: true }) }
   },
 
   created: function () {
@@ -177,17 +178,5 @@ export default {
     }
 
   }
-}
-
-function toHumanTime (ms) {
-  let secNum = Math.floor(ms / 1000)
-  let hours = Math.floor(secNum / 3600)
-  let minutes = Math.floor((secNum - (hours * 3600)) / 60)
-  let seconds = secNum - (hours * 3600) - (minutes * 60)
-
-  hours = hours > 0 ? hours + ' hours' : ''
-  minutes = minutes > 0 ? minutes + ' minutes' : ''
-  seconds = seconds + ' seconds'
-  return hours + minutes + seconds
 }
 </script>
