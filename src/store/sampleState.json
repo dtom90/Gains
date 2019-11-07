@@ -4,12 +4,20 @@
       "id": "circuit",
       "name": "Circuit",
       "exercises": [
-        "Push-Ups",
-        "Pull-Ups",
-        "Dips",
-        "Squats"
+        {
+          "name": "Push-ups",
+          "reps": 1,
+          "weight": 0,
+          "rest": 3
+        },
+        {
+          "name": "Pull-ups",
+          "reps": 6,
+          "weight": 15,
+          "rest": 3
+        }
       ],
-      "rounds": 4
+      "rounds": 2
     },
     {
       "id": "hiit",
@@ -20,15 +28,6 @@
         "Jumping Jacks"
       ],
       "rounds": 3
-    },
-    {
-      "id": "test",
-      "name": "Test",
-      "exercises": [
-        "A",
-        "B"
-      ],
-      "rounds": 2
     }
   ],
   "completed": {}
