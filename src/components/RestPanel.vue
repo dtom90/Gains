@@ -18,10 +18,10 @@
       big
       fill
       raised
-      color="red"
+      :color="countdown > 0 ? 'red' : 'blue'"
       @click="finishRest"
     >
-      Skip Rest
+      {{ countdown > 0 ? 'Skip Rest' : 'Proceed to next exercise' }}
     </f7-button>
   </f7-block>
 </template>

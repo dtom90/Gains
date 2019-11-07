@@ -11,14 +11,6 @@
       <!-- Round Counter -->
       <h3>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</h3>
 
-      <!-- Active Rest -->
-      <rest-panel
-        v-if="rest && !done"
-        :countdown="countdown"
-        :rest="rest"
-        :finish-rest="finishRest"
-      />
-
       <!-- Completed Exercise -->
       <exercise-panel
         v-if="rest && !firstExerciseOfWorkout"
@@ -28,6 +20,14 @@
         :workout-id="workout.id"
         :workout-time="startTime"
         :last-completed-exercise-time="lastCompletedExerciseTime"
+      />
+
+      <!-- Active Rest -->
+      <rest-panel
+        v-if="rest && !done"
+        :countdown="countdown"
+        :rest="rest"
+        :finish-rest="finishRest"
       />
 
       <!-- Current / Next Exercise -->
@@ -105,7 +105,7 @@ export default {
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
-    totalWorkoutTime () { return humanizeDuration(this.endTime - this.startTime + 60000, { round: true }) }
+    totalWorkoutTime () { return humanizeDuration(this.endTime - this.startTime, { round: true }) }
   },
 
   created: function () {
@@ -159,16 +159,20 @@ export default {
       if (this.countdown > 1) {
         this.countdown -= 1
       } else {
-        this.finishRest()
+        this.clearCountdown()
       }
+    },
+
+    clearCountdown () {
+      this.countdown = 0
+      clearInterval(this.timer)
     },
 
     // Handle finished rest
     finishRest () {
       // Finish countdown, end rest flag, clear timer
-      this.countdown = 0
+      this.clearCountdown()
       this.rest = false
-      clearInterval(this.timer)
 
       // Increment the currentExerciseIndex
       this.currentExerciseIndex++

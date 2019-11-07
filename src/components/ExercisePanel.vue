@@ -128,6 +128,7 @@ export default {
     exercise: function (newExercise) {
       this.weight = newExercise.weight
       this.reps = newExercise.reps
+      this.updated = false
     }
   },
   mounted () {
@@ -135,6 +136,7 @@ export default {
       this.weight = this.exercise.weight
       this.reps = this.exercise.reps
     }
+    this.updated = false
   },
   methods: {
 

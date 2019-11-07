@@ -142,6 +142,7 @@ test('Create a workout', async t => {
     .expect(blockText('Target: 6 reps of 15 lbs.').visible).ok()
     .expect(inputGroup('Weight', { type: 'number' }).value).eql('15')
     .expect(inputGroup('Reps', { type: 'number' }).value).eql('6')
+    .expect(Selector('div.input-info').withExactText('Set numbers updated!').exists).notOk()
     .click(skipRestButton)
     //
     // Continue until the end of the exercise
