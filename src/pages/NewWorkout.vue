@@ -108,7 +108,7 @@
           validate
           min="1"
           pattern="[0-9]*"
-          @input="rounds = parseInt($event.target.value)"
+          @input="modifyRounds($event.target.value)"
         />
       </f7-list>
 
@@ -168,9 +168,19 @@ export default {
       }
       if (this.exercises[this.exercises.length - 1].name !== '') {
         this.exercises.push(newExercise())
-        if (this.exercises.length >= 3) {
-          this.$set(this.exercises[this.exercises.length - 3], 'rest', this.defaultRest)
+        const offset = this.rounds > 1 ? 2 : 3
+        if (this.exercises.length >= offset) {
+          this.$set(this.exercises[this.exercises.length - offset], 'rest', this.defaultRest)
         }
+      }
+    },
+
+    modifyRounds (newRounds) {
+      this.rounds = parseInt(newRounds)
+      if (this.rounds > 1 && !('rest' in this.exercises[this.exercises.length - 2])) {
+        this.$set(this.exercises[this.exercises.length - 2], 'rest', this.defaultRest)
+      } else if (this.rounds === 1 && 'rest' in this.exercises[this.exercises.length - 2]) {
+        this.$delete(this.exercises[this.exercises.length - 2], 'rest', this.defaultRest)
       }
     },
 

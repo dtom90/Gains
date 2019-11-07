@@ -71,6 +71,11 @@ test('Create a workout', async t => {
     .typeText(targetWeightInput.nth(1), '15', { replace: true })
     .typeText(targetRepsInput.nth(1), '6', { replace: true })
     //
+    // Increase the number of rounds, expect the last exercise to get a rest interval
+    .expect(restInput.count).eql(1)
+    .typeText(roundsInput, '3', { replace: true })
+    .expect(restInput.count).eql(2)
+    //
     // Create the workout, should navigate to the workout page
     .click(button('Create Workout'))
     .expect(title('Workout: My Workout').visible).ok()
@@ -83,7 +88,7 @@ test('Create a workout', async t => {
     .expect(listCell('Pull-ups').visible).ok()
     .expect(listCell('Weight: 15 lbs.').visible).ok()
     .expect(listCell('Reps: 6').visible).ok()
-    .expect(listItem('Rest: 30 seconds').count).eql(1)
-    .expect(Selector('p').withExactText('x 1 Round').visible).ok()
+    .expect(listItem('Rest: 30 seconds').count).eql(2)
+    .expect(Selector('p').withExactText('x 3 Rounds').visible).ok()
     .expect(button('Start Workout').visible).ok()
 })
