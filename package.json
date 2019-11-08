@@ -16,6 +16,7 @@
     "build:prod": "node ./build/prod.js",
     "build:test": "LOAD_SAMPLE_STATE=true yarn run build:prod",
     "serve": "node server.js",
+    "emulate:ios": "cordova emulate ios",
     "copy-fonts": "cpy node_modules/framework7-icons/fonts/*.* src/fonts && cpy node_modules/material-design-icons/iconfont/*.{eot,ttf,woff,woff2} src/fonts",
     "postinstall": "yarn run copy-fonts",
     "audit:packages": "yarn audit || test $? -eq 0",
