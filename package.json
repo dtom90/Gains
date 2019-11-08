@@ -1,22 +1,81 @@
 {
-  "name": "com.davidthomason.gains",
+  "name": "gains",
   "displayName": "Gains",
-  "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "version": "0.1.0",
+  "description": "Workout tracker app",
+  "homepage": "https://github.com/dtom90/Gains",
+  "repository": "https://github.com/dtom90/Gains",
+  "author": "David Thomason",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack-dev-server --config ./build/webpack.config.dev.js",
+    "dev:test": "LOAD_SAMPLE_STATE=true yarn run dev",
+    "prod": "webpack-dev-server --config ./build/webpack.config.prod.js",
+    "build:dev": "node ./build/dev.js",
+    "build:prod": "node ./build/prod.js",
+    "build:test": "LOAD_SAMPLE_STATE=true yarn run build:prod",
+    "serve": "node server.js",
+    "copy-fonts": "cpy node_modules/framework7-icons/fonts/*.* src/fonts && cpy node_modules/material-design-icons/iconfont/*.{eot,ttf,woff,woff2} src/fonts",
+    "postinstall": "yarn run copy-fonts",
+    "audit:packages": "yarn audit || test $? -eq 0",
+    "lint": "./node_modules/.bin/eslint --ext .js,.vue src",
+    "test:e2e": "testcafe chrome tests/e2e",
+    "test:e2e:prod": "testcafe chrome:headless tests/e2e -c 2 --app 'yarn run serve'",
+    "test": "yarn audit:packages && yarn lint && yarn build:test && yarn test:e2e:prod"
   },
-  "keywords": [
-    "ecosystem:cordova"
-  ],
-  "author": "Apache Cordova Team",
-  "license": "Apache-2.0",
   "dependencies": {
-    "cordova-ios": "^5.0.1"
+    "cordova-ios": "^5.0.1",
+    "framework7": "^4.1.0",
+    "framework7-icons": "2.2.0",
+    "framework7-vue": "^4.1.0",
+    "humanize-duration": "^3.21.0",
+    "material-design-icons": "^3.0.1",
+    "vue": "^2.6.8",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
-    "cordova-plugin-whitelist": "^1.3.4"
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-jsx": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "autoprefixer": "^9.1.5",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-transform-vue-jsx": "^4.0.1",
+    "chalk": "^2.4.1",
+    "copy-webpack-plugin": "^4.5.2",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cpy-cli": "^2.0.0",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.15.3",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-testcafe": "^0.2.1",
+    "eslint-plugin-vue": "^5.2.2",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.4.3",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "ora": "^3.0.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "testcafe": "^1.6.0",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "url-loader": "^1.1.1",
+    "vue-loader": "^15.7.0",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.8",
+    "webpack": "^4.20.0",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.11"
   },
   "cordova": {
     "plugins": {
@@ -25,5 +84,14 @@
     "platforms": [
       "ios"
     ]
-  }
+  },
+  "engines": {
+    "node": ">= 6.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }
