@@ -9,7 +9,10 @@
       Workouts
     </f7-block-title>
 
-    <f7-block strong>
+    <f7-block
+      v-if="workouts.length > 0"
+      strong
+    >
       <f7-row
         v-for="(workout, i) in workouts"
         :key="i"

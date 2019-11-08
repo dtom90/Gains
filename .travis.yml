@@ -1,3 +1,5 @@
 language: node_js
-script: npm run lint
-cache: npm
+node_js: lts/*
+cache: yarn
+addons:
+  chrome: stable

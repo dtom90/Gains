@@ -25,12 +25,79 @@
           :key="i"
           :label="'Exercise '+(i+1)"
           type="text"
-          :value="ex"
+          :value="ex.name"
           placeholder="Exercise Name"
           :required="i===0"
           validate
-          @input="modifyExercise(i, $event.target.value)"
-        />
+          @input="modifyExercise(i, 'name', $event.target.value)"
+        >
+          <div
+            v-if="exercises.length > (i+1)"
+            slot="inner"
+          >
+            <ul>
+              <f7-list-input
+                label="Target weight:"
+                inline-label
+                type="number"
+                :value="ex.weight"
+                error-message="Weight must be non-negative"
+                validate
+                min="0"
+                pattern="[0-9]*"
+                @input="modifyExercise(i, 'weight', $event.target.value)"
+              >
+                <div
+                  slot="inner"
+                  class="item-label"
+                >
+                  lbs.
+                </div>
+              </f7-list-input>
+              <f7-list-input
+                label="Target reps:"
+                inline-label
+                type="number"
+                :value="ex.reps"
+                error-message="Target reps must be positive"
+                validate
+                min="1"
+                pattern="[0-9]*"
+                @input="modifyExercise(i, 'reps', $event.target.value)"
+              >
+                <div
+                  slot="inner"
+                  class="item-label"
+                >
+                  reps
+                </div>
+              </f7-list-input>
+            </ul>
+          </div>
+          <div
+            v-if="'rest' in ex"
+            slot="inner"
+          >
+            <f7-list-input
+              label="Rest:"
+              inline-label
+              type="number"
+              :value="ex.rest"
+              error-message="Rest must be non-negative"
+              validate
+              min="0"
+              pattern="[0-9]*"
+              @input="modifyExercise(i, 'rest', $event.target.value)"
+            >
+              <div
+                slot="inner"
+                class="item-label"
+              >
+                seconds
+              </div>
+            </f7-list-input>
+          </div>
+        </f7-list-input>
 
         <f7-list-input
           label="Rounds"
@@ -41,7 +108,7 @@
           validate
           min="1"
           pattern="[0-9]*"
-          @input="rounds = parseInt($event.target.value)"
+          @input="modifyRounds($event.target.value)"
         />
       </f7-list>
 
@@ -63,26 +130,58 @@
 
 <script>
 import { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button } from 'framework7-vue'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+
+const newExercise = () => Object.assign({}, {
+  name: '',
+  weight: 0,
+  reps: 1
+})
 
 export default {
+  name: 'NewWorkout',
+
   components: { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button },
 
   data: () => ({
     name: '',
-    exercises: [''],
+    exercises: [newExercise()],
     rounds: 1,
+    defaultRest: 30,
     nameError: false,
     nameErrorMessage: ''
   }),
+  computed: {
+    ...mapState(['workouts'])
+  },
   methods: {
 
     ...mapMutations(['addWorkout']),
 
-    modifyExercise (i, val) {
-      this.$set(this.exercises, i, val)
+    modifyExercise (i, key, val) {
+      if (key !== 'name') {
+        val = parseInt(val)
+      }
+      this.$set(this.exercises[i], key, val)
+      if (key === 'rest') {
+        this.defaultRest = val
+      }
+      if (this.exercises[this.exercises.length - 1].name !== '') {
+        this.exercises.push(newExercise())
+        const offset = this.rounds > 1 ? 2 : 3
+        if (this.exercises.length >= offset) {
+          this.$set(this.exercises[this.exercises.length - offset], 'rest', this.defaultRest)
+        }
+      }
+    },
 
-      if (this.exercises[this.exercises.length - 1] !== '') { this.exercises.push('') }
+    modifyRounds (newRounds) {
+      this.rounds = parseInt(newRounds)
+      if (this.rounds > 1 && !('rest' in this.exercises[this.exercises.length - 2])) {
+        this.$set(this.exercises[this.exercises.length - 2], 'rest', this.defaultRest)
+      } else if (this.rounds === 1 && 'rest' in this.exercises[this.exercises.length - 2]) {
+        this.$delete(this.exercises[this.exercises.length - 2], 'rest', this.defaultRest)
+      }
     },
 
     createWorkout () {
@@ -90,14 +189,14 @@ export default {
         this.nameError = true
         this.nameErrorMessage = 'Please fill out this field.'
         this.$refs.newWorkout.$el.checkValidity()
-      } else if (this.$store.state.workouts.filter(w => w.name === this.name).length > 0) {
+      } else if (this.workouts.filter(w => w.name === this.name).length > 0) {
         this.nameError = true
         this.nameErrorMessage = 'Workout name already exists.'
         this.$refs.newWorkout.$el.checkValidity()
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
-        this.exercises = this.exercises.filter(ex => ex) // filter out blank (unfilled) exercises
+        this.exercises = this.exercises.filter(ex => ex.name) // filter out blank (unfilled) exercises
         this.addWorkout(this.$data)
-        this.$f7router.navigate('/')
+        this.$f7router.navigate('/workout/' + this.workouts[this.workouts.length - 1].id)
       }
     },
 

@@ -1,13 +1,13 @@
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const path = require('path');
+const path = require('path')
 
-function resolvePath(dir) {
-  return path.join(__dirname, '..', dir);
+function resolvePath (dir) {
+  return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolvePath('src'),
+      '@': resolvePath('src')
     }
   },
   devServer: {
@@ -47,35 +47,35 @@ module.exports = {
           resolvePath('node_modules/framework7-vue'),
           resolvePath('node_modules/template7'),
           resolvePath('node_modules/dom7'),
-          resolvePath('node_modules/ssr-window'),
-        ],
+          resolvePath('node_modules/ssr-window')
+        ]
       },
       {
         test: /\.vue$/,
-        use: 'vue-loader',
+        use: 'vue-loader'
       },
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
+          'css-loader'
+        ]
       },
       {
         test: /\.styl(us)?$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'stylus-loader',
-        ],
+          'stylus-loader'
+        ]
       },
       {
         test: /\.less$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'less-loader',
-        ],
+          'less-loader'
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -105,7 +105,10 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify('development'),
+      'process.env': JSON.stringify('development')
+    }),
+    new webpack.EnvironmentPlugin({
+      LOAD_SAMPLE_STATE: ''
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
@@ -113,14 +116,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './src/index.html',
-      inject: true,
+      inject: true
     }),
     new MiniCssExtractPlugin({
       filename: 'app.css'
     }),
     new CopyWebpackPlugin([{
       from: resolvePath('static'),
-      to: resolvePath('www/static'),
-    }]),
+      to: resolvePath('www/static')
+    }])
   ]
 }
