@@ -50,6 +50,18 @@
         Start Workout
       </f7-button>
     </f7-block>
+    <f7-block>
+      <f7-button
+        :href="`/editWorkout/${workout.id}`"
+        class="col"
+        big
+        fill
+        raised
+        color="yellow"
+      >
+        Edit Workout
+      </f7-button>
+    </f7-block>
     <f7-block v-if="lastWorkout">
       <f7-block-title>
         Last Workout:

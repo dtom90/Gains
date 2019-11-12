@@ -23,6 +23,15 @@ const store = new Vuex.Store({
         )
       )
     },
+    editWorkout (state, { id, name, exercises, rounds }) {
+      const workout = state.workouts.filter(w => w.id === id)[0]
+      if (workout.name !== name) {
+        Vue.set(workout, 'id', name.replace(/[^a-z0-9]/gi, '_').toLowerCase())
+        Vue.set(workout, 'name', name)
+      }
+      Vue.set(workout, 'exercises', exercises)
+      Vue.set(workout, 'rounds', rounds)
+    },
     startActiveWorkout (state, { workoutId, startTime }) {
       if (!(workoutId in state.completed)) {
         state.completed[workoutId] = {}
