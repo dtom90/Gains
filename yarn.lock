@@ -4331,23 +4331,23 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-framework7-icons@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-2.2.0.tgz#419b67079d4ea2dfa44c58b3d8d68bcd91f2a867"
-  integrity sha512-27r2cyR3JL6KExoTJPNAeqsdTwBTTAj3tBOOZ83pnGokYhDme6av/kUn3xCL7SRvWZg3khdNef06VVty4sEGQg==
+framework7-icons@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-3.0.0.tgz#7545c16694b21d04168c81d1b34d36cbb0b510ae"
+  integrity sha512-+mB8XhEAaIjjfRNlqW2tk7kYfPrQvDmDVpRFUjeUOiPDqqOybYmC9McvVPwwmqmob4nD3iZFWfs+rAMkVs5vPQ==
 
-framework7-vue@^4.1.0:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-4.5.2.tgz#dc4d8ed836acf23b50f84659705e1a1be36caa6f"
-  integrity sha512-qdKZB5W2/qxA761y9EvkMgXsyE1vqXyPdzjG/O8cVCd9BokP1CsXioZoCVBl76jKfk0G3PQ94HjFgYO8DYteGA==
+framework7-vue@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-5.1.1.tgz#372a39af6f551a1036bbcec6bf1cea7e92428708"
+  integrity sha512-9rg1fBVMxL8nlnHswCGnTiprpApjZgozw8BFr18di/OOhV0jb/wnl3JAeeQkl4Oh2nPazxPfF9Z03XapnfXc4A==
 
-framework7@^4.1.0:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/framework7/-/framework7-4.5.2.tgz#07eca370529c09547a2652312eea6026857fae40"
-  integrity sha512-qn8i1q2lr19HbEOeFiMbDvvQI7P17+P4bA4Ckt37oKJPe52wjmWszr2Uqn1RRwkAWcs/ztheA8Pa8d1YpkApEQ==
+framework7@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/framework7/-/framework7-5.1.1.tgz#a3ad5cf43e3101f83d886f3545502b5ae8f0d2ec"
+  integrity sha512-5O2bOG3V8GiI0i8tLWAD4fOEsIb7ui/OkblwlfOpCPT+BHyx+ZeR9zGX1XsJTUMEh0g6PuAl6fmEy0sYzJlQzA==
   dependencies:
     dom7 "^2.1.3"
-    path-to-regexp "^3.0.0"
+    path-to-regexp "^3.1.0"
     ssr-window "^1.0.1"
     template7 "^1.4.2"
 
@@ -6867,10 +6867,10 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
 
-path-to-regexp@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.1.0.tgz#f45a9cc4dc6331ae8f131e0ce4fde8607f802367"
-  integrity sha512-PtHLisEvUOepjc+sStXxJ/pDV/s5UBTOKWJY2SOz3e6E/iN/jLknY9WL72kTwRrwXDUbZTEAtSnJbz2fF127DA==
+path-to-regexp@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.2.0.tgz#fa7877ecbc495c601907562222453c43cc204a5f"
+  integrity sha512-jczvQbCUS7XmS7o+y1aEO9OBVFeZBQ1MDSEqmO7xSoPgOPoowY/SxLpZ6Vh97/8qHZOteiCKb7gkG9gA2ZUxJA==
 
 path-type@^2.0.0:
   version "2.0.0"
