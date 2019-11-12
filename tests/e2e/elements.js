@@ -14,6 +14,14 @@ const listCell = text => Selector('div.item-cell').withExactText(text)
 const doneButton = Selector('div.exercise-block > a.button').withExactText('Done')
 const skipRestButton = Selector('div.rest-block > a.button').withExactText('Skip Rest')
 
+const expectHomePage = async t => {
+  await t.expect(Selector('div.title-large-text').withText('Gainzz').visible).ok()
+    .expect(blockTitle('Workouts').visible).ok()
+    .expect(button('Circuit').visible).ok()
+    .expect(button('HIIT').visible).ok()
+    .expect(button('New Workout').visible).ok()
+}
+
 async function expectCircuitWorkout (t) {
   await t
     .expect(blockTitle('Exercises:').visible).ok()
@@ -55,6 +63,7 @@ export {
   listCell,
   doneButton,
   skipRestButton,
+  expectHomePage,
   expectCircuitWorkout,
   startCircuitWorkout
 }
