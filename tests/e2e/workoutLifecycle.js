@@ -1,6 +1,6 @@
 import {
   title, button, inputGroup,
-  expectHomePage, expectCircuitWorkout
+  expectHomePage, expectCircuitWorkout, listItem
 } from './elements'
 
 const hostname = 'localhost'
@@ -11,14 +11,14 @@ fixture(`Workout Lifecycle`)
   .page(page)
   .beforeEach(expectHomePage)
 
-test('Create a workout', async t => {
-  const workoutNameInput = inputGroup('Name', { type: 'text', placeholder: 'Workout Name' })
-  const exerciseNameInput = i => inputGroup('Exercise ' + i, { type: 'text', placeholder: 'Exercise Name' })
-  const targetWeightInput = inputGroup('Target weight:', { type: 'number' })
-  const targetRepsInput = inputGroup('Target reps:', { type: 'number' })
-  const restInput = inputGroup('Rest:', { type: 'number' })
-  const roundsInput = inputGroup('Rounds', { type: 'number' })
+const workoutNameInput = inputGroup('Name', { type: 'text', placeholder: 'Workout Name' })
+const exerciseNameInput = i => inputGroup('Exercise ' + i, { type: 'text', placeholder: 'Exercise Name' })
+const targetWeightInput = inputGroup('Target weight:', { type: 'number' })
+const targetRepsInput = inputGroup('Target reps:', { type: 'number' })
+const restInput = inputGroup('Rest:', { type: 'number' })
+const roundsInput = inputGroup('Rounds', { type: 'number' })
 
+test('Create a workout', async t => {
   await t
     //
     // Open the New Workout page, expect the right content
@@ -73,4 +73,33 @@ test('Create a workout', async t => {
     .click(button('Create Workout'))
     .expect(title('Workout: My Workout').visible).ok()
   expectCircuitWorkout(t)
+})
+
+test('Blank rest should default to 0', async t => {
+  await t
+    //
+    // Open the New Workout page, expect the right content
+    .click(button('New Workout'))
+    .expect(title('New Workout').visible).ok()
+    .expect(workoutNameInput.visible).ok()
+    .expect(exerciseNameInput('1').visible).ok()
+    .expect(roundsInput.visible).ok()
+    .expect(roundsInput.value).eql('1')
+    //
+    // Type in the workout name
+    .typeText(workoutNameInput, 'My Workout')
+    //
+    // Type the first and second exercise name
+    .typeText(exerciseNameInput('1'), 'Push-ups')
+    .typeText(exerciseNameInput('2'), 'Pull-ups')
+    //
+    // Delete the rest period between exercises
+    .selectText(restInput)
+    .pressKey('delete')
+    .expect(restInput.value).eql('0')
+    //
+    // Create the workout, should navigate to the workout page
+    .click(button('Create Workout'))
+    .expect(title('Workout: My Workout').visible).ok()
+    .expect(listItem('Rest: 0 seconds').visible).ok()
 })

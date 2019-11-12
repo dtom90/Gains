@@ -85,6 +85,7 @@
               :value="ex.rest"
               error-message="Rest must be non-negative"
               validate
+              placeholder="0"
               min="0"
               pattern="[0-9]*"
               @input="modifyExercise(i, 'rest', $event.target.value)"
@@ -162,10 +163,13 @@ export default {
       if (key !== 'name') {
         val = parseInt(val)
       }
-      this.$set(this.exercises[i], key, val)
       if (key === 'rest') {
+        if (isNaN(val)) {
+          val = 0
+        }
         this.defaultRest = val
       }
+      this.$set(this.exercises[i], key, val)
       if (this.exercises[this.exercises.length - 1].name !== '') {
         this.exercises.push(newExercise())
         const offset = this.rounds > 1 ? 2 : 3
