@@ -1,5 +1,16 @@
 /* Your app styles here */
 :root {
+  --f7-navbar-bg-color: #0A1344;
+  --f7-list-bg-color: #0A1344;
+  --f7-input-bg-color: #0A1344;
+  --f7-label-text-color: grey;
+  --f7-input-placeholder-color: grey;
+  --f7-input-text-color: white;
+  --f7-navbar-text-color: white;
+  --f7-page-bg-color: #050A23;
+  --f7-block-strong-bg-color: #050A23;
+  --f7-block-title-text-color: white;
+  --f7-text-color: white;
   --f7-button-height: 44px;
   --f7-block-title-font-size: 20px;
 }

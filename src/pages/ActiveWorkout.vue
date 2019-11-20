@@ -1,13 +1,6 @@
 <template>
-  <f7-page>
-    <f7-navbar
-      :title="'Active Workout: '+workout.name"
-      back-link="Back"
-    />
-
-    <f7-block
-      strong
-    >
+  <f7-page style="background-color: #0A1344">
+    <f7-block>
       <!-- Round Counter -->
       <h3>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</h3>
 
@@ -66,7 +59,7 @@
 </template>
 
 <script>
-import { f7Page, f7Navbar, f7Block, f7Button } from 'framework7-vue'
+import { f7Page, f7Block, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
@@ -78,7 +71,6 @@ export default {
     ExercisePanel,
     RestPanel,
     f7Page,
-    f7Navbar,
     f7Block,
     f7Button
   },
