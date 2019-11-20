@@ -1,8 +1,24 @@
 <template>
   <f7-page style="background-color: #0A1344">
-    <f7-block>
+    <f7-button
+      :href="'/workout/'+workout.id"
+      small
+      outline
+      round
+      color="red"
+      style="color: red; width: 36px; height: 36px; font-size: 28px; margin: 12px;"
+    >
+      &times;
+    </f7-button>
+    <f7-block style="margin-top: 16px;">
+      <div class="workout-name">
+        {{ workout.name }}
+      </div>
+
       <!-- Round Counter -->
-      <h3>{{ firstExerciseOfRound && rest ? 'Next' : 'Current' }} Round: {{ currentRound }}</h3>
+      <div class="workout-round">
+        Round {{ currentRound }} of {{ workout.rounds }}
+      </div>
 
       <!-- Completed Exercise -->
       <exercise-panel
@@ -30,16 +46,13 @@
         :rest="rest"
         :finish-exercise="finishExercise"
       />
-
-      <!-- Next Up: Rest -->
-      <rest-panel
-        v-if="!rest && !done"
-        :countdown="countdown"
-        :rest="rest"
-        :rest-time="currentExercise.rest"
-      />
     </f7-block>
 
+    <f7-block v-if="!done">
+      <div class="time-elapsed">
+        Time Elapsed: {{ elapsedWorkoutTime }}
+      </div>
+    </f7-block>
     <f7-block
       v-if="done"
     >
@@ -97,6 +110,7 @@ export default {
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
+    elapsedWorkoutTime () { return humanizeDuration(Date.now() - this.startTime, { round: true }) },
     totalWorkoutTime () { return humanizeDuration(this.endTime - this.startTime, { round: true }) }
   },
 
@@ -176,3 +190,22 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .workout-name {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .workout-round {
+    margin-top: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .time-elapsed {
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+  }
+</style>

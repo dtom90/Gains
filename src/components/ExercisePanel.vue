@@ -1,14 +1,27 @@
 <template>
   <f7-block
     class="exercise-block"
-    :style="{backgroundColor: completed ? 'green' : 'blue'}"
+    :style="{backgroundColor: completed ? 'green' : '#D7263D'}"
   >
-    <p :class="(rest ? '' : 'large-text')+' text-align-center'">
-      {{ adjective }} Exercise: {{ exercise.name }}
+    <p
+      class="exercise-target text-shadow"
+      style="margin-bottom: 12px;"
+    >
+      {{ adjective }}:
     </p>
-    <p class="text-align-center">
-      Target: {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }} of {{ exercise.weight }} lbs.
+    <p class="exercise-name text-shadow">
+      {{ exercise.name }}
     </p>
+    <div
+      class="exercise-target text-shadow"
+      style="margin-bottom: 36px;"
+    >
+      <div>
+        {{ exercise.weight }} lbs.
+      </div><div>
+        {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}
+      </div>
+    </div>
     <f7-block
       v-if="completed"
       class="input-block display-flex justify-content-center"
@@ -67,9 +80,9 @@
     </f7-block>
     <f7-button
       v-if="!rest"
-      class="col"
-      big
-      fill
+      class="done-button"
+      large
+      strong
       raised
       @click="finishExercise"
     >
@@ -122,7 +135,7 @@ export default {
     updated: false
   }),
   computed: {
-    adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' }
+    adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Now' }
   },
   watch: {
     exercise: function (newExercise) {
@@ -161,6 +174,29 @@ export default {
     border-radius: 5px;
     padding: 16px;
     font-size: 18px;
+  }
+  .text-shadow {
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  .exercise-name {
+    margin: 0;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .exercise-target {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .done-button {
+    background-color: #27AE60;
+    height: auto;
+    font-weight: bold;
+    font-size: 32px;
+    max-width: 242px;
+    padding: 12px;
+    margin: 12px auto 12px auto;
   }
   .input-block {
     margin: 0;
