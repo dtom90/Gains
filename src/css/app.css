@@ -1,7 +1,9 @@
 /* Your app styles here */
 :root {
   --f7-navbar-bg-color: #0A1344;
+  --f7-navbar-bg-color-rgb: 10, 19, 68;
   --f7-toolbar-bg-color: #0A1344;
+  --f7-toolbar-bg-color-rgb: 10, 19, 68;
   --f7-list-bg-color: #0A1344;
   --f7-input-bg-color: #0A1344;
   --f7-label-text-color: grey;

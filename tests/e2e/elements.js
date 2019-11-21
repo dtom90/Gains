@@ -3,6 +3,7 @@ import { Selector } from 'testcafe'
 const title = text => Selector('div.title').withExactText(text)
 const blockTitle = text => Selector('div.block-title').withExactText(text)
 const blockText = text => Selector('div.block > p').withExactText(text)
+const blockDiv = text => Selector('div.block div').withExactText(text)
 const button = text => Selector('a.button').withExactText(text)
 const inputGroup = (label, { type, placeholder }) => Selector('li')
   .find('div.item-label').withExactText(label)
@@ -45,18 +46,20 @@ async function startCircuitWorkout (t) {
    */
   await t
     .click(button('Start Workout'))
-    .expect(title('Active Workout: Circuit').visible).ok()
-    .expect(Selector('h3').withExactText('Current Round: 1').visible).ok()
-    .expect(blockText('Current Exercise: Push-ups').visible).ok()
-    .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
+    .expect(blockDiv('Circuit').visible).ok()
+    .expect(blockDiv('Round 1 of 2').visible).ok()
+    .expect(blockText('Now:').visible).ok()
+    .expect(blockText('Push-ups').visible).ok()
+    .expect(blockDiv('1 rep').visible).ok()
+    .expect(blockDiv('0 lbs.').visible).ok()
     .expect(doneButton.visible).ok()
-    .expect(blockText('Next Up: 3s Rest').visible).ok()
 }
 
 export {
   title,
   blockTitle,
   blockText,
+  blockDiv,
   button,
   inputGroup,
   listItem,

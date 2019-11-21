@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe'
 
 import {
-  title, blockTitle, blockText, button, inputGroup, listItem,
+  title, blockTitle, blockText, blockDiv, button, inputGroup, listItem,
   doneButton, skipRestButton,
   expectHomePage, expectCircuitWorkout, startCircuitWorkout
 } from './elements'
@@ -30,8 +30,8 @@ test('Start Circuit workout', async t => {
     .click(doneButton)
     .expect(blockText('Rest: 3').visible).ok()
     .expect(skipRestButton.visible).ok()
-    .expect(blockText('Completed Exercise: Push-ups').visible).ok()
-    .expect(blockText('Target: 1 rep of 0 lbs.').visible).ok()
+    .expect(blockText('Completed:').visible).ok()
+    .expect(blockText('Push-ups').visible).ok()
     .expect(inputGroup('Weight', { type: 'number' }).visible).ok()
     .expect(inputGroup('Reps', { type: 'number' }).visible).ok()
     .expect(inputGroup('Weight', { type: 'number' }).value).eql('0')
@@ -45,33 +45,38 @@ test('Start Circuit workout', async t => {
     //
     // Skip the rest, expect the next workout to be active
     .click(skipRestButton)
-    .expect(blockText('Current Exercise: Pull-ups').visible).ok()
-    .expect(blockText('Target: 6 reps of 15 lbs.').visible).ok()
+    .expect(blockText('Now:').visible).ok()
+    .expect(blockText('Pull-ups').visible).ok()
+    .expect(blockDiv('6 reps').visible).ok()
+    .expect(blockDiv('15 lbs.').visible).ok()
     .expect(doneButton.visible).ok()
-    .expect(blockText('Next Up: 3s Rest').visible).ok()
     //
     // Click 'Done', leave default weight & rep values
     .click(doneButton)
     .expect(blockText('Rest: 3').visible).ok()
     .expect(skipRestButton.visible).ok()
-    .expect(blockText('Completed Exercise: Pull-ups').visible).ok()
-    .expect(blockText('Target: 6 reps of 15 lbs.').visible).ok()
+    .expect(blockText('Completed:').visible).ok()
+    .expect(blockText('Pull-ups').visible).ok()
     .expect(inputGroup('Weight', { type: 'number' }).value).eql('15')
     .expect(inputGroup('Reps', { type: 'number' }).value).eql('6')
     .expect(Selector('div.input-info').withExactText('Set numbers updated!').exists).notOk()
     .click(skipRestButton)
     //
     // Continue until the end of the exercise
-    .expect(blockText('Current Exercise: Push-ups').visible).ok()
+    .expect(blockText('Now:').visible).ok()
+    .expect(blockText('Push-ups').visible).ok()
     .click(doneButton)
     .expect(blockText('Rest: 3').visible).ok()
-    .expect(blockText('Completed Exercise: Push-ups').visible).ok()
+    .expect(blockText('Completed:').visible).ok()
+    .expect(blockText('Push-ups').visible).ok()
     .expect(inputGroup('Weight', { type: 'number' }).value).eql('0')
     .expect(inputGroup('Reps', { type: 'number' }).value).eql('1')
     .click(skipRestButton)
-    .expect(blockText('Current Exercise: Pull-ups').visible).ok()
+    .expect(blockText('Now:').visible).ok()
+    .expect(blockText('Pull-ups').visible).ok()
     .click(doneButton)
-    .expect(blockText('Completed Exercise: Pull-ups').visible).ok()
+    .expect(blockText('Completed:').visible).ok()
+    .expect(blockText('Pull-ups').visible).ok()
     .expect(Selector('p').withText(/Total Workout Time: [0-9]+ seconds/).visible).ok()
     .click(button('Finish Workout'))
     //

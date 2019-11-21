@@ -18,9 +18,10 @@
       style="margin-bottom: 36px;"
     >
       <div>
-        {{ exercise.weight }} lbs.
-      </div><div>
-        {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}
+        <span>{{ exercise.weight }} lbs.</span>
+      </div>
+      <div>
+        <span>{{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}</span>
       </div>
     </div>
     <f7-block

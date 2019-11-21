@@ -75,7 +75,7 @@
       class="no-hairline no-shadow"
       style="height: auto"
     >
-      <f7-block>
+      <f7-block style="margin-top: 8px;">
         <div class="time-elapsed">
           Time Elapsed: {{ elapsedWorkoutTime }}
         </div>
