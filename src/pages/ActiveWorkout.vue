@@ -1,74 +1,102 @@
 <template>
   <f7-page id="active-workout">
-    <CloseButton :link="'/workout/'+workout.id" />
-    <f7-block style="margin-top: 0;">
-      <div class="workout-name">
-        {{ workout.name }}
-      </div>
-
-      <!-- Round Counter -->
-      <div class="workout-round">
-        Round {{ currentRound }} of {{ workout.rounds }}
-      </div>
-
-      <!-- Completed Exercise -->
-      <exercise-panel
-        v-if="rest && !firstExerciseOfWorkout"
-        :exercise="currentExercise"
-        :rest="rest"
-        :completed="true"
-        :workout-id="workout.id"
-        :workout-time="startTime"
-        :last-completed-exercise-time="lastCompletedExerciseTime"
-      />
-
-      <!-- Active Rest -->
-      <rest-panel
-        v-if="rest && !done"
-        :countdown="countdown"
-        :rest="rest"
-        :finish-rest="finishRest"
-      />
-
-      <!-- Current / Next Exercise -->
-      <exercise-panel
-        v-if="!rest && !done"
-        :exercise="currentExercise"
-        :rest="rest"
-        :finish-exercise="finishExercise"
-      />
-    </f7-block>
-
-    <f7-block v-if="!done">
-      <div class="time-elapsed">
-        Time Elapsed: {{ elapsedWorkoutTime }}
-      </div>
-      <div class="time-elapsed">
-        Progress: {{ Math.round(workoutPercentage * 100) }} %
-      </div>
-    </f7-block>
-    <f7-block
-      v-if="done"
+    <f7-navbar
+      class="no-hairline no-shadow"
     >
-      <p><strong>Total Workout Time:</strong> {{ totalWorkoutTime }}</p>
-      <f7-button
-        :href="`/workout/${workout.id}`"
-        class="col"
-        big
-        fill
-        raised
-        color="green"
+      <f7-link
+        id="close-button"
+        :href="'/workout/'+workout.id"
+        small
+        round
       >
-        Finish Workout
-      </f7-button>
-    </f7-block>
+        <f7-icon material="close" />
+      </f7-link>
+    </f7-navbar>
+    <f7-page-content style="padding-top: 0;">
+      <f7-block style="margin-top: 0;">
+        <div class="workout-name">
+          {{ workout.name }}
+        </div>
+
+        <!-- Round Counter -->
+        <div class="workout-round">
+          Round {{ currentRound }} of {{ workout.rounds }}
+        </div>
+
+        <!-- Completed Exercise -->
+        <exercise-panel
+          v-if="rest && !firstExerciseOfWorkout"
+          :exercise="currentExercise"
+          :rest="rest"
+          :completed="true"
+          :workout-id="workout.id"
+          :workout-time="startTime"
+          :last-completed-exercise-time="lastCompletedExerciseTime"
+        />
+
+        <!-- Active Rest -->
+        <rest-panel
+          v-if="rest && !done"
+          :countdown="countdown"
+          :rest="rest"
+          :finish-rest="finishRest"
+        />
+
+        <!-- Current / Next Exercise -->
+        <exercise-panel
+          v-if="!rest && !done"
+          :exercise="currentExercise"
+          :rest="rest"
+          :finish-exercise="finishExercise"
+        />
+      </f7-block>
+
+      <f7-block
+        v-if="done"
+      >
+        <p><strong>Total Workout Time:</strong> {{ totalWorkoutTime }}</p>
+        <f7-button
+          :href="`/workout/${workout.id}`"
+          class="col"
+          big
+          fill
+          raised
+          color="green"
+        >
+          Finish Workout
+        </f7-button>
+      </f7-block>
+    </f7-page-content>
+
+    <f7-toolbar
+      v-if="!done"
+      bottom
+      :inner="false"
+      class="no-hairline no-shadow"
+      style="height: auto"
+    >
+      <f7-block>
+        <div class="time-elapsed">
+          Time Elapsed: {{ elapsedWorkoutTime }}
+        </div>
+        <div
+          id="progress-container"
+          class="time-elapsed"
+        >
+          <span class="progress-text">Progress: {{ workoutPercentage }} %</span>
+          <span
+            class="progress-bar"
+            :style="`width: ${workoutPercentage}%;`"
+          />
+        </div>
+      </f7-block>
+    </f7-toolbar>
   </f7-page>
 </template>
 
 <script>
-import { f7Page, f7Block, f7Button } from 'framework7-vue'
+import { f7Page, f7Navbar, f7Link, f7Icon, f7PageContent, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
-import CloseButton from '@/components/CloseButton.vue'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 import humanizeDuration from 'humanize-duration'
@@ -76,11 +104,15 @@ import humanizeDuration from 'humanize-duration'
 export default {
 
   components: {
-    CloseButton,
     ExercisePanel,
     RestPanel,
     f7Page,
+    f7Navbar,
+    f7Link,
+    f7Icon,
+    f7PageContent,
     f7Block,
+    f7Toolbar,
     f7Button
   },
 
@@ -104,7 +136,7 @@ export default {
   computed: {
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
-    workoutPercentage () { return (this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length },
+    workoutPercentage () { return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100) },
     firstExerciseOfWorkout () { return this.currentRound === 0 && this.currentExerciseIndex === 0 },
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
@@ -225,5 +257,24 @@ export default {
     font-weight: bold;
     font-size: 24px;
     text-align: center;
+  }
+  #progress-container {
+    margin-top: 10px;
+    background-color: #A6A6A6;
+    border-radius: 5px;
+    position: relative;
+  }
+  .progress-bar {
+    background-color: #27AE60;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
+  .progress-text {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 </style>
