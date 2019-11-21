@@ -1,7 +1,7 @@
 <template>
   <f7-block
     class="exercise-block"
-    :style="{backgroundColor: completed ? 'green' : '#D7263D'}"
+    :style="{backgroundColor: completed ? '#27AE60' : '#D7263D'}"
   >
     <p
       class="exercise-target text-shadow"
@@ -13,6 +13,7 @@
       {{ exercise.name }}
     </p>
     <div
+      v-if="!completed"
       class="exercise-target text-shadow"
       style="margin-bottom: 36px;"
     >
@@ -200,18 +201,24 @@ export default {
   }
   .input-block {
     margin: 0;
-    background-color: green;
+    background-color: #27AE60;
   }
   .input-list {
     margin: 0;
     max-width: 200px;
   }
   .input-item {
-    background-color: #1B9A59;
+    background-color: #2ABF68;
   }
   #set-update-alert {
     position: static;
     margin-top: 10px;
     color: white;
+  }
+</style>
+
+<style>
+  .input-list input {
+    background-color: #2ABF68 !important;
   }
 </style>

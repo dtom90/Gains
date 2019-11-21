@@ -1,12 +1,11 @@
 <template>
-  <f7-page style="background-color: #0A1344">
+  <f7-page id="active-workout">
     <f7-button
+      id="close-button"
       :href="'/workout/'+workout.id"
       small
       outline
       round
-      color="red"
-      style="color: red; width: 36px; height: 36px; font-size: 28px; margin: 12px;"
     >
       &times;
     </f7-button>
@@ -41,8 +40,8 @@
 
       <!-- Current / Next Exercise -->
       <exercise-panel
-        v-if="!done"
-        :exercise="rest ? nextExercise : currentExercise"
+        v-if="!rest && !done"
+        :exercise="currentExercise"
         :rest="rest"
         :finish-exercise="finishExercise"
       />
@@ -51,6 +50,9 @@
     <f7-block v-if="!done">
       <div class="time-elapsed">
         Time Elapsed: {{ elapsedWorkoutTime }}
+      </div>
+      <div class="time-elapsed">
+        Progress: {{ workoutPercentage * 100 }} %
       </div>
     </f7-block>
     <f7-block
@@ -92,10 +94,12 @@ export default {
     workout: {},
     exerciseSequence: [],
     startTime: null,
+    now: null,
     endTime: null,
     currentExerciseIndex: 0,
     currentRound: 1,
     lastCompletedExerciseTime: null,
+    workoutTimer: null,
     countdown: null,
     timer: null,
     started: false,
@@ -106,11 +110,18 @@ export default {
   computed: {
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
+    workoutPercentage () { return (this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length },
     firstExerciseOfWorkout () { return this.currentRound === 0 && this.currentExerciseIndex === 0 },
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
-    elapsedWorkoutTime () { return humanizeDuration(Date.now() - this.startTime, { round: true }) },
+    elapsedWorkoutTime () {
+      const ms = this.now - this.startTime
+      let secs = Math.round(ms / 1000)
+      const mins = Math.floor(secs / 60)
+      secs -= (mins * 60)
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+    },
     totalWorkoutTime () { return humanizeDuration(this.endTime - this.startTime, { round: true }) }
   },
 
@@ -121,6 +132,8 @@ export default {
       this.exerciseSequence.push(...this.workout.exercises)
     }
     this.startTime = Date.now()
+    this.now = Date.now()
+    this.workoutTimer = setInterval(this.incrementTimeElapsed, 1000)
     this.startActiveWorkout({
       workoutId: this.workout.id,
       startTime: this.startTime
@@ -160,6 +173,14 @@ export default {
       }
     },
 
+    incrementTimeElapsed () {
+      if (this.done) {
+        clearInterval(this.workoutTimer)
+      } else {
+        this.now = Date.now()
+      }
+    },
+
     // Countdown function during rest
     decrementCountdown () {
       if (this.countdown > 1) {
@@ -192,6 +213,17 @@ export default {
 </script>
 
 <style scoped>
+  #active-workout {
+    background-color: #0A1344
+  }
+  #close-button {
+    color: red;
+    border-color: red;
+    width: 36px;
+    height: 36px;
+    font-size: 28px;
+    margin: 12px;
+  }
   .workout-name {
     font-size: 36px;
     font-weight: bold;
