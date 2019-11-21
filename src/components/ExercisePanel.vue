@@ -1,14 +1,29 @@
 <template>
   <f7-block
     class="exercise-block"
-    :style="{backgroundColor: completed ? 'green' : 'blue'}"
+    :style="{backgroundColor: completed ? '#27AE60' : '#D7263D'}"
   >
-    <p :class="(rest ? '' : 'large-text')+' text-align-center'">
-      {{ adjective }} Exercise: {{ exercise.name }}
+    <p
+      class="exercise-target text-shadow"
+      style="margin-bottom: 12px;"
+    >
+      {{ adjective }}:
     </p>
-    <p class="text-align-center">
-      Target: {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }} of {{ exercise.weight }} lbs.
+    <p class="exercise-name text-shadow">
+      {{ exercise.name }}
     </p>
+    <div
+      v-if="!completed"
+      class="exercise-target text-shadow"
+      style="margin-bottom: 36px;"
+    >
+      <div>
+        <span>{{ exercise.weight }} lbs.</span>
+      </div>
+      <div>
+        <span>{{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}</span>
+      </div>
+    </div>
     <f7-block
       v-if="completed"
       class="input-block display-flex justify-content-center"
@@ -67,9 +82,9 @@
     </f7-block>
     <f7-button
       v-if="!rest"
-      class="col"
-      big
-      fill
+      class="done-button"
+      large
+      strong
       raised
       @click="finishExercise"
     >
@@ -122,7 +137,7 @@ export default {
     updated: false
   }),
   computed: {
-    adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Current' }
+    adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Now' }
   },
   watch: {
     exercise: function (newExercise) {
@@ -162,20 +177,49 @@ export default {
     padding: 16px;
     font-size: 18px;
   }
+  .text-shadow {
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  .exercise-name {
+    margin: 0;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .exercise-target {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .done-button {
+    background-color: #27AE60;
+    height: auto;
+    font-weight: bold;
+    font-size: 32px;
+    max-width: 242px;
+    padding: 12px;
+    margin: 12px auto 12px auto;
+  }
   .input-block {
     margin: 0;
-    background-color: green;
+    background-color: #27AE60;
   }
   .input-list {
     margin: 0;
     max-width: 200px;
   }
   .input-item {
-    background-color: #1B9A59;
+    background-color: #2ABF68;
   }
   #set-update-alert {
     position: static;
     margin-top: 10px;
     color: white;
+  }
+</style>
+
+<style>
+  .input-list input {
+    background-color: #2ABF68 !important;
   }
 </style>

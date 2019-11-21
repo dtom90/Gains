@@ -2,7 +2,9 @@
   <f7-page>
     <f7-navbar
       :title="'Workout: '+workout.name"
-      back-link="Back"
+      back-link
+      back-link-force
+      back-link-url="/"
     />
 
     <f7-block>
@@ -48,6 +50,18 @@
         color="green"
       >
         Start Workout
+      </f7-button>
+    </f7-block>
+    <f7-block>
+      <f7-button
+        :href="`/editWorkout/${workout.id}`"
+        class="col"
+        big
+        fill
+        raised
+        color="yellow"
+      >
+        Edit Workout
       </f7-button>
     </f7-block>
     <f7-block v-if="lastWorkout">

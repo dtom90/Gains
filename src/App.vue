@@ -2,7 +2,6 @@
   <!-- App -->
   <f7-app
     :params="f7params"
-    theme-dark
   >
     <!-- Main View -->
     <f7-view
@@ -27,8 +26,7 @@ export default {
         id: 'io.framework7.testapp', // App bundle ID
         name: 'Framework7', // App name
         theme: 'auto', // Automatic theme detection
-        // App routes
-        routes: routes
+        routes: routes // App routes
       }
     }
   }

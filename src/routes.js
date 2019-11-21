@@ -18,6 +18,10 @@ export default [
     component: WorkoutPage
   },
   {
+    path: '/editWorkout/:workoutId',
+    component: FormPage
+  },
+  {
     path: '/workout/:workoutId/go',
     component: ActiveWorkout
   },

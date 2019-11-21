@@ -1,7 +1,7 @@
 <template>
   <f7-page>
     <f7-navbar
-      title="Gainzz"
+      title="Gains Tracker"
       large
     />
 

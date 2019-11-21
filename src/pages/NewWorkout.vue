@@ -1,7 +1,7 @@
 <template>
   <f7-page>
     <f7-navbar
-      title="New Workout"
+      :title="newWorkout ? 'New Workout' : 'Edit Workout'"
       back-link="Back"
     />
 
@@ -85,6 +85,7 @@
               :value="ex.rest"
               error-message="Rest must be non-negative"
               validate
+              placeholder="0"
               min="0"
               pattern="[0-9]*"
               @input="modifyExercise(i, 'rest', $event.target.value)"
@@ -121,7 +122,7 @@
           color="green"
           @click="createWorkout"
         >
-          Create Workout
+          {{ newWorkout ? 'Create Workout' : 'Update Workout' }}
         </f7-button>
       </f7-row>
     </f7-block>
@@ -148,24 +149,46 @@ export default {
     exercises: [newExercise()],
     rounds: 1,
     defaultRest: 30,
+    newWorkout: true,
+    changedName: false,
     nameError: false,
     nameErrorMessage: ''
   }),
+
   computed: {
     ...mapState(['workouts'])
   },
+
+  mounted () {
+    if ('workoutId' in this.$f7route.params) {
+      this.newWorkout = false
+      const workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+      this.name = workout.name
+      this.exercises = workout.exercises
+      this.rounds = workout.rounds
+    }
+  },
+
   methods: {
 
-    ...mapMutations(['addWorkout']),
+    ...mapMutations([
+      'addWorkout',
+      'editWorkout'
+    ]),
 
     modifyExercise (i, key, val) {
       if (key !== 'name') {
         val = parseInt(val)
+      } else {
+        this.changedName = true
       }
-      this.$set(this.exercises[i], key, val)
       if (key === 'rest') {
+        if (isNaN(val)) {
+          val = 0
+        }
         this.defaultRest = val
       }
+      this.$set(this.exercises[i], key, val)
       if (this.exercises[this.exercises.length - 1].name !== '') {
         this.exercises.push(newExercise())
         const offset = this.rounds > 1 ? 2 : 3
@@ -189,14 +212,20 @@ export default {
         this.nameError = true
         this.nameErrorMessage = 'Please fill out this field.'
         this.$refs.newWorkout.$el.checkValidity()
-      } else if (this.workouts.filter(w => w.name === this.name).length > 0) {
+      } else if ((this.newWorkout || this.changedName) && this.workouts.filter(w => w.name === this.name).length > 0) {
         this.nameError = true
         this.nameErrorMessage = 'Workout name already exists.'
         this.$refs.newWorkout.$el.checkValidity()
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
         this.exercises = this.exercises.filter(ex => ex.name) // filter out blank (unfilled) exercises
-        this.addWorkout(this.$data)
-        this.$f7router.navigate('/workout/' + this.workouts[this.workouts.length - 1].id)
+        if (this.newWorkout) {
+          this.addWorkout(this.$data)
+          this.$f7router.navigate('/workout/' + this.workouts[this.workouts.length - 1].id)
+        } else {
+          const id = this.$f7route.params['workoutId']
+          this.editWorkout(Object.assign({ id }, this.$data))
+          this.$f7router.navigate('/workout/' + id)
+        }
       }
     },
 
