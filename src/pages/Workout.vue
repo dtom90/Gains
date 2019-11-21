@@ -2,7 +2,9 @@
   <f7-page>
     <f7-navbar
       :title="'Workout: '+workout.name"
-      back-link="Back"
+      back-link
+      back-link-force
+      back-link-url="/"
     />
 
     <f7-block>

@@ -1,15 +1,7 @@
 <template>
   <f7-page id="active-workout">
-    <f7-button
-      id="close-button"
-      :href="'/workout/'+workout.id"
-      small
-      outline
-      round
-    >
-      &times;
-    </f7-button>
-    <f7-block style="margin-top: 16px;">
+    <CloseButton :link="'/workout/'+workout.id" />
+    <f7-block style="margin-top: 0;">
       <div class="workout-name">
         {{ workout.name }}
       </div>
@@ -52,7 +44,7 @@
         Time Elapsed: {{ elapsedWorkoutTime }}
       </div>
       <div class="time-elapsed">
-        Progress: {{ workoutPercentage * 100 }} %
+        Progress: {{ Math.round(workoutPercentage * 100) }} %
       </div>
     </f7-block>
     <f7-block
@@ -76,6 +68,7 @@
 <script>
 import { f7Page, f7Block, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
+import CloseButton from '@/components/CloseButton.vue'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 import humanizeDuration from 'humanize-duration'
@@ -83,6 +76,7 @@ import humanizeDuration from 'humanize-duration'
 export default {
 
   components: {
+    CloseButton,
     ExercisePanel,
     RestPanel,
     f7Page,
@@ -215,14 +209,6 @@ export default {
 <style scoped>
   #active-workout {
     background-color: #0A1344
-  }
-  #close-button {
-    color: red;
-    border-color: red;
-    width: 36px;
-    height: 36px;
-    font-size: 28px;
-    margin: 12px;
   }
   .workout-name {
     font-size: 36px;
