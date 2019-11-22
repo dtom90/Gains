@@ -3,6 +3,7 @@
     class="exercise-block"
     :style="{backgroundColor: completed ? '#27AE60' : '#D7263D'}"
   >
+    <!-- Status & Exercise -->
     <p
       class="exercise-target text-shadow"
       style="margin-bottom: 12px;"
@@ -12,6 +13,8 @@
     <p class="exercise-name text-shadow">
       {{ exercise.name }}
     </p>
+
+    <!-- Weight & Reps Target -->
     <div
       v-if="!completed"
       class="exercise-target text-shadow"
@@ -24,6 +27,8 @@
         <span>{{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}</span>
       </div>
     </div>
+
+    <!-- Weight & Reps Inputs -->
     <f7-block
       v-if="completed"
       class="input-block display-flex justify-content-center"
@@ -33,16 +38,17 @@
         no-hairlines-md
       >
         <f7-list-input
+          id="weight-picker"
           class="input-item color-white"
           inline-label
           label="Weight"
           type="number"
-          :value="weight"
+          readonly
           error-message="Only positive numbers please!"
           validate
           min="0"
           pattern="[0-9]*"
-          @input="weight = parseInt($event.target.value)"
+          @change="weight = parseInt($event.target.value)"
         >
           <div
             slot="inner"
@@ -52,16 +58,17 @@
           </div>
         </f7-list-input>
         <f7-list-input
+          id="rep-picker"
           class="input-item color-white"
           inline-label
           label="Reps"
           type="number"
-          :value="reps"
+          readonly
           error-message="Only positive numbers please!"
           validate
           min="1"
           pattern="[0-9]*"
-          @input="reps = parseInt($event.target.value)"
+          @change="reps = parseInt($event.target.value)"
         />
         <f7-button
           big
@@ -80,6 +87,8 @@
         </div>
       </f7-list>
     </f7-block>
+
+    <!-- Done Button -->
     <f7-button
       v-if="!rest"
       class="done-button"
@@ -144,6 +153,38 @@ export default {
       this.weight = newExercise.weight
       this.reps = newExercise.reps
       this.updated = false
+    },
+    completed: function (completed) {
+      if (completed) {
+        const self = this
+        const app = self.$f7
+        this.$nextTick(() => {
+          self.weightPicker = app.picker.create({
+            inputEl: '#weight-picker input',
+            cols: [
+              {
+                textAlign: 'center',
+                values: [...Array(301).keys()]
+              }
+            ],
+            value: [this.weight]
+          })
+
+          self.repPicker = app.picker.create({
+            inputEl: '#rep-picker input',
+            cols: [
+              {
+                textAlign: 'center',
+                values: [...Array(50).keys()].map(x => x + 1)
+              }
+            ],
+            value: [this.reps]
+          })
+        })
+      } else if (this.weightPicker || this.repPicker) {
+        this.weightPicker.destroy()
+        this.repPicker.destroy()
+      }
     }
   },
   mounted () {
@@ -158,6 +199,13 @@ export default {
     ...mapMutations(['addCompletedSet']),
 
     enterSet () {
+      console.log({
+        workoutId: this.workoutId,
+        workoutTime: this.workoutTime,
+        time: this.lastCompletedExerciseTime,
+        weight: this.weight,
+        reps: this.reps
+      })
       this.addCompletedSet({
         workoutId: this.workoutId,
         workoutTime: this.workoutTime,
