@@ -37,6 +37,7 @@
         <!-- Active Rest -->
         <rest-panel
           v-if="rest && !done"
+          v-show="lastExercise && lastExercise.weight !== null && lastExercise.reps !== null"
           :countdown="countdown"
           :rest="rest"
           :finish-rest="finishRest"
@@ -96,7 +97,7 @@
 
 <script>
 import { f7Page, f7Navbar, f7Link, f7Icon, f7PageContent, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 import humanizeDuration from 'humanize-duration'
@@ -134,6 +135,10 @@ export default {
   }),
 
   computed: {
+    ...mapGetters(['getExercise']),
+    lastExercise () {
+      return this.getExercise(this.workout.id, this.startTime, this.lastCompletedExerciseTime)
+    },
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
     workoutPercentage () { return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100) },

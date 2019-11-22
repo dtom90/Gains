@@ -1,7 +1,6 @@
 <template>
   <f7-block
-    class="exercise-block"
-    :style="{backgroundColor: completed ? '#27AE60' : '#D7263D'}"
+    :class="'exercise-block bg-color-'+(completed ? 'green' : 'red')"
   >
     <!-- Status & Exercise -->
     <p
@@ -18,13 +17,12 @@
     <div
       v-if="!completed"
       class="exercise-target text-shadow"
-      style="margin-bottom: 36px;"
     >
       <div>
-        <span>{{ exercise.weight }} lbs.</span>
+        <span>{{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}</span>
       </div>
       <div>
-        <span>{{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}</span>
+        <span>{{ exercise.weight }} lbs.</span>
       </div>
     </div>
 
@@ -38,11 +36,30 @@
         no-hairlines-md
       >
         <f7-list-input
+          id="rep-picker"
+          class="input-item color-white"
+          inline-label
+          type="text"
+          readonly
+          error-message="Only positive numbers please!"
+          validate
+          min="1"
+          pattern="[0-9]*"
+          @change="reps = parseInt($event.target.value)"
+        >
+          <div
+            slot="inner"
+            class="item-label"
+          >
+            <span>&nbsp;&nbsp;&nbsp;reps</span>
+          </div>
+        </f7-list-input>
+
+        <f7-list-input
           id="weight-picker"
           class="input-item color-white"
           inline-label
-          label="Weight"
-          type="number"
+          type="text"
           readonly
           error-message="Only positive numbers please!"
           validate
@@ -54,47 +71,32 @@
             slot="inner"
             class="item-label"
           >
-            &nbsp;lbs.
+            <span>&nbsp;&nbsp;&nbsp;lbs.</span>
           </div>
         </f7-list-input>
-        <f7-list-input
-          id="rep-picker"
-          class="input-item color-white"
-          inline-label
-          label="Reps"
-          type="number"
-          readonly
-          error-message="Only positive numbers please!"
-          validate
-          min="1"
-          pattern="[0-9]*"
-          @change="reps = parseInt($event.target.value)"
-        />
+
         <f7-button
+          id="enter-button"
           big
           fill
           raised
-          color="green"
+          class="submit-button"
           @click="enterSet"
         >
-          Submit
+          Enter
         </f7-button>
-        <div
-          id="set-update-alert"
-          class="input-info text-align-center"
-        >
-          &nbsp;{{ updated ? 'Set numbers updated!' : '' }}&nbsp;
-        </div>
       </f7-list>
     </f7-block>
 
     <!-- Done Button -->
     <f7-button
       v-if="!rest"
-      class="done-button"
+      class="submit-button"
       large
       strong
       raised
+      fill
+      color="green"
       @click="finishExercise"
     >
       Done
@@ -150,8 +152,7 @@ export default {
     }
   },
   data: () => ({
-    reps: null,
-    updated: false
+    reps: null
   }),
   computed: {
     adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Now' }
@@ -160,7 +161,6 @@ export default {
     exercise: function (newExercise) {
       this.weight = newExercise.weight
       this.reps = newExercise.reps
-      this.updated = false
     },
     completed: function (completed) {
       if (completed) {
@@ -204,6 +204,7 @@ export default {
             ],
             value: [this.reps]
           })
+          self.repPicker.open()
         })
       } else if (this.weightPicker || this.repPicker) {
         this.weightPicker.destroy()
@@ -216,34 +217,26 @@ export default {
       this.weight = this.exercise.weight
       this.reps = this.exercise.reps
     }
-    this.updated = false
   },
   methods: {
 
     ...mapMutations(['addCompletedSet']),
 
     enterSet () {
-      console.log({
-        workoutId: this.workoutId,
-        workoutTime: this.workoutTime,
-        time: this.lastCompletedExerciseTime,
-        weight: this.weight,
-        reps: this.reps
-      })
       this.addCompletedSet({
         workoutId: this.workoutId,
         workoutTime: this.workoutTime,
-        time: this.lastCompletedExerciseTime,
+        completedTime: this.lastCompletedExerciseTime,
         weight: this.weight,
         reps: this.reps
       })
-      this.updated = true
     }
   }
 }
 </script>
 
 <style scoped>
+  /*noinspection CssUnusedSymbol*/
   .exercise-block {
     border-radius: 5px;
     padding: 16px;
@@ -262,9 +255,10 @@ export default {
     font-size: 28px;
     font-weight: bold;
     text-align: center;
+    margin-top: 20px;
+    margin-bottom: 32px;
   }
-  .done-button {
-    background-color: #27AE60;
+  .submit-button {
     height: auto;
     font-weight: bold;
     font-size: 32px;
@@ -272,26 +266,48 @@ export default {
     padding: 12px;
     margin: 12px auto 12px auto;
   }
+  #enter-button {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
   .input-block {
-    margin: 0;
-    background-color: #27AE60;
+    margin-top: 32px;
+    margin-bottom: 0;
   }
   .input-list {
     margin: 0;
     max-width: 200px;
   }
-  .input-item {
-    background-color: #2ABF68;
+  .input-item:first-of-type {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
   }
-  #set-update-alert {
-    position: static;
-    margin-top: 10px;
-    color: white;
+  .input-item {
+    background-color: #2FD073;
+  }
+  .input-item * {
+    font-size: 20px !important;
+    font-weight: bold;
+  }
+  .item-label {
+    line-height: 24px;
   }
 </style>
 
 <style>
+  .input-list > ul {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .input-item {
+    padding-left: 40px !important;
+    padding-right: 60px !important;
+  }
   .input-list input {
-    background-color: #2ABF68 !important;
+    font-size: 20px !important;
+    font-weight: bold;
+    text-align:right;
+    background-color: #2FD073 !important;
   }
 </style>

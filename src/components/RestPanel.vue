@@ -7,7 +7,7 @@
       Next Up: {{ restTime }}s Rest
     </p>
     <p
-      v-if="rest"
+      v-if="rest && countdown > 0"
       class="large-text text-align-center"
     >
       Rest: {{ countdown }}
@@ -21,7 +21,7 @@
       :color="countdown > 0 ? 'red' : 'blue'"
       @click="finishRest"
     >
-      {{ countdown > 0 ? 'Skip Rest' : 'Proceed to next exercise' }}
+      {{ countdown > 0 ? 'Skip Rest' : 'Next Set' }}
     </f7-button>
   </f7-block>
 </template>
@@ -46,7 +46,7 @@ export default {
     rest: Boolean,
     finishRest: {
       type: Function,
-      default: () => console.error('Rest completion method not passed in')
+      default: () => {}
     }
   }
 }
