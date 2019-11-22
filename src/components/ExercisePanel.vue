@@ -107,9 +107,11 @@ import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
 
 const maxWeight = 300
+const step1 = '+/- 1'
+const step5 = '+/- 5'
 const weightOptions = {
-  '5 lbs.': [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
-  '1 lb.': [...Array(maxWeight).keys()]
+  [step5]: [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
+  [step1]: [...Array(maxWeight).keys()]
 }
 
 export default {
@@ -174,13 +176,13 @@ export default {
               {
                 textAlign: 'left',
                 values: Object.keys(weightOptions),
-                onChange: function (picker, interval) {
+                onChange: function (picker, step) {
                   let currentValue = parseInt(picker.value[1])
-                  if (interval === '5 lbs.' && currentValue % 5 !== 0) {
+                  if (step === step5 && currentValue % 5 !== 0) {
                     currentValue = Math.round(currentValue / 5) * 5
                   }
                   if (picker.cols[1].replaceValues) {
-                    picker.cols[1].replaceValues(weightOptions[interval])
+                    picker.cols[1].replaceValues(weightOptions[step])
                     picker.cols[1].setValue(currentValue, 0)
                   }
                 }
@@ -190,7 +192,7 @@ export default {
                 width: 160
               }
             ],
-            value: [this.weight % 5 === 0 ? '5 lbs.' : '1lb.', this.weight]
+            value: [this.weight % 5 === 0 ? step5 : step1, this.weight]
           })
           self.repPicker = app.picker.create({
             inputEl: '#rep-picker input',
