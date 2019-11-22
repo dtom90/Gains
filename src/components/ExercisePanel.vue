@@ -106,6 +106,12 @@
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
 
+const maxWeight = 300
+const weightOptions = {
+  '5 lbs.': [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
+  '1 lb.': [...Array(maxWeight).keys()]
+}
+
 export default {
 
   name: 'ExercisePanel',
@@ -161,15 +167,31 @@ export default {
         this.$nextTick(() => {
           self.weightPicker = app.picker.create({
             inputEl: '#weight-picker input',
+            formatValue: function (values) {
+              return values[1]
+            },
             cols: [
               {
-                textAlign: 'center',
-                values: [...Array(301).keys()]
+                textAlign: 'left',
+                values: Object.keys(weightOptions),
+                onChange: function (picker, interval) {
+                  let currentValue = parseInt(picker.value[1])
+                  if (interval === '5 lbs.' && currentValue % 5 !== 0) {
+                    currentValue = Math.round(currentValue / 5) * 5
+                  }
+                  if (picker.cols[1].replaceValues) {
+                    picker.cols[1].replaceValues(weightOptions[interval])
+                    picker.cols[1].setValue(currentValue, 0)
+                  }
+                }
+              },
+              {
+                values: Object.values(weightOptions)[0],
+                width: 160
               }
             ],
-            value: [this.weight]
+            value: [this.weight % 5 === 0 ? '5 lbs.' : '1lb.', this.weight]
           })
-
           self.repPicker = app.picker.create({
             inputEl: '#rep-picker input',
             cols: [
