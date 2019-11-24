@@ -8,7 +8,8 @@ Vue.use(Vuex)
 
 const state = process.env.LOAD_SAMPLE_STATE ? sampleState : {
   workouts: [],
-  completed: {}
+  completed: {},
+  numbersEntered: false
 }
 
 const store = new Vuex.Store({
@@ -51,16 +52,11 @@ const store = new Vuex.Store({
       if (idx >= 0) {
         state.completed[workoutId][workoutTime].exercises[idx].weight = weight
         state.completed[workoutId][workoutTime].exercises[idx].reps = reps
+        state.numbersEntered = true
       }
-    }
-  },
-  getters: {
-    getExercise: state => (workoutId, workoutTime, completedTime) => {
-      const matching = state.completed[workoutId][workoutTime].exercises.filter(ex => ex.completedTime === completedTime)
-      if (matching.length > 0) {
-        return matching[0]
-      }
-      return false
+    },
+    resetNumbersEntered (state) {
+      state.numbersEntered = false
     }
   }
 })

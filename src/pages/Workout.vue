@@ -39,11 +39,22 @@
       <f7-block-footer>
         <p>x {{ workout.rounds }} Round{{ workout.rounds === 1 ? '' : 's' }}</p>
       </f7-block-footer>
+      <br>
+      <f7-button
+        :href="`/editWorkout/${workout.id}`"
+        class="col"
+        big
+        fill
+        raised
+      >
+        Edit Workout
+      </f7-button>
     </f7-block>
+
     <f7-block>
       <f7-button
         :href="`/workout/${workout.id}/go`"
-        class="col"
+        class="col big-button"
         big
         fill
         raised
@@ -52,18 +63,7 @@
         Start Workout
       </f7-button>
     </f7-block>
-    <f7-block>
-      <f7-button
-        :href="`/editWorkout/${workout.id}`"
-        class="col"
-        big
-        fill
-        raised
-        color="yellow"
-      >
-        Edit Workout
-      </f7-button>
-    </f7-block>
+
     <f7-block v-if="lastWorkout">
       <f7-block-title>
         Last Workout:

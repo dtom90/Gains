@@ -14,7 +14,7 @@
     </p>
     <f7-button
       v-if="rest"
-      class="col"
+      class="col big-button"
       big
       fill
       raised

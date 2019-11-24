@@ -15,7 +15,7 @@
 
     <!-- Weight & Reps Target -->
     <div
-      v-if="!completed"
+      v-if="!completed || numbersEntered"
       class="exercise-target text-shadow"
     >
       <div>
@@ -28,7 +28,7 @@
 
     <!-- Weight & Reps Inputs -->
     <f7-block
-      v-if="completed"
+      v-if="completed && !numbersEntered"
       class="input-block display-flex justify-content-center"
     >
       <f7-list
@@ -80,7 +80,7 @@
           big
           fill
           raised
-          class="submit-button"
+          class="big-button submit-button"
           @click="enterSet"
         >
           Enter
@@ -91,7 +91,7 @@
     <!-- Done Button -->
     <f7-button
       v-if="!rest"
-      class="submit-button"
+      class="big-button submit-button"
       large
       strong
       raised
@@ -106,7 +106,7 @@
 
 <script>
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 const maxWeight = 300
 const step1 = '+/- 1'
@@ -155,12 +155,16 @@ export default {
     reps: null
   }),
   computed: {
+    ...mapState([
+      'numbersEntered'
+    ]),
     adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Now' }
   },
   watch: {
     exercise: function (newExercise) {
       this.weight = newExercise.weight
       this.reps = newExercise.reps
+      this.resetNumbersEntered()
     },
     completed: function (completed) {
       if (completed) {
@@ -219,8 +223,10 @@ export default {
     }
   },
   methods: {
-
-    ...mapMutations(['addCompletedSet']),
+    ...mapMutations([
+      'addCompletedSet',
+      'resetNumbersEntered'
+    ]),
 
     enterSet () {
       this.addCompletedSet({
@@ -259,12 +265,7 @@ export default {
     margin-bottom: 32px;
   }
   .submit-button {
-    height: auto;
-    font-weight: bold;
-    font-size: 32px;
     max-width: 242px;
-    padding: 12px;
-    margin: 12px auto 12px auto;
   }
   #enter-button {
     margin-top: 0;
@@ -296,6 +297,13 @@ export default {
 </style>
 
 <style>
+  .big-button {
+    height: auto;
+    font-weight: bold !important;
+    font-size: 32px !important;
+    padding: 12px;
+    margin: 12px auto 12px auto;
+  }
   .input-list > ul {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;

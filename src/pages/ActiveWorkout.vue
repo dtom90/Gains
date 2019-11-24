@@ -23,6 +23,31 @@
           Round {{ currentRound }} of {{ workout.rounds }}
         </div>
 
+        <!-- Finish Workout Button -->
+        <div
+          v-show="done && numbersEntered"
+        >
+          <p><strong>Total Workout Time:</strong> {{ totalWorkoutTime }}</p>
+          <f7-button
+            :href="`/workout/${workout.id}`"
+            class="col big-button"
+            big
+            fill
+            raised
+          >
+            Finish Workout
+          </f7-button>
+        </div>
+
+        <!-- Active Rest -->
+        <rest-panel
+          v-if="rest && !done"
+          v-show="numbersEntered"
+          :countdown="countdown"
+          :rest="rest"
+          :finish-rest="finishRest"
+        />
+
         <!-- Completed Exercise -->
         <exercise-panel
           v-if="rest && !firstExerciseOfWorkout"
@@ -34,15 +59,6 @@
           :last-completed-exercise-time="lastCompletedExerciseTime"
         />
 
-        <!-- Active Rest -->
-        <rest-panel
-          v-if="rest && !done"
-          v-show="lastExercise && lastExercise.weight !== null && lastExercise.reps !== null"
-          :countdown="countdown"
-          :rest="rest"
-          :finish-rest="finishRest"
-        />
-
         <!-- Current / Next Exercise -->
         <exercise-panel
           v-if="!rest && !done"
@@ -50,22 +66,6 @@
           :rest="rest"
           :finish-exercise="finishExercise"
         />
-      </f7-block>
-
-      <f7-block
-        v-if="done"
-      >
-        <p><strong>Total Workout Time:</strong> {{ totalWorkoutTime }}</p>
-        <f7-button
-          :href="`/workout/${workout.id}`"
-          class="col"
-          big
-          fill
-          raised
-          color="green"
-        >
-          Finish Workout
-        </f7-button>
       </f7-block>
     </f7-page-content>
 
@@ -97,7 +97,7 @@
 
 <script>
 import { f7Page, f7Navbar, f7Link, f7Icon, f7PageContent, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 import humanizeDuration from 'humanize-duration'
@@ -135,10 +135,9 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['getExercise']),
-    lastExercise () {
-      return this.getExercise(this.workout.id, this.startTime, this.lastCompletedExerciseTime)
-    },
+    ...mapState([
+      'numbersEntered'
+    ]),
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
     workoutPercentage () { return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100) },
@@ -157,6 +156,7 @@ export default {
   },
 
   created: function () {
+    this.resetNumbersEntered()
     this.workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     this.exerciseSequence = []
     for (let i = 0; i < this.workout.rounds; i++) {
@@ -173,7 +173,11 @@ export default {
 
   methods: {
 
-    ...mapMutations(['addCompletedExercise', 'startActiveWorkout']),
+    ...mapMutations([
+      'addCompletedExercise',
+      'startActiveWorkout',
+      'resetNumbersEntered'
+    ]),
 
     // Handle completed exercise
     finishExercise () {
