@@ -17,6 +17,7 @@
           placeholder="Workout Name"
           :error-message-force="nameError"
           :error-message="nameErrorMessage"
+          outline
           @input="nameInputHandler"
         />
 
@@ -29,74 +30,79 @@
           placeholder="Exercise Name"
           :required="i===0"
           validate
+          outline
           @input="modifyExercise(i, 'name', $event.target.value)"
         >
           <div
             v-if="exercises.length > (i+1)"
-            slot="inner"
-          >
-            <ul>
-              <f7-list-input
-                label="Target weight:"
-                inline-label
-                type="number"
-                :value="ex.weight"
-                error-message="Weight must be non-negative"
-                validate
-                min="0"
-                pattern="[0-9]*"
-                @input="modifyExercise(i, 'weight', $event.target.value)"
-              >
-                <div
-                  slot="inner"
-                  class="item-label"
-                >
-                  lbs.
-                </div>
-              </f7-list-input>
-              <f7-list-input
-                label="Target reps:"
-                inline-label
-                type="number"
-                :value="ex.reps"
-                error-message="Target reps must be positive"
-                validate
-                min="1"
-                pattern="[0-9]*"
-                @input="modifyExercise(i, 'reps', $event.target.value)"
-              >
-                <div
-                  slot="inner"
-                  class="item-label"
-                >
-                  reps
-                </div>
-              </f7-list-input>
-            </ul>
-          </div>
-          <div
-            v-if="'rest' in ex"
-            slot="inner"
+            slot="root"
+            class="exercise-target-numbers"
           >
             <f7-list-input
-              label="Rest:"
+              label="Target weight:"
               inline-label
               type="number"
-              :value="ex.rest"
-              error-message="Rest must be non-negative"
+              :value="ex.weight"
+              error-message="Weight must be non-negative"
               validate
-              placeholder="0"
               min="0"
               pattern="[0-9]*"
-              @input="modifyExercise(i, 'rest', $event.target.value)"
+              outline
+              @input="modifyExercise(i, 'weight', $event.target.value)"
             >
               <div
                 slot="inner"
-                class="item-label"
+                class="item-label label-append"
               >
-                seconds
+                <span>&nbsp;&nbsp;lbs.</span>
               </div>
             </f7-list-input>
+            <f7-list-input
+              label="Target reps:"
+              inline-label
+              type="number"
+              :value="ex.reps"
+              error-message="Target reps must be positive"
+              validate
+              min="1"
+              pattern="[0-9]*"
+              outline
+              @input="modifyExercise(i, 'reps', $event.target.value)"
+            >
+              <div
+                slot="inner"
+                class="item-label label-append"
+              >
+                <span>&nbsp;&nbsp;reps</span>
+              </div>
+            </f7-list-input>
+          </div>
+          <div
+            v-if="'rest' in ex"
+            slot="root"
+          >
+            <ul style="padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-list-in-list-padding-left));">
+              <f7-list-input
+                label="Rest:"
+                inline-label
+                type="number"
+                :value="ex.rest"
+                error-message="Rest must be non-negative"
+                validate
+                placeholder="0"
+                min="0"
+                pattern="[0-9]*"
+                outline
+                @input="modifyExercise(i, 'rest', $event.target.value)"
+              >
+                <div
+                  slot="inner"
+                  class="item-label label-append"
+                >
+                  <span>&nbsp;&nbsp;seconds</span>
+                </div>
+              </f7-list-input>
+            </ul>
           </div>
         </f7-list-input>
 
@@ -240,3 +246,16 @@ export default {
   }
 }
 </script>
+
+<style>
+  /*noinspection CssUnusedSymbol*/
+  .exercise-target-numbers .item-title {
+    width: 40%;
+  }
+</style>
+
+<style scoped>
+  .label-append {
+    width: 20%;
+  }
+</style>
