@@ -20,6 +20,9 @@ import './css/app.css'
 // App Component
 import App from './App.vue'
 
+// Import fastClick
+import FastClick from 'fastclick'
+
 // install additional modules
 Framework7.use([Framework7Vue, Picker, Sheet])
 
@@ -30,6 +33,13 @@ export default new Vue({
   // Register App Component
   components: {
     app: App
+  },
+
+  mounted () {
+    window.addEventListener('load', () => {
+      // run after everything is in-place
+      FastClick.attach(document.body)
+    })
   },
 
   template: '<app/>',
