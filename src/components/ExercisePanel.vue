@@ -19,10 +19,10 @@
       class="exercise-target text-shadow"
     >
       <div>
-        <span>{{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}</span>
+        <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
       </div>
       <div>
-        <span>{{ exercise.weight }} lbs.</span>
+        <span>{{ weight }} lbs.</span>
       </div>
     </div>
 
@@ -144,7 +144,8 @@ export default {
     }
   },
   data: () => ({
-    reps: null
+    reps: null,
+    weight: null
   }),
   computed: {
     ...mapState([

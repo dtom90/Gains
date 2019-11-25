@@ -18,20 +18,28 @@
           :key="i"
           class="workout-exercise"
         >
-          <f7-list-item-cell>
-            {{ exercise.name }}
+          <f7-list-item-cell style="flex: 2">
+            <strong>{{ exercise.name }}</strong>
           </f7-list-item-cell>
-          <f7-list-item-cell>
-            Weight: {{ exercise.weight }} lbs.
+          <f7-list-item-cell
+            class="text-align-right"
+            style="flex: 1"
+          >
+            <span>Target:</span>
           </f7-list-item-cell>
-          <f7-list-item-cell>
-            Reps: {{ exercise.reps }}
+          <f7-list-item-cell style="flex: 2">
+            <span>{{ exercise.weight }}&nbsp;lbs.</span>
+            <span>&times;</span>
+            <span>{{ exercise.reps }}&nbsp;reps</span>
           </f7-list-item-cell>
           <f7-list-item
             v-if="'rest' in exercise"
             slot="root"
           >
-            Rest: {{ exercise.rest }} seconds
+            <span
+              style="width: 100%"
+              class="text-align-center"
+            >Rest: {{ exercise.rest }} seconds</span>
           </f7-list-item>
         </f7-list-item>
       </f7-list>
@@ -115,14 +123,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7List, f7BlockFooter, f7ListItem, f7ListItemCell, f7Button } from 'framework7-vue'
 
 export default {
   components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
 
   computed: {
+    ...mapState([
+      'workouts'
+    ]),
     workout () {
-      return this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+      return this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
     allCompleted () {
       if (this.workout && this.workout.id in this.$store.state.completed) {
