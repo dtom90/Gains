@@ -1,13 +1,13 @@
 <template>
   <f7-page>
     <f7-navbar
-      :title="'Workout: '+workout.name"
+      :title="workout ? workout.name : ''"
       back-link
       back-link-force
       back-link-url="/"
     />
 
-    <f7-block>
+    <f7-block v-if="workout">
       <f7-block-title>
         Exercises:
       </f7-block-title>
@@ -51,7 +51,7 @@
       </f7-button>
     </f7-block>
 
-    <f7-block>
+    <f7-block v-if="workout">
       <f7-button
         :href="`/workout/${workout.id}/go`"
         class="col big-button"
@@ -125,7 +125,7 @@ export default {
       return this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
     allCompleted () {
-      if (this.workout.id in this.$store.state.completed) {
+      if (this.workout && this.workout.id in this.$store.state.completed) {
         return this.$store.state.completed[this.workout.id]
       }
       return null

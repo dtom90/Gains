@@ -108,14 +108,6 @@
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 
-const maxWeight = 300
-const step1 = '+/- 1'
-const step5 = '+/- 5'
-const weightOptions = {
-  [step5]: [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
-  [step1]: [...Array(maxWeight).keys()]
-}
-
 export default {
 
   name: 'ExercisePanel',
@@ -170,6 +162,17 @@ export default {
       if (completed) {
         const self = this
         const app = self.$f7
+
+        const maxWeight = Math.max(200, this.weight * 2)
+        const step1 = '+/- 1'
+        const step5 = '+/- 5'
+        const weightOptions = {
+          [step5]: [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
+          [step1]: [...Array(maxWeight).keys()]
+        }
+
+        const maxReps = Math.max(50, this.reps * 2)
+
         this.$nextTick(() => {
           self.weightPicker = app.picker.create({
             inputEl: '#weight-picker input',
@@ -203,7 +206,7 @@ export default {
             cols: [
               {
                 textAlign: 'center',
-                values: [...Array(50).keys()].map(x => x + 1)
+                values: [...Array(maxReps).keys()].map(x => x + 1)
               }
             ],
             value: [this.reps]
