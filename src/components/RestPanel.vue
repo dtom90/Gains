@@ -57,5 +57,7 @@ export default {
         background-color: darkred;
         border-radius: 5px;
         padding: 16px;
+        margin-top: 28px;
+        margin-bottom: 28px;
     }
 </style>

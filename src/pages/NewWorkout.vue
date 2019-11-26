@@ -115,6 +115,7 @@
           validate
           min="1"
           pattern="[0-9]*"
+          outline
           @input="modifyRounds($event.target.value)"
         />
       </f7-list>

@@ -23,6 +23,11 @@
   --f7-table-head-text-color: white;
 }
 
+.md {
+  --f7-navbar-title-text-align: center;
+  --f7-navbar-large-title-font-weight: bold;
+}
+
 .color-red {
   --f7-theme-color: #D7263D;
   --f7-theme-color-rgb: 215,38,61;

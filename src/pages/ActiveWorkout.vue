@@ -3,31 +3,39 @@
     <f7-navbar
       class="no-hairline no-shadow"
     >
+      <!-- Close Button -->
       <f7-link
         id="close-button"
+        slot="left"
         :href="'/workout/'+workout.id"
         small
         round
       >
         <f7-icon material="close" />
       </f7-link>
-    </f7-navbar>
-    <f7-page-content style="padding-top: 0;">
-      <f7-block style="margin-top: 0;">
-        <div class="workout-name">
-          {{ workout.name }}
-        </div>
 
-        <!-- Round Counter -->
-        <div class="workout-round">
-          Round {{ currentRound }} of {{ workout.rounds }}
+      <!-- Workout Name -->
+      <f7-nav-title-large id="workout-name">
+        {{ workout.name }}
+      </f7-nav-title-large>
+    </f7-navbar>
+    <f7-page-content>
+      <f7-block style="margin-top: 12px;">
+        <div class="display-flex">
+          <!-- Round Counter -->
+          <div id="workout-round">
+            Round {{ currentRound }} of {{ workout.rounds }}
+          </div>
+          <!-- Time Elapsed -->
+          <div id="time-elapsed">
+            {{ elapsedWorkoutTime }}
+          </div>
         </div>
 
         <!-- Finish Workout Button -->
         <div
           v-show="done && numbersEntered"
         >
-          <p><strong>Total Workout Time:</strong> {{ totalWorkoutTime }}</p>
           <f7-button
             :href="`/workout/${workout.id}`"
             class="col big-button"
@@ -70,20 +78,13 @@
     </f7-page-content>
 
     <f7-toolbar
-      v-if="!done"
       bottom
       :inner="false"
       class="no-hairline no-shadow"
       style="height: auto"
     >
       <f7-block style="margin-top: 8px;">
-        <div class="time-elapsed">
-          Time Elapsed: {{ elapsedWorkoutTime }}
-        </div>
-        <div
-          id="progress-container"
-          class="time-elapsed"
-        >
+        <div id="progress-container">
           <span class="progress-text">Progress: {{ workoutPercentage }} %</span>
           <span
             class="progress-bar"
@@ -96,11 +97,10 @@
 </template>
 
 <script>
-import { f7Page, f7Navbar, f7Link, f7Icon, f7PageContent, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
+import { f7Page, f7Navbar, f7NavTitleLarge, f7Link, f7Icon, f7PageContent, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
-import humanizeDuration from 'humanize-duration'
 
 export default {
 
@@ -109,6 +109,7 @@ export default {
     RestPanel,
     f7Page,
     f7Navbar,
+    f7NavTitleLarge,
     f7Link,
     f7Icon,
     f7PageContent,
@@ -146,13 +147,12 @@ export default {
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
     elapsedWorkoutTime () {
-      const ms = this.now - this.startTime
+      const ms = (this.endTime || this.now) - this.startTime
       let secs = Math.round(ms / 1000)
       const mins = Math.floor(secs / 60)
       secs -= (mins * 60)
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-    },
-    totalWorkoutTime () { return humanizeDuration(this.endTime - this.startTime, { round: true }) }
+    }
   },
 
   created: function () {
@@ -251,27 +251,27 @@ export default {
   #active-workout {
     background-color: #0A1344
   }
-  .workout-name {
-    font-size: 36px;
-    font-weight: bold;
+  #workout-name {
     text-align: center;
   }
-  .workout-round {
-    margin-top: 12px;
+  #workout-round {
     font-size: 24px;
     font-weight: bold;
-    text-align: center;
   }
-  .time-elapsed {
+  #time-elapsed {
+    flex: 1;
+    text-align: right;
     font-weight: bold;
     font-size: 24px;
-    text-align: center;
   }
   #progress-container {
-    margin-top: 10px;
     background-color: #A6A6A6;
+    margin-top: 10px;
     border-radius: 5px;
     position: relative;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
   }
   .progress-bar {
     background-color: #27AE60;

@@ -5,24 +5,44 @@
     <!-- Status & Exercise -->
     <p
       class="exercise-target text-shadow"
-      style="margin-bottom: 12px;"
+      :style="'margin-bottom: ' + (true ? '0;' : '12px;')"
     >
-      {{ adjective }}:
+      <span>{{ adjective }}:</span>
     </p>
-    <p class="exercise-name text-shadow">
-      {{ exercise.name }}
+    <p :class=" (completed && numbersEntered ? 'numbers-entered numbers-entered-' : '') + 'exercise-name text-shadow'">
+      <span>{{ exercise.name }}</span>
     </p>
 
     <!-- Weight & Reps Target -->
     <div
-      v-if="!completed || numbersEntered"
-      class="exercise-target text-shadow"
+      v-if="!completed"
+      class="exercise-target text-shadow display-flex justify-content-center"
+      style="flex-wrap: wrap;"
     >
-      <div>
-        <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
+      <div
+        class="display-flex justify-content-center"
+        style="flex: 1;"
+      >
+        <span class="align-self-center">Target:&nbsp;&nbsp;&nbsp;</span>
       </div>
       <div>
-        <span>{{ weight }} lbs.</span>
+        <div>
+          <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
+        </div>
+        <div>
+          <span>{{ weight }} lbs.</span>
+        </div>
+      </div>
+      <div style="flex: 1;visibility: hidden;" />
+    </div>
+
+    <div
+      v-if="completed && numbersEntered"
+      class="numbers-entered text-shadow"
+      style="margin: 0;"
+    >
+      <div>
+        <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }} &times; {{ weight }} lbs.</span>
       </div>
     </div>
 
@@ -248,6 +268,8 @@ export default {
 <style scoped>
   /*noinspection CssUnusedSymbol*/
   .exercise-block {
+    margin-top: 28px;
+    margin-bottom: 28px;
     border-radius: 5px;
     padding: 16px;
     font-size: 18px;
@@ -255,6 +277,7 @@ export default {
   .text-shadow {
     text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
+  /*noinspection CssUnusedSymbol*/
   .exercise-name {
     margin: 0;
     font-size: 48px;
@@ -265,8 +288,18 @@ export default {
     font-size: 28px;
     font-weight: bold;
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 32px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+  }
+  /*noinspection CssUnusedSymbol*/
+  .numbers-entered-exercise-name {
+    font-size: 42px !important;
+  }
+  .numbers-entered {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
   }
   .submit-button {
     max-width: 242px;
@@ -277,7 +310,7 @@ export default {
     border-top-right-radius: 0;
   }
   .input-block {
-    margin-top: 32px;
+    margin-top: 16px;
     margin-bottom: 0;
   }
   .input-list {
