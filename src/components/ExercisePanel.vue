@@ -164,15 +164,15 @@ export default {
         const self = this
         const app = self.$f7
 
-        const maxWeight = Math.max(200, this.weight * 2)
+        const maxWeight = Math.max(500, this.weight * 2)
         const step1 = '+/- 1'
         const step5 = '+/- 5'
         const weightOptions = {
           [step5]: [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
-          [step1]: [...Array(maxWeight).keys()]
+          [step1]: [...Array(maxWeight + 1).keys()]
         }
 
-        const maxReps = Math.max(50, this.reps * 2)
+        const maxReps = Math.max(500, this.reps * 2)
 
         this.$nextTick(() => {
           self.weightPicker = app.picker.create({
