@@ -1,7 +1,7 @@
 <template>
   <f7-page>
     <f7-navbar
-      :title="workout ? workout.name : ''"
+      :title="'Workout: ' + (workout ? workout.name : '')"
       back-link
       back-link-force
       back-link-url="/"
@@ -18,19 +18,16 @@
           :key="i"
           class="workout-exercise"
         >
-          <f7-list-item-cell style="flex: 2">
+          <f7-list-item-cell class="exercise-name">
             <strong>{{ exercise.name }}</strong>
           </f7-list-item-cell>
-          <f7-list-item-cell
-            class="text-align-right"
-            style="flex: 1"
-          >
+          <f7-list-item-cell class="target-label text-align-right">
             <span>Target:</span>
           </f7-list-item-cell>
-          <f7-list-item-cell style="flex: 2">
+          <f7-list-item-cell class="target-numbers">
             <span>{{ exercise.weight }}&nbsp;lbs.</span>
             <span>&times;</span>
-            <span>{{ exercise.reps }}&nbsp;reps</span>
+            <span>{{ exercise.reps }}&nbsp;rep{{ exercise.reps === 1 ? '' : 's' }}</span>
           </f7-list-item-cell>
           <f7-list-item
             v-if="'rest' in exercise"
@@ -162,3 +159,13 @@ export default {
   }
 }
 </script>
+
+<style>
+  .exercise-name, .target-numbers {
+    flex: 2
+  }
+
+  .target-label {
+    flex: 1;
+  }
+</style>

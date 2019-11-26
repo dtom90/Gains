@@ -6,13 +6,14 @@ const blockText = text => Selector('div.block > p').withExactText(text)
 const blockDiv = text => Selector('div.block div').withExactText(text)
 const button = text => Selector('a.button').withExactText(text)
 const inputGroup = (label, { type, placeholder }) => Selector('li')
-  .find('div.item-label').withExactText(label)
+  .find('div.item-label').withText(label)
   .sibling('div.item-input-wrap')
   .child(`input[type="${type}"]${placeholder ? `[placeholder="${placeholder}"]` : ''}`)
 const listItem = text => Selector('div.item-inner').withExactText(text)
 const listCell = text => Selector('div.item-cell').withExactText(text)
 
 const doneButton = Selector('div.exercise-block > a.button').withExactText('Done')
+const enterButton = Selector('div.exercise-block > a.button').withExactText('Enter')
 const skipRestButton = Selector('div.rest-block > a.button').withExactText('Skip Rest')
 
 const expectHomePage = async t => {
@@ -24,16 +25,20 @@ const expectHomePage = async t => {
 }
 
 async function expectCircuitWorkout (t) {
+  const targetText = i => Selector('.target-numbers').nth(i).innerText
+  const targetText0 = await targetText(0)
+  const targetText1 = await targetText(1)
   await t
     .expect(blockTitle('Exercises:').visible).ok()
     .expect(Selector('li.workout-exercise').count).eql(2)
     .expect(listCell('Push-ups').visible).ok()
-    .expect(listCell('Weight: 0 lbs.').visible).ok()
-    .expect(listCell('Reps: 1').visible).ok()
+    .expect(listCell('Target:').nth(0).visible).ok()
+    .expect(targetText0.replace(/\s/g, ' ')).eql('0 lbs. × 1 rep')
+    .expect(listCell('0 lbs. × 1 reps').visible).ok()
     .expect(listItem('Rest: 3 seconds').visible).ok()
     .expect(listCell('Pull-ups').visible).ok()
-    .expect(listCell('Weight: 15 lbs.').visible).ok()
-    .expect(listCell('Reps: 6').visible).ok()
+    .expect(listCell('Target:').nth(1).visible).ok()
+    .expect(targetText1.replace(/\s/g, ' ')).eql('15 lbs. × 6 reps')
     .expect(listItem('Rest: 3 seconds').count).eql(2)
     .expect(Selector('p').withExactText('x 2 Rounds').visible).ok()
     .expect(button('Start Workout').visible).ok()
@@ -65,6 +70,7 @@ export {
   listItem,
   listCell,
   doneButton,
+  enterButton,
   skipRestButton,
   expectHomePage,
   expectCircuitWorkout,

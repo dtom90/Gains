@@ -70,7 +70,7 @@
     "ora": "^3.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "testcafe": "^1.6.0",
+    "testcafe": "^1.7.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.1.1",
     "vue-loader": "^15.7.0",
