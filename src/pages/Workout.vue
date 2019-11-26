@@ -1,7 +1,10 @@
 <template>
   <f7-page>
     <f7-navbar
-      :title="'Workout: ' + (workout ? workout.name : '')"
+      :title="workout ? workout.name : ''"
+      :title-large="workout ? workout.name : ''"
+      large
+      inner-class="text-align-center"
       back-link
       back-link-force
       back-link-url="/"

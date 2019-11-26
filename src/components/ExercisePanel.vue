@@ -65,6 +65,7 @@
           validate
           min="1"
           pattern="[0-9]*"
+          outline
           @change="reps = parseInt($event.target.value)"
         >
           <div
@@ -85,6 +86,7 @@
           validate
           min="0"
           pattern="[0-9]*"
+          outline
           @change="weight = parseInt($event.target.value)"
         >
           <div
@@ -346,8 +348,8 @@ export default {
     border-top-right-radius: 5px;
   }
   .input-item {
-    padding-left: 40px !important;
-    padding-right: 60px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
   .input-list input {
     font-size: 20px !important;

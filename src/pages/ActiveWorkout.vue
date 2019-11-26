@@ -1,7 +1,11 @@
 <template>
   <f7-page id="active-workout">
     <f7-navbar
+      :title="workout.name"
+      :title-large="workout.name"
+      large
       class="no-hairline no-shadow"
+      inner-class="text-align-center"
     >
       <!-- Close Button -->
       <f7-link
@@ -13,14 +17,15 @@
       >
         <f7-icon material="close" />
       </f7-link>
-
-      <!-- Workout Name -->
-      <f7-nav-title-large id="workout-name">
-        {{ workout.name }}
-      </f7-nav-title-large>
     </f7-navbar>
-    <f7-page-content>
-      <f7-block style="margin-top: 12px;">
+
+    <f7-toolbar
+      bottom
+      :inner="false"
+      class="no-hairline no-shadow"
+      style="height: auto"
+    >
+      <f7-block style="margin-top: 8px;">
         <div class="display-flex">
           <!-- Round Counter -->
           <div id="workout-round">
@@ -31,59 +36,6 @@
             {{ elapsedWorkoutTime }}
           </div>
         </div>
-
-        <!-- Finish Workout Button -->
-        <div
-          v-show="done && numbersEntered"
-        >
-          <f7-button
-            :href="`/workout/${workout.id}`"
-            class="col big-button"
-            big
-            fill
-            raised
-          >
-            Finish Workout
-          </f7-button>
-        </div>
-
-        <!-- Active Rest -->
-        <rest-panel
-          v-if="rest && !done"
-          v-show="numbersEntered"
-          :countdown="countdown"
-          :rest="rest"
-          :finish-rest="finishRest"
-        />
-
-        <!-- Completed Exercise -->
-        <exercise-panel
-          v-if="rest && !firstExerciseOfWorkout"
-          :exercise="currentExercise"
-          :rest="rest"
-          :completed="true"
-          :workout-id="workout.id"
-          :workout-time="startTime"
-          :last-completed-exercise-time="lastCompletedExerciseTime"
-        />
-
-        <!-- Current / Next Exercise -->
-        <exercise-panel
-          v-if="!rest && !done"
-          :exercise="currentExercise"
-          :rest="rest"
-          :finish-exercise="finishExercise"
-        />
-      </f7-block>
-    </f7-page-content>
-
-    <f7-toolbar
-      bottom
-      :inner="false"
-      class="no-hairline no-shadow"
-      style="height: auto"
-    >
-      <f7-block style="margin-top: 8px;">
         <div id="progress-container">
           <span class="progress-text">Progress: {{ workoutPercentage }} %</span>
           <span
@@ -93,11 +45,56 @@
         </div>
       </f7-block>
     </f7-toolbar>
+
+    <f7-block style="margin-top: 12px;">
+      <!-- Finish Workout Button -->
+      <div
+        v-show="done && numbersEntered"
+      >
+        <f7-button
+          :href="`/workout/${workout.id}`"
+          class="col big-button"
+          big
+          fill
+          raised
+        >
+          Finish Workout
+        </f7-button>
+      </div>
+
+      <!-- Active Rest -->
+      <rest-panel
+        v-if="rest && !done"
+        v-show="numbersEntered"
+        :countdown="countdown"
+        :rest="rest"
+        :finish-rest="finishRest"
+      />
+
+      <!-- Completed Exercise -->
+      <exercise-panel
+        v-if="rest && !firstExerciseOfWorkout"
+        :exercise="currentExercise"
+        :rest="rest"
+        :completed="true"
+        :workout-id="workout.id"
+        :workout-time="startTime"
+        :last-completed-exercise-time="lastCompletedExerciseTime"
+      />
+
+      <!-- Current / Next Exercise -->
+      <exercise-panel
+        v-if="!rest && !done"
+        :exercise="currentExercise"
+        :rest="rest"
+        :finish-exercise="finishExercise"
+      />
+    </f7-block>
   </f7-page>
 </template>
 
 <script>
-import { f7Page, f7Navbar, f7NavTitleLarge, f7Link, f7Icon, f7PageContent, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
+import { f7Page, f7Navbar, f7Link, f7Icon, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
@@ -109,10 +106,8 @@ export default {
     RestPanel,
     f7Page,
     f7Navbar,
-    f7NavTitleLarge,
     f7Link,
     f7Icon,
-    f7PageContent,
     f7Block,
     f7Toolbar,
     f7Button
@@ -250,9 +245,6 @@ export default {
 <style scoped>
   #active-workout {
     background-color: #0A1344
-  }
-  #workout-name {
-    text-align: center;
   }
   #workout-round {
     font-size: 24px;
