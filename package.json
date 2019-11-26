@@ -24,7 +24,7 @@
     "audit:packages": "yarn audit || test $? -eq 0",
     "lint": "./node_modules/.bin/eslint --ext .js,.vue src",
     "test:e2e": "testcafe chrome tests/e2e",
-    "test:e2e:prod": "testcafe chrome:headless tests/e2e -c 2 --app 'yarn run serve'",
+    "test:e2e:prod": "testcafe chrome:headless tests/e2e -c 2 --app 'yarn run serve' --fixture 'Workout Lifecycle'",
     "test": "yarn audit:packages && yarn lint && yarn build:test && yarn test:e2e:prod"
   },
   "dependencies": {
