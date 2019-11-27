@@ -19,11 +19,8 @@
       class="exercise-target text-shadow display-flex justify-content-center"
       style="flex-wrap: wrap;"
     >
-      <div
-        class="display-flex justify-content-center"
-        style="flex: 1;"
-      >
-        <span class="align-self-center">Target:&nbsp;&nbsp;&nbsp;</span>
+      <div class="display-flex align-items-center">
+        <span>Target:&nbsp;&nbsp;</span>
       </div>
       <div>
         <div>
@@ -33,7 +30,7 @@
           <span>{{ weight }} lbs.</span>
         </div>
       </div>
-      <div style="flex: 1;visibility: hidden;" />
+      <div style="flex-basis: 91.61px;" />
     </div>
 
     <div
@@ -287,7 +284,7 @@ export default {
     text-align: center;
   }
   .exercise-target {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     text-align: center;
     margin-top: 12px;
@@ -295,7 +292,7 @@ export default {
   }
   /*noinspection CssUnusedSymbol*/
   .numbers-entered-exercise-name {
-    font-size: 42px !important;
+    font-size: 36px !important;
   }
   .numbers-entered {
     font-size: 28px;

@@ -68,6 +68,7 @@
         v-show="numbersEntered"
         :countdown="countdown"
         :rest="rest"
+        :next-exercise="nextExercise"
         :finish-rest="finishRest"
       />
 
