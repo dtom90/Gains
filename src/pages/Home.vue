@@ -19,9 +19,9 @@
         tag="p"
       >
         <f7-button
-          class="col no-caps"
           :href="'/workout/'+workout.id"
-          big
+          class="col no-caps"
+          large
           fill
           raised
         >
@@ -35,7 +35,7 @@
         <f7-button
           href="/newWorkout/"
           class="col"
-          big
+          large
           fill
           raised
           color="green"

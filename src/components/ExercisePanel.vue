@@ -98,10 +98,9 @@
 
         <f7-button
           id="enter-button"
-          big
+          class="big-button submit-button"
           fill
           raised
-          class="big-button submit-button"
           @click="enterSet"
         >
           Enter
@@ -113,8 +112,6 @@
     <f7-button
       v-if="!rest"
       class="big-button submit-button"
-      large
-      strong
       raised
       fill
       color="green"

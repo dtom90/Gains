@@ -28,7 +28,6 @@
     <f7-button
       v-if="rest"
       class="col big-button"
-      big
       fill
       raised
       :color="countdown > 0 ? 'red' : 'blue'"

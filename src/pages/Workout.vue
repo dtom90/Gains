@@ -51,7 +51,7 @@
       <f7-button
         :href="`/editWorkout/${workout.id}`"
         class="col"
-        big
+        large
         fill
         raised
       >
@@ -63,7 +63,6 @@
       <f7-button
         :href="`/workout/${workout.id}/go`"
         class="col big-button"
-        big
         fill
         raised
         color="green"

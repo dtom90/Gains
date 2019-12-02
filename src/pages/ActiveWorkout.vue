@@ -54,7 +54,6 @@
         <f7-button
           :href="`/workout/${workout.id}`"
           class="col big-button"
-          big
           fill
           raised
         >

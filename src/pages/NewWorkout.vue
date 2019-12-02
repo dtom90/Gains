@@ -123,7 +123,7 @@
       <f7-row tag="p">
         <f7-button
           class="col"
-          big
+          large
           fill
           raised
           color="green"
