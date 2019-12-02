@@ -118,15 +118,18 @@
               v-for="i in workout.exercises.length * workout.rounds"
               :key="i"
             >
-              <td>{{ workout.exercises[i % workout.rounds].name }} Round {{ Math.floor((i-1) / workout.rounds) + 1 }}</td>
+              <td>
+                <span>{{ workout.exercises[(i-1) % workout.exercises.length].name.replace('-', '&#8209;') }}</span>
+                <span> Round&nbsp;{{ Math.floor((i-1) / workout.exercises.length) + 1 }}</span>
+              </td>
               <td
                 v-for="(sequence, time) in displayCompleted"
                 :key="time"
               >
                 <set-numbers
-                  v-if="i < sequence.exercises.length"
-                  :weight="sequence.exercises[i].weight"
-                  :reps="sequence.exercises[i].reps"
+                  v-if="i <= sequence.exercises.length"
+                  :weight="sequence.exercises[i-1].weight"
+                  :reps="sequence.exercises[i-1].reps"
                 />
               </td>
             </tr>
