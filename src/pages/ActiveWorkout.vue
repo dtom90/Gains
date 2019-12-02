@@ -66,29 +66,18 @@
       <rest-panel
         v-if="rest && !done"
         v-show="numbersEntered"
-        :countdown="countdown"
-        :rest="rest"
-        :next-exercise="nextExercise"
-        :finish-rest="finishRest"
+        :rest-time="currentExercise.rest"
+        :on-end-rest="onEndRest"
+        :next-exercise-name="nextExercise.name"
       />
 
       <!-- Completed Exercise -->
       <exercise-panel
-        v-if="rest && !firstExerciseOfWorkout"
         :exercise="currentExercise"
         :rest="rest"
-        :completed="true"
-        :workout-id="workout.id"
-        :workout-time="startTime"
-        :last-completed-exercise-time="lastCompletedExerciseTime"
-      />
-
-      <!-- Current / Next Exercise -->
-      <exercise-panel
-        v-if="!rest && !done"
-        :exercise="currentExercise"
-        :rest="rest"
-        :finish-exercise="finishExercise"
+        :numbers-entered="numbersEntered"
+        :on-end-set="onEndSet"
+        :enter-numbers="enterNumbers"
       />
     </f7-block>
   </f7-page>
@@ -96,7 +85,7 @@
 
 <script>
 import { f7Page, f7Navbar, f7Link, f7Icon, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 
@@ -122,19 +111,15 @@ export default {
     endTime: null,
     currentExerciseIndex: 0,
     currentRound: 1,
-    lastCompletedExerciseTime: null,
+    lastCompletedSetTime: null,
     workoutTimer: null,
-    countdown: null,
-    timer: null,
-    started: false,
     rest: false,
+    restCountdown: false,
+    numbersEntered: false,
     done: false
   }),
 
   computed: {
-    ...mapState([
-      'numbersEntered'
-    ]),
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
     workoutPercentage () { return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100) },
@@ -152,7 +137,6 @@ export default {
   },
 
   created: function () {
-    this.resetNumbersEntered()
     this.workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     this.exerciseSequence = []
     for (let i = 0; i < this.workout.rounds; i++) {
@@ -170,37 +154,48 @@ export default {
   methods: {
 
     ...mapMutations([
-      'addCompletedExercise',
-      'startActiveWorkout',
-      'resetNumbersEntered'
+      'addCompletedSet',
+      'startActiveWorkout'
     ]),
 
-    // Handle completed exercise
-    finishExercise () {
+    // Handle completed set
+    onEndSet () {
       // Record completed time of exercise
-      this.lastCompletedExerciseTime = Date.now()
-
-      // Record completed exercise
-      this.addCompletedExercise({
-        workoutId: this.workout.id,
-        startTime: this.startTime,
-        exercise: this.currentExercise,
-        round: this.currentRound,
-        completedTime: this.lastCompletedExerciseTime
-      })
+      this.lastCompletedSetTime = Date.now()
 
       // Mark that we're resting
       this.rest = true
+      this.restCountdown = true
 
       // If this is the last exercise of the workout
       if (this.lastExerciseOfWorkout) {
         // Mark that we're done and record the end time of the workout
         this.done = true
         this.endTime = Date.now()
-      } else {
-        // Otherwise, start the rest timer and start the countdown
-        this.countdown = this.currentExercise.rest
-        this.timer = setInterval(this.decrementCountdown, 1000)
+      }
+    },
+
+    enterNumbers (weight, reps) {
+      // Record completed set
+      this.addCompletedSet({
+        workoutId: this.workout.id,
+        workoutStartTime: this.startTime,
+        exerciseName: this.currentExercise.name,
+        round: this.currentRound,
+        weight,
+        reps,
+        completedTime: this.lastCompletedSetTime
+      })
+      this.numbersEntered = true
+      if (!this.restCountdown) {
+        this.startNextSet()
+      }
+    },
+
+    onEndRest () {
+      this.restCountdown = false
+      if (this.numbersEntered) {
+        this.startNextSet()
       }
     },
 
@@ -212,33 +207,18 @@ export default {
       }
     },
 
-    // Countdown function during rest
-    decrementCountdown () {
-      if (this.countdown > 1) {
-        this.countdown -= 1
-      } else {
-        this.clearCountdown()
-      }
-    },
-
-    clearCountdown () {
-      this.countdown = 0
-      clearInterval(this.timer)
-    },
-
-    // Handle finished rest
-    finishRest () {
-      // Finish countdown, end rest flag, clear timer
-      this.clearCountdown()
-      this.rest = false
+    startNextSet () {
+      this.numbersEntered = false
 
       // Increment the currentExerciseIndex
       this.currentExerciseIndex++
       if (this.firstExerciseOfRound) {
         this.currentRound += 1
       }
-    }
 
+      // End the rest
+      this.rest = false
+    }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <f7-block
-    :class="'exercise-block bg-color-'+(completed ? 'green' : 'red')"
+    :class="'exercise-block bg-color-'+(rest ? 'green' : 'red')"
   >
     <!-- Status & Exercise -->
     <p
@@ -9,13 +9,13 @@
     >
       <span>{{ adjective }}:</span>
     </p>
-    <p :class=" (completed && numbersEntered ? 'numbers-entered numbers-entered-' : '') + 'exercise-name text-shadow'">
+    <p :class=" (rest && numbersEntered ? 'numbers-entered numbers-entered-' : '') + 'exercise-name text-shadow'">
       <span>{{ exercise.name }}</span>
     </p>
 
     <!-- Weight & Reps Target -->
     <div
-      v-if="!completed"
+      v-if="!rest"
       class="exercise-target text-shadow display-flex justify-content-center"
     >
       <div
@@ -36,7 +36,7 @@
     </div>
 
     <div
-      v-if="completed && numbersEntered"
+      v-if="rest && numbersEntered"
       class="numbers-entered text-shadow"
       style="margin: 0;"
     >
@@ -47,7 +47,7 @@
 
     <!-- Weight & Reps Inputs -->
     <f7-block
-      v-if="completed && !numbersEntered"
+      v-if="rest && !numbersEntered"
       class="input-block display-flex justify-content-center"
     >
       <f7-list
@@ -102,7 +102,7 @@
           large
           fill
           raised
-          @click="enterSet"
+          @click="enterNumbers(weight, reps)"
         >
           Enter
         </f7-button>
@@ -117,7 +117,7 @@
       fill
       raised
       color="green"
-      @click="finishExercise"
+      @click="onEndSet"
     >
       Done
     </f7-button>
@@ -126,7 +126,6 @@
 
 <script>
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
-import { mapState, mapMutations } from 'vuex'
 
 export default {
 
@@ -137,28 +136,19 @@ export default {
       type: Object,
       default: () => null
     },
-    rest: Boolean,
-    completed: {
+    rest: {
       type: Boolean,
       default: false
     },
-    workoutId: {
-      type: String,
-      default: 'Workout'
+    numbersEntered: {
+      type: Boolean,
+      default: false
     },
-    workoutTime: {
-      type: Number,
-      default: 0
+    onEndSet: {
+      type: Function,
+      default: () => null
     },
-    startTime: {
-      type: Number,
-      default: 0
-    },
-    lastCompletedExerciseTime: {
-      type: Number,
-      default: 0
-    },
-    finishExercise: {
+    enterNumbers: {
       type: Function,
       default: () => null
     }
@@ -168,19 +158,15 @@ export default {
     weight: null
   }),
   computed: {
-    ...mapState([
-      'numbersEntered'
-    ]),
-    adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Now' }
+    adjective () { return this.rest ? (this.rest ? 'Completed' : 'Next') : 'Now' }
   },
   watch: {
     exercise: function (newExercise) {
       this.weight = newExercise.weight
       this.reps = newExercise.reps
-      this.resetNumbersEntered()
     },
-    completed: function (completed) {
-      if (completed) {
+    rest: function (rest) {
+      if (rest) {
         const self = this
         const app = self.$f7
 
@@ -234,9 +220,6 @@ export default {
           })
           self.repPicker.open()
         })
-      } else if (this.weightPicker || this.repPicker) {
-        this.weightPicker.destroy()
-        this.repPicker.destroy()
       }
     }
   },
@@ -244,22 +227,6 @@ export default {
     if (this.exercise) {
       this.weight = this.exercise.weight
       this.reps = this.exercise.reps
-    }
-  },
-  methods: {
-    ...mapMutations([
-      'addCompletedSet',
-      'resetNumbersEntered'
-    ]),
-
-    enterSet () {
-      this.addCompletedSet({
-        workoutId: this.workoutId,
-        workoutTime: this.workoutTime,
-        completedTime: this.lastCompletedExerciseTime,
-        weight: this.weight,
-        reps: this.reps
-      })
     }
   }
 }

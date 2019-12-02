@@ -1,19 +1,12 @@
 <template>
   <f7-block class="rest-block">
     <p
-      v-if="!rest"
-      class="text-align-center"
-    >
-      Next Up: {{ restTime }}s Rest
-    </p>
-    <p
-      v-if="rest && countdown > 0"
+      v-if="countdown > 0"
       class="large-text text-align-center"
     >
       Rest: {{ countdown }}
     </p>
     <div
-      v-if="rest"
       class="display-flex justify-content-center large-text"
       style="flex-wrap: wrap;"
     >
@@ -22,19 +15,18 @@
       >
         <span>Next:&nbsp;&nbsp;</span>
       </div>
-      <strong style="font-size: 36px; text-align: center;">{{ nextExercise.name }}</strong>
+      <strong style="font-size: 36px; text-align: center;">{{ nextExerciseName }}</strong>
       <span style="flex-basis: 68.2px;" />
     </div>
     <f7-button
-      v-if="rest"
       class="col big-button"
       large
       fill
       raised
-      :color="countdown > 0 ? 'red' : 'blue'"
-      @click="finishRest"
+      color="red"
+      @click="endRest"
     >
-      {{ countdown > 0 ? 'Skip Rest' : 'Begin Set' }}
+      <span>Skip Rest</span>
     </f7-button>
   </f7-block>
 </template>
@@ -43,27 +35,51 @@
 import { f7Block, f7Button } from 'framework7-vue'
 
 export default {
-
   name: 'RestPanel',
+
   components: { f7Block, f7Button },
 
   props: {
-    countdown: {
-      type: Number,
-      default: 30
-    },
     restTime: {
       type: Number,
       default: 30
     },
-    rest: Boolean,
-    finishRest: {
+    onEndRest: {
       type: Function,
       default: () => {}
     },
-    nextExercise: {
-      type: Object,
-      default: () => {}
+    nextExerciseName: {
+      type: String,
+      default: ''
+    }
+  },
+
+  data: () => ({
+    timer: null,
+    countdown: null
+  }),
+
+  created () {
+    this.countdown = this.restTime
+    this.timer = setInterval(this.decrementCountdown, 1000)
+  },
+
+  methods: {
+
+    // Countdown function during rest
+    decrementCountdown () {
+      if (this.countdown > 1) {
+        this.countdown -= 1
+      } else {
+        this.endRest()
+      }
+    },
+
+    // Finish countdown, clear timer, call onEndRest
+    endRest () {
+      clearInterval(this.timer)
+      this.countdown = 0
+      this.onEndRest()
     }
   }
 }

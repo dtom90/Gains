@@ -13,8 +13,7 @@ const vuexLocalStorage = new VuexPersist({
 
 const state = process.env.LOAD_SAMPLE_STATE ? sampleState : {
   workouts: [],
-  completed: {},
-  numbersEntered: false
+  completed: {}
 }
 
 const store = new Vuex.Store({
@@ -43,25 +42,14 @@ const store = new Vuex.Store({
       state.completed[workoutId][startTime] = { exercises: [] }
       state.completed[workoutId].lastWorkoutTime = startTime
     },
-    addCompletedExercise (state, { workoutId, startTime, exercise, round, completedTime }) {
-      state.completed[workoutId][startTime].exercises.push({
-        exercise: exercise.name,
-        weight: null,
-        reps: null,
+    addCompletedSet (state, { workoutId, workoutStartTime, exerciseName, round, weight, reps, completedTime }) {
+      state.completed[workoutId][workoutStartTime].exercises.push({
+        exercise: exerciseName,
+        weight,
+        reps,
         round,
         completedTime
       })
-    },
-    addCompletedSet (state, { workoutId, workoutTime, completedTime, weight, reps }) {
-      const idx = state.completed[workoutId][workoutTime].exercises.findIndex(ex => ex.completedTime === completedTime)
-      if (idx >= 0) {
-        state.completed[workoutId][workoutTime].exercises[idx].weight = weight
-        state.completed[workoutId][workoutTime].exercises[idx].reps = reps
-        state.numbersEntered = true
-      }
-    },
-    resetNumbersEntered (state) {
-      state.numbersEntered = false
     }
   },
   plugins: [vuexLocalStorage.plugin]

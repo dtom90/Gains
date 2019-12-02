@@ -112,7 +112,7 @@
                 v-for="(sequence, time) in displayCompleted"
                 :key="time"
               >
-                {{ sequence.exercises[i].weight }} lbs. x {{ sequence.exercises[i].reps }} rep{{ sequence.exercises[i].reps > 1 ? 's' : '' }}
+                <span v-if="i < sequence.exercises.length">{{ sequence.exercises[i].weight }} lbs. x {{ sequence.exercises[i].reps }} rep{{ sequence.exercises[i].reps > 1 ? 's' : '' }}</span>
               </td>
             </tr>
           </tbody>
