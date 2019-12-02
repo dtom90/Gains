@@ -17,12 +17,14 @@
     <div
       v-if="!completed"
       class="exercise-target text-shadow display-flex justify-content-center"
-      style="flex-wrap: wrap;"
     >
-      <div class="display-flex align-items-center">
-        <span>Target:&nbsp;&nbsp;</span>
+      <div
+        class="display-flex align-items-center"
+        style="padding-right: 24px;"
+      >
+        <span>Target:</span>
       </div>
-      <div>
+      <div style="font-size: 34px;">
         <div>
           <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
         </div>
@@ -30,7 +32,7 @@
           <span>{{ weight }} lbs.</span>
         </div>
       </div>
-      <div style="flex-basis: 91.61px;" />
+      <div style="flex: 1; max-width: 117.41px;" />
     </div>
 
     <div
@@ -284,11 +286,11 @@ export default {
     text-align: center;
   }
   .exercise-target {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     text-align: center;
-    margin-top: 12px;
     margin-bottom: 24px;
+    flex-wrap: wrap;
   }
   /*noinspection CssUnusedSymbol*/
   .numbers-entered-exercise-name {
