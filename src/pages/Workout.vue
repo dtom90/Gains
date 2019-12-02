@@ -63,6 +63,7 @@
       <f7-button
         :href="`/workout/${workout.id}/go`"
         class="col big-button"
+        large
         fill
         raised
         color="green"

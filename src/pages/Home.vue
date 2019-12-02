@@ -20,7 +20,7 @@
       >
         <f7-button
           :href="'/workout/'+workout.id"
-          class="col no-caps"
+          class="col"
           large
           fill
           raised
