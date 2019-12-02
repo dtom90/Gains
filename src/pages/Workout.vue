@@ -82,7 +82,18 @@
           v-for="(exercise, i) in lastWorkout.exercises"
           :key="i"
         >
-          {{ exercise.exercise }}: {{ exercise.weight }} lbs. x {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}
+          <f7-list-item-cell>
+            <span>{{ exercise.exercise }}</span>
+          </f7-list-item-cell>
+          <f7-list-item-cell>
+            <span>Round {{ exercise.round }}</span>
+          </f7-list-item-cell>
+          <f7-list-item-cell>
+            <set-numbers
+              :weight="exercise.weight"
+              :reps="exercise.reps"
+            />
+          </f7-list-item-cell>
         </f7-list-item>
       </f7-list>
 
@@ -104,15 +115,19 @@
           </thead>
           <tbody>
             <tr
-              v-for="(exercise, i) in lastWorkout.exercises"
+              v-for="i in workout.exercises.length * workout.rounds"
               :key="i"
             >
-              <td>{{ exercise.exercise }} Round {{ exercise.round }}</td>
+              <td>{{ workout.exercises[i % workout.rounds].name }} Round {{ Math.floor((i-1) / workout.rounds) + 1 }}</td>
               <td
                 v-for="(sequence, time) in displayCompleted"
                 :key="time"
               >
-                <span v-if="i < sequence.exercises.length">{{ sequence.exercises[i].weight }} lbs. x {{ sequence.exercises[i].reps }} rep{{ sequence.exercises[i].reps > 1 ? 's' : '' }}</span>
+                <set-numbers
+                  v-if="i < sequence.exercises.length"
+                  :weight="sequence.exercises[i].weight"
+                  :reps="sequence.exercises[i].reps"
+                />
               </td>
             </tr>
           </tbody>
@@ -125,20 +140,22 @@
 <script>
 import { mapState } from 'vuex'
 import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7List, f7BlockFooter, f7ListItem, f7ListItemCell, f7Button } from 'framework7-vue'
+import SetNumbers from '../components/SetNumbers'
 
 export default {
-  components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
+  components: { SetNumbers, f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
 
   computed: {
     ...mapState([
-      'workouts'
+      'workouts',
+      'completed'
     ]),
     workout () {
       return this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
     allCompleted () {
-      if (this.workout && this.workout.id in this.$store.state.completed) {
-        return this.$store.state.completed[this.workout.id]
+      if (this.workout && this.workout.id in this.completed) {
+        return this.completed[this.workout.id]
       }
       return null
     },

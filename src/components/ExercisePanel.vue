@@ -25,11 +25,11 @@
         <span>Target:</span>
       </div>
       <div style="font-size: 34px;">
-        <div>
-          <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
+        <div v-if="weight > 0">
+          <span>{{ weight }} lbs.</span>
         </div>
         <div>
-          <span>{{ weight }} lbs.</span>
+          <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
         </div>
       </div>
       <div style="flex: 1; max-width: 117.41px;" />
@@ -41,7 +41,10 @@
       style="margin: 0;"
     >
       <div>
-        <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }} &times; {{ weight }} lbs.</span>
+        <set-numbers
+          :weight="weight"
+          :reps="reps"
+        />
       </div>
     </div>
 
@@ -54,27 +57,6 @@
         class="input-list"
         no-hairlines-md
       >
-        <f7-list-input
-          id="rep-picker"
-          class="input-item color-white"
-          inline-label
-          type="text"
-          readonly
-          error-message="Only positive numbers please!"
-          validate
-          min="1"
-          pattern="[0-9]*"
-          outline
-          @change="reps = parseInt($event.target.value)"
-        >
-          <div
-            slot="inner"
-            class="item-label"
-          >
-            <span>&nbsp;&nbsp;&nbsp;reps</span>
-          </div>
-        </f7-list-input>
-
         <f7-list-input
           id="weight-picker"
           class="input-item color-white"
@@ -93,6 +75,27 @@
             class="item-label"
           >
             <span>&nbsp;&nbsp;&nbsp;lbs.</span>
+          </div>
+        </f7-list-input>
+
+        <f7-list-input
+          id="rep-picker"
+          class="input-item color-white"
+          inline-label
+          type="text"
+          readonly
+          error-message="Only positive numbers please!"
+          validate
+          min="1"
+          pattern="[0-9]*"
+          outline
+          @change="reps = parseInt($event.target.value)"
+        >
+          <div
+            slot="inner"
+            class="item-label"
+          >
+            <span>&nbsp;&nbsp;&nbsp;reps</span>
           </div>
         </f7-list-input>
 
@@ -126,11 +129,12 @@
 
 <script>
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
+import SetNumbers from './SetNumbers'
 
 export default {
 
   name: 'ExercisePanel',
-  components: { f7Block, f7List, f7ListInput, f7Button },
+  components: { SetNumbers, f7Block, f7List, f7ListInput, f7Button },
   props: {
     exercise: {
       type: Object,
@@ -218,7 +222,12 @@ export default {
             ],
             value: [this.reps]
           })
-          self.repPicker.open()
+
+          if (this.weight > 0) {
+            self.weightPicker.open()
+          } else {
+            self.repPicker.open()
+          }
         })
       }
     }
