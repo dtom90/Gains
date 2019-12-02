@@ -1,13 +1,16 @@
 <template>
   <f7-page>
     <f7-navbar
-      :title="'Workout: '+workout.name"
+      :title="workout ? workout.name : ''"
+      :title-large="workout ? workout.name : ''"
+      large
+      inner-class="text-align-center"
       back-link
       back-link-force
       back-link-url="/"
     />
 
-    <f7-block>
+    <f7-block v-if="workout">
       <f7-block-title>
         Exercises:
       </f7-block-title>
@@ -18,20 +21,25 @@
           :key="i"
           class="workout-exercise"
         >
-          <f7-list-item-cell>
-            {{ exercise.name }}
+          <f7-list-item-cell class="exercise-name">
+            <strong>{{ exercise.name }}</strong>
           </f7-list-item-cell>
-          <f7-list-item-cell>
-            Weight: {{ exercise.weight }} lbs.
+          <f7-list-item-cell class="target-label text-align-right">
+            <span>Target:</span>
           </f7-list-item-cell>
-          <f7-list-item-cell>
-            Reps: {{ exercise.reps }}
+          <f7-list-item-cell class="target-numbers">
+            <span>{{ exercise.weight }}&nbsp;lbs.</span>
+            <span>&times;</span>
+            <span>{{ exercise.reps }}&nbsp;rep{{ exercise.reps === 1 ? '' : 's' }}</span>
           </f7-list-item-cell>
           <f7-list-item
             v-if="'rest' in exercise"
             slot="root"
           >
-            Rest: {{ exercise.rest }} seconds
+            <span
+              style="width: 100%"
+              class="text-align-center"
+            >Rest: {{ exercise.rest }} seconds</span>
           </f7-list-item>
         </f7-list-item>
       </f7-list>
@@ -39,11 +47,22 @@
       <f7-block-footer>
         <p>x {{ workout.rounds }} Round{{ workout.rounds === 1 ? '' : 's' }}</p>
       </f7-block-footer>
+      <br>
+      <f7-button
+        :href="`/editWorkout/${workout.id}`"
+        class="col"
+        big
+        fill
+        raised
+      >
+        Edit Workout
+      </f7-button>
     </f7-block>
-    <f7-block>
+
+    <f7-block v-if="workout">
       <f7-button
         :href="`/workout/${workout.id}/go`"
-        class="col"
+        class="col big-button"
         big
         fill
         raised
@@ -52,18 +71,7 @@
         Start Workout
       </f7-button>
     </f7-block>
-    <f7-block>
-      <f7-button
-        :href="`/editWorkout/${workout.id}`"
-        class="col"
-        big
-        fill
-        raised
-        color="yellow"
-      >
-        Edit Workout
-      </f7-button>
-    </f7-block>
+
     <f7-block v-if="lastWorkout">
       <f7-block-title>
         Last Workout:
@@ -115,17 +123,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7List, f7BlockFooter, f7ListItem, f7ListItemCell, f7Button } from 'framework7-vue'
 
 export default {
   components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
 
   computed: {
+    ...mapState([
+      'workouts'
+    ]),
     workout () {
-      return this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+      return this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
     allCompleted () {
-      if (this.workout.id in this.$store.state.completed) {
+      if (this.workout && this.workout.id in this.$store.state.completed) {
         return this.$store.state.completed[this.workout.id]
       }
       return null
@@ -150,3 +162,13 @@ export default {
   }
 }
 </script>
+
+<style>
+  .exercise-name, .target-numbers {
+    flex: 2
+  }
+
+  .target-label {
+    flex: 1;
+  }
+</style>

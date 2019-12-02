@@ -1,7 +1,7 @@
 <template>
   <f7-page>
     <f7-navbar
-      :title="newWorkout ? 'New Workout' : 'Edit Workout'"
+      :title="workout ? 'Edit Workout' : 'New Workout'"
       back-link="Back"
     />
 
@@ -17,6 +17,7 @@
           placeholder="Workout Name"
           :error-message-force="nameError"
           :error-message="nameErrorMessage"
+          outline
           @input="nameInputHandler"
         />
 
@@ -29,74 +30,79 @@
           placeholder="Exercise Name"
           :required="i===0"
           validate
+          outline
           @input="modifyExercise(i, 'name', $event.target.value)"
         >
           <div
             v-if="exercises.length > (i+1)"
-            slot="inner"
-          >
-            <ul>
-              <f7-list-input
-                label="Target weight:"
-                inline-label
-                type="number"
-                :value="ex.weight"
-                error-message="Weight must be non-negative"
-                validate
-                min="0"
-                pattern="[0-9]*"
-                @input="modifyExercise(i, 'weight', $event.target.value)"
-              >
-                <div
-                  slot="inner"
-                  class="item-label"
-                >
-                  lbs.
-                </div>
-              </f7-list-input>
-              <f7-list-input
-                label="Target reps:"
-                inline-label
-                type="number"
-                :value="ex.reps"
-                error-message="Target reps must be positive"
-                validate
-                min="1"
-                pattern="[0-9]*"
-                @input="modifyExercise(i, 'reps', $event.target.value)"
-              >
-                <div
-                  slot="inner"
-                  class="item-label"
-                >
-                  reps
-                </div>
-              </f7-list-input>
-            </ul>
-          </div>
-          <div
-            v-if="'rest' in ex"
-            slot="inner"
+            slot="root"
+            class="exercise-target-numbers"
           >
             <f7-list-input
-              label="Rest:"
+              label="Target weight:"
               inline-label
               type="number"
-              :value="ex.rest"
-              error-message="Rest must be non-negative"
+              :value="ex.weight"
+              error-message="Weight must be non-negative"
               validate
-              placeholder="0"
               min="0"
               pattern="[0-9]*"
-              @input="modifyExercise(i, 'rest', $event.target.value)"
+              outline
+              @input="modifyExercise(i, 'weight', $event.target.value)"
             >
               <div
                 slot="inner"
-                class="item-label"
+                class="item-label label-append"
               >
-                seconds
+                <span>&nbsp;&nbsp;lbs.</span>
               </div>
             </f7-list-input>
+            <f7-list-input
+              label="Target reps:"
+              inline-label
+              type="number"
+              :value="ex.reps"
+              error-message="Target reps must be positive"
+              validate
+              min="1"
+              pattern="[0-9]*"
+              outline
+              @input="modifyExercise(i, 'reps', $event.target.value)"
+            >
+              <div
+                slot="inner"
+                class="item-label label-append"
+              >
+                <span>&nbsp;&nbsp;reps</span>
+              </div>
+            </f7-list-input>
+          </div>
+          <div
+            v-if="'rest' in ex"
+            slot="root"
+          >
+            <ul style="padding-right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-list-in-list-padding-left));">
+              <f7-list-input
+                label="Rest:"
+                inline-label
+                type="number"
+                :value="ex.rest"
+                error-message="Rest must be non-negative"
+                validate
+                placeholder="0"
+                min="0"
+                pattern="[0-9]*"
+                outline
+                @input="modifyExercise(i, 'rest', $event.target.value)"
+              >
+                <div
+                  slot="inner"
+                  class="item-label label-append"
+                >
+                  <span>&nbsp;&nbsp;seconds</span>
+                </div>
+              </f7-list-input>
+            </ul>
           </div>
         </f7-list-input>
 
@@ -109,6 +115,7 @@
           validate
           min="1"
           pattern="[0-9]*"
+          outline
           @input="modifyRounds($event.target.value)"
         />
       </f7-list>
@@ -122,7 +129,7 @@
           color="green"
           @click="createWorkout"
         >
-          {{ newWorkout ? 'Create Workout' : 'Update Workout' }}
+          {{ workout ? 'Update Workout' : 'Create Workout' }}
         </f7-button>
       </f7-row>
     </f7-block>
@@ -149,23 +156,26 @@ export default {
     exercises: [newExercise()],
     rounds: 1,
     defaultRest: 30,
-    newWorkout: true,
-    changedName: false,
     nameError: false,
     nameErrorMessage: ''
   }),
 
   computed: {
-    ...mapState(['workouts'])
+    ...mapState([
+      'workouts'
+    ]),
+    workout () {
+      return 'workoutId' in this.$f7route.params
+        ? this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+        : null
+    }
   },
 
   mounted () {
     if ('workoutId' in this.$f7route.params) {
-      this.newWorkout = false
-      const workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
-      this.name = workout.name
-      this.exercises = workout.exercises
-      this.rounds = workout.rounds
+      this.name = this.workout.name
+      this.exercises = this.workout.exercises.concat(this.exercises)
+      this.rounds = this.workout.rounds
     }
   },
 
@@ -179,8 +189,6 @@ export default {
     modifyExercise (i, key, val) {
       if (key !== 'name') {
         val = parseInt(val)
-      } else {
-        this.changedName = true
       }
       if (key === 'rest') {
         if (isNaN(val)) {
@@ -212,19 +220,20 @@ export default {
         this.nameError = true
         this.nameErrorMessage = 'Please fill out this field.'
         this.$refs.newWorkout.$el.checkValidity()
-      } else if ((this.newWorkout || this.changedName) && this.workouts.filter(w => w.name === this.name).length > 0) {
+      } else if ((!this.workout || this.workout.name !== this.name) &&
+              this.workouts.findIndex(w => w.name === this.name) > -1) {
         this.nameError = true
         this.nameErrorMessage = 'Workout name already exists.'
         this.$refs.newWorkout.$el.checkValidity()
       } else if (this.$refs.newWorkout.$el.checkValidity()) {
         this.exercises = this.exercises.filter(ex => ex.name) // filter out blank (unfilled) exercises
-        if (this.newWorkout) {
+        if (this.workout) {
+          this.editWorkout(Object.assign({ id: this.workout.id }, this.$data))
+          const newId = this.workouts.filter(w => w.name === this.name)[0].id
+          this.$f7router.navigate('/workout/' + newId)
+        } else {
           this.addWorkout(this.$data)
           this.$f7router.navigate('/workout/' + this.workouts[this.workouts.length - 1].id)
-        } else {
-          const id = this.$f7route.params['workoutId']
-          this.editWorkout(Object.assign({ id }, this.$data))
-          this.$f7router.navigate('/workout/' + id)
         }
       }
     },
@@ -240,3 +249,16 @@ export default {
   }
 }
 </script>
+
+<style>
+  /*noinspection CssUnusedSymbol*/
+  .exercise-target-numbers .item-title {
+    width: 40%;
+  }
+</style>
+
+<style scoped>
+  .label-append {
+    width: 20%;
+  }
+</style>

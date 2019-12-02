@@ -1,27 +1,33 @@
-// Import Vue
+// Vue & Vuex store
 import Vue from 'vue'
-
-// Import store
 import store from './store'
 
-// Import F7
+// Framework7 core & additional components
 import Framework7 from 'framework7'
+import Picker from 'framework7/components/picker/picker'
+import Sheet from 'framework7/components/sheet/sheet'
 
-// Import F7 Vue Plugin
+// Framework7 Vue Plugin
 import Framework7Vue from 'framework7-vue'
 
-// Import F7 Styles
+// Framework7 Styles
 import 'framework7/css/framework7.bundle.min.css'
 
-// Import Icons and App Custom Styles
+// Icons and App Custom Styles
 import './css/icons.css'
 import './css/app.css'
 
-// Import App Component
+// App Component
 import App from './App.vue'
 
-// Init F7 Vue Plugin
-Framework7.use(Framework7Vue)
+// Import fastClick
+import FastClick from 'fastclick'
+
+// Default to passive events
+import 'default-passive-events'
+
+// install additional modules
+Framework7.use([Framework7Vue, Picker, Sheet])
 
 // Init App
 export default new Vue({
@@ -30,6 +36,13 @@ export default new Vue({
   // Register App Component
   components: {
     app: App
+  },
+
+  mounted () {
+    window.addEventListener('load', () => {
+      // run after everything is in-place
+      FastClick.attach(document.body)
+    })
   },
 
   template: '<app/>',

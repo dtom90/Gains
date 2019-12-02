@@ -2,7 +2,7 @@ import { Selector } from 'testcafe'
 
 import {
   title, blockTitle, blockText, blockDiv, button, inputGroup, listItem,
-  doneButton, skipRestButton,
+  doneButton, enterButton, skipRestButton,
   expectHomePage, expectCircuitWorkout, startCircuitWorkout
 } from './elements'
 
@@ -25,22 +25,32 @@ test('Start Circuit workout', async t => {
   // Start the workout
   startCircuitWorkout(t)
   await t
-  //
-  // Click 'Done', expect the reps input to be filled with the target value
+    //
+    // Click 'Done', expect the reps input to be filled with the target value
     .click(doneButton)
-    .expect(blockText('Rest: 3').visible).ok()
-    .expect(skipRestButton.visible).ok()
+    .expect(blockText('Rest: 3').visible).notOk()
+    .expect(skipRestButton.visible).notOk()
     .expect(blockText('Completed:').visible).ok()
     .expect(blockText('Push-ups').visible).ok()
-    .expect(inputGroup('Weight', { type: 'number' }).visible).ok()
-    .expect(inputGroup('Reps', { type: 'number' }).visible).ok()
-    .expect(inputGroup('Weight', { type: 'number' }).value).eql('0')
-    .expect(inputGroup('Reps', { type: 'number' }).value).eql('1')
+    .expect(inputGroup('lbs.', { type: 'text' }).visible).ok()
+    .expect(inputGroup('reps', { type: 'text' }).visible).ok()
+    .expect(inputGroup('lbs.', { type: 'text' }).value).eql('0')
+    .expect(inputGroup('reps', { type: 'text' }).value).eql('1')
     //
     // Modify the weight and reps with custom values
-    .typeText(inputGroup('Weight', { type: 'number' }), '5', { replace: true })
-    .typeText(inputGroup('Reps', { type: 'number' }), '10', { replace: true })
-    .click(button('Submit'))
+    .click(inputGroup('reps', { type: 'text' }))
+    .expect(Selector('.picker-sheet').visible).ok()
+    .click(Selector('.picker-item').withExactText('3'))
+    .click(Selector('.picker-item').withExactText('5'))
+    .click(Selector('.picker-item').withExactText('7'))
+    .click(Selector('.picker-item').withExactText('9'))
+    .click(Selector('.picker-item').withExactText('10'))
+    .click(inputGroup('lbs.', { type: 'text' }))
+    .expect(Selector('.picker-sheet').visible).ok()
+    .expect(Selector('.picker-item').withExactText('+/- 5').visible).ok()
+    .expect(Selector('.picker-item').withExactText('+/- 1').visible).ok()
+    .click(Selector('.picker-item').withExactText('5'))
+    .click(button('Enter'))
     .expect(Selector('div.input-info').withExactText('Set numbers updated!').visible).ok()
     //
     // Skip the rest, expect the next workout to be active
@@ -57,8 +67,8 @@ test('Start Circuit workout', async t => {
     .expect(skipRestButton.visible).ok()
     .expect(blockText('Completed:').visible).ok()
     .expect(blockText('Pull-ups').visible).ok()
-    .expect(inputGroup('Weight', { type: 'number' }).value).eql('15')
-    .expect(inputGroup('Reps', { type: 'number' }).value).eql('6')
+    .expect(inputGroup('lbs.', { type: 'text' }).value).eql('15')
+    .expect(inputGroup('reps', { type: 'text' }).value).eql('6')
     .expect(Selector('div.input-info').withExactText('Set numbers updated!').exists).notOk()
     .click(skipRestButton)
     //
@@ -69,8 +79,8 @@ test('Start Circuit workout', async t => {
     .expect(blockText('Rest: 3').visible).ok()
     .expect(blockText('Completed:').visible).ok()
     .expect(blockText('Push-ups').visible).ok()
-    .expect(inputGroup('Weight', { type: 'number' }).value).eql('0')
-    .expect(inputGroup('Reps', { type: 'number' }).value).eql('1')
+    .expect(inputGroup('lbs.', { type: 'text' }).value).eql('0')
+    .expect(inputGroup('reps', { type: 'text' }).value).eql('1')
     .click(skipRestButton)
     .expect(blockText('Now:').visible).ok()
     .expect(blockText('Pull-ups').visible).ok()
@@ -102,6 +112,7 @@ test('Rest countdown', async t => {
   //
   // Click 'Done', expect the reps input to be filled with the target value
     .click(doneButton)
+    .click(enterButton)
     .expect(skipRestButton.visible).ok()
     .expect(blockText('Rest: 3').visible).ok()
     .expect(blockText('Rest: 2').visible).ok()
