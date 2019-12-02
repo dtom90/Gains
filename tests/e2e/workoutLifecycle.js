@@ -71,7 +71,7 @@ test('Create a workout', async t => {
     //
     // Create the workout, should navigate to the workout page
     .click(button('Create Workout'))
-    .expect(title('Workout: My Workout').visible).ok()
+    .expect(title('My Workout').visible).ok()
   expectCircuitWorkout(t)
 })
 
@@ -100,6 +100,6 @@ test('Blank rest should default to 0', async t => {
     //
     // Create the workout, should navigate to the workout page
     .click(button('Create Workout'))
-    .expect(title('Workout: My Workout').visible).ok()
+    .expect(title('My Workout').visible).ok()
     .expect(listItem('Rest: 0 seconds').visible).ok()
 })
