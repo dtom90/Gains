@@ -35,6 +35,13 @@ if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function () {
     FastClick.attach(document.body)
   }, false)
+
+  document.addEventListener('deviceready', function () {
+    Keyboard.shrinkView(true)
+    window.addEventListener('keyboardDidShow', function () {
+      document.activeElement.scrollIntoView()
+    })
+  })
 }
 
 // Initialize App
