@@ -195,11 +195,11 @@ export default {
                 textAlign: 'left',
                 values: Object.keys(weightOptions),
                 onChange: function (picker, step) {
-                  let currentValue = parseInt(picker.value[1])
-                  if (step === step5 && currentValue % 5 !== 0) {
-                    currentValue = Math.round(currentValue / 5) * 5
-                  }
                   if (picker.cols[1].replaceValues) {
+                    let currentValue = parseInt(picker.value[1])
+                    if (step === step5 && currentValue % 5 !== 0) {
+                      currentValue = Math.round(currentValue / 5) * 5
+                    }
                     picker.cols[1].replaceValues(weightOptions[step])
                     picker.cols[1].setValue(currentValue, 0)
                   }
@@ -210,7 +210,15 @@ export default {
                 width: 160
               }
             ],
-            value: [this.weight % 5 === 0 ? step5 : step1, this.weight]
+            value: [this.weight % 5 === 0 ? step5 : step1, this.weight],
+            on: {
+              open: function (picker) {
+                picker.$inputEl.trigger('focus')
+              },
+              close: function (picker) {
+                picker.$inputEl.trigger('blur')
+              }
+            }
           })
           self.repPicker = app.picker.create({
             inputEl: '#rep-picker input',
@@ -220,7 +228,15 @@ export default {
                 values: [...Array(maxReps).keys()].map(x => x + 1)
               }
             ],
-            value: [this.reps]
+            value: [this.reps],
+            on: {
+              open: function (picker) {
+                picker.$inputEl.trigger('focus')
+              },
+              close: function (picker) {
+                picker.$inputEl.trigger('blur')
+              }
+            }
           })
 
           if (this.weight > 0) {

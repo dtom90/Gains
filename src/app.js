@@ -25,7 +25,7 @@ import App from './App.vue'
 import FastClick from 'fastclick'
 
 // Default to passive events
-import 'default-passive-events'
+// import 'default-passive-events'
 
 // install additional modules
 Framework7.use([Framework7Vue, Dialog, Picker, Sheet])
