@@ -77,10 +77,10 @@
       <f7-block-title>
         Last Workout:
       </f7-block-title>
-      <p>{{ (new Date(lastWorkout.lastWorkoutTime)).toLocaleString() }}</p>
+      <p>{{ (new Date(parseInt(lastWorkoutTime))).toLocaleString() }}</p>
       <f7-list>
         <f7-list-item
-          v-for="(exercise, i) in lastWorkout.exercises"
+          v-for="(exercise, i) in lastWorkout"
           :key="i"
         >
           <f7-list-item-cell>
@@ -167,28 +167,23 @@ export default {
       return this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
     allCompleted () {
-      if (this.workout && this.workout.id in this.completed) {
-        return this.completed[this.workout.id]
-      }
-      return null
+      return this.workout && this.workout.id in this.completed
+        ? this.completed[this.workout.id] : null
     },
-    displayCompleted () {
+    sortedWorkoutTimes () {
       return Object.keys(this.allCompleted)
         .filter(key => key !== 'lastWorkoutTime')
         .slice().sort()
+    },
+    displayCompleted () {
+      return this.sortedWorkoutTimes
         .reduce((obj, key) => ({
           ...obj,
           [key]: this.allCompleted[key]
         }), {})
     },
-    lastWorkout () {
-      if (this.allCompleted) {
-        const lastWorkoutTime = this.allCompleted.lastWorkoutTime
-        const lastCompleted = this.allCompleted[lastWorkoutTime]
-        return { lastWorkoutTime, exercises: lastCompleted.exercises }
-      }
-      return null
-    }
+    lastWorkoutTime () { return this.allCompleted ? this.sortedWorkoutTimes.slice(-1)[0] : null },
+    lastWorkout () { return this.allCompleted ? this.allCompleted[this.lastWorkoutTime].exercises : null }
   }
 }
 </script>

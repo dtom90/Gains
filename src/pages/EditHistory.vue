@@ -99,11 +99,17 @@ export default {
       'deleteWorkoutRecords'
     ]),
     deleteSelected () {
-      this.deleteWorkoutRecords({
-        workoutId: this.workout.id,
-        times: this.selected
-      })
-      this.selected = []
+      this.$f7.dialog.confirm(
+        `Are you sure that you want to delete these ${this.selected.length} workout records?`,
+        'Delete Workout History',
+        () => {
+          this.deleteWorkoutRecords({
+            workoutId: this.workout.id,
+            times: this.selected
+          })
+          this.selected = []
+        }
+      )
     }
   }
 }
