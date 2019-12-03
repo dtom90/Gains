@@ -28,9 +28,10 @@
             <span>Target:</span>
           </f7-list-item-cell>
           <f7-list-item-cell class="target-numbers">
-            <span>{{ exercise.weight }}&nbsp;lbs.</span>
-            <span>&times;</span>
-            <span>{{ exercise.reps }}&nbsp;rep{{ exercise.reps === 1 ? '' : 's' }}</span>
+            <set-numbers
+              :weight="exercise.weight"
+              :reps="exercise.reps"
+            />
           </f7-list-item-cell>
           <f7-list-item
             v-if="'rest' in exercise"
@@ -136,6 +137,15 @@
           </tbody>
         </table>
       </div>
+      <f7-button
+        :href="`/workout/${workout.id}/editHistory`"
+        class="col"
+        large
+        fill
+        raised
+      >
+        Edit History
+      </f7-button>
     </f7-block>
   </f7-page>
 </template>

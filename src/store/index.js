@@ -50,6 +50,11 @@ const store = new Vuex.Store({
         round,
         completedTime
       })
+    },
+    deleteWorkoutRecords (state, { workoutId, times }) {
+      times.forEach(time => {
+        Vue.delete(state.completed[workoutId], time)
+      })
     }
   },
   plugins: [vuexLocalStorage.plugin]
