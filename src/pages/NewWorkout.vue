@@ -203,6 +203,7 @@ export default {
         if (this.exercises.length >= offset) {
           this.$set(this.exercises[this.exercises.length - offset], 'rest', this.defaultRest)
         }
+        this.$nextTick(() => { document.activeElement.scrollIntoViewIfNeeded() })
       }
     },
 

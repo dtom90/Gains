@@ -37,9 +37,10 @@ if ('addEventListener' in document) {
   }, false)
 
   document.addEventListener('deviceready', function () {
-    Keyboard.shrinkView(true)
+    Keyboard.shrinkView(true) // eslint-disable-line no-undef
+    Keyboard.disableScrollingInShrinkView(true) // eslint-disable-line no-undef
     window.addEventListener('keyboardDidShow', function () {
-      document.activeElement.scrollIntoView()
+      document.activeElement.scrollIntoViewIfNeeded()
     })
   })
 }
