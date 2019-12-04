@@ -137,6 +137,7 @@
           </tbody>
         </table>
       </div>
+      <br>
       <f7-button
         :href="`/workout/${workout.id}/editHistory`"
         class="col"

@@ -51,6 +51,11 @@ const store = new Vuex.Store({
         completedTime
       })
     },
+    modifyCompletedSet (state, { workoutId, workoutStartTime, setIndex, type, value }) {
+      if (['weight', 'reps'].includes(type)) {
+        Vue.set(state.completed[workoutId][workoutStartTime].exercises[setIndex], type, value)
+      }
+    },
     deleteWorkoutRecords (state, { workoutId, times }) {
       times.forEach(time => {
         Vue.delete(state.completed[workoutId], time)

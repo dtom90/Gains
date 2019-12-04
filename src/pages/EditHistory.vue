@@ -46,12 +46,24 @@
           </tbody>
         </table>
       </div>
-
+      <br>
+      <f7-button
+        large
+        fill
+        raised
+        :disabled="selected.length !== 1"
+        color="orange"
+        @click="$f7router.navigate(`/workout/${workout.id}/editHistory/${selected[0]}`)"
+      >
+        <span>Modify</span>
+      </f7-button>
+      <br>
       <f7-button
         large
         fill
         raised
         :disabled="selected.length === 0"
+        color="red"
         @click="deleteSelected"
       >
         <span>Delete</span><span v-if="selected.length > 0">{{ selected.length }} Workouts</span>
