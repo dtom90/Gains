@@ -12,12 +12,7 @@
         <table>
           <thead>
             <tr>
-              <th class="checkbox-cell">
-                <!--                <label class="checkbox">-->
-                <!--                  <input type="checkbox">-->
-                <!--                  <i class="icon-checkbox" />-->
-                <!--                </label>-->
-              </th>
+              <th />
               <th class="label-cell">
                 Start Time
               </th>
