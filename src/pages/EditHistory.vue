@@ -38,7 +38,7 @@
                     :value="startedTime"
                     type="checkbox"
                   >
-                  <i class="icon-checkbox" />
+                  <i class="icon-checkbox needsclick" />
                 </label>
               </td>
               <td class="label-cell">
