@@ -123,7 +123,7 @@ export default {
     currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
     nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
     workoutPercentage () { return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100) },
-    firstExerciseOfWorkout () { return this.currentRound === 0 && this.currentExerciseIndex === 0 },
+    firstExerciseOfWorkout () { return this.currentRound === 1 && this.currentExerciseIndex === 0 },
     firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
     lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
     completed () { return this.$store.state.completed },
@@ -145,17 +145,13 @@ export default {
     this.startTime = Date.now()
     this.now = Date.now()
     this.workoutTimer = setInterval(this.incrementTimeElapsed, 1000)
-    this.startActiveWorkout({
-      workoutId: this.workout.id,
-      startTime: this.startTime
-    })
   },
 
   methods: {
 
     ...mapMutations([
-      'addCompletedSet',
-      'startActiveWorkout'
+      'startActiveWorkout',
+      'addCompletedSet'
     ]),
 
     // Handle completed set
@@ -176,6 +172,14 @@ export default {
     },
 
     enterNumbers (weight, reps) {
+      // Initialize the workout record if this is the first exercise
+      if (this.firstExerciseOfWorkout) {
+        this.startActiveWorkout({
+          workoutId: this.workout.id,
+          startTime: this.startTime
+        })
+      }
+
       // Record completed set
       this.addCompletedSet({
         workoutId: this.workout.id,
