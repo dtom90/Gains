@@ -37,12 +37,14 @@ if ('addEventListener' in document) {
   }, false)
 
   document.addEventListener('deviceready', function () {
+    console.log('deviceready')
     Keyboard.shrinkView(true) // eslint-disable-line no-undef
     Keyboard.disableScrollingInShrinkView(true) // eslint-disable-line no-undef
     window.addEventListener('keyboardDidShow', function () {
       document.activeElement.scrollIntoViewIfNeeded()
     })
-  })
+    console.log(cordova.file)
+  }, false)
 }
 
 // Initialize App

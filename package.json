@@ -15,6 +15,7 @@
     "build:dev": "node ./build/dev.js",
     "build:prod": "node ./build/prod.js",
     "build:test": "LOAD_SAMPLE_STATE=true yarn run build:prod",
+    "build:test:prepare": "LOAD_SAMPLE_STATE=true yarn run build:prod && cordova prepare",
     "serve": "node server.js",
     "ios:add": "cordova platform add ios",
     "ios:emulate": "yarn run build:test && cordova emulate ios --target=\"iPhone-6\"",
