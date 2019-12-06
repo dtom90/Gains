@@ -3,10 +3,18 @@
     <f7-navbar
       title="Gains Tracker"
       large
-    />
+    >
+      <f7-button
+        slot="left"
+        raised
+        panel-open="left"
+      >
+        <f7-icon material="menu" />
+      </f7-button>
+    </f7-navbar>
 
     <f7-block-title>
-      Workouts
+      <span>Workouts</span>
     </f7-block-title>
 
     <f7-block
@@ -19,13 +27,13 @@
         tag="p"
       >
         <f7-button
-          class="col no-caps"
           :href="'/workout/'+workout.id"
-          big
+          class="col"
+          large
           fill
           raised
         >
-          {{ workout.name }}
+          <span>{{ workout.name }}</span>
         </f7-button>
       </f7-row>
     </f7-block>
@@ -35,22 +43,22 @@
         <f7-button
           href="/newWorkout/"
           class="col"
-          big
+          large
           fill
           raised
           color="green"
         >
-          New Workout
+          <span>New Workout</span>
         </f7-button>
       </f7-row>
     </f7-block>
   </f7-page>
 </template>
 <script>
-import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7Row, f7Button } from 'framework7-vue'
+import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7Row, f7Button, f7Icon } from 'framework7-vue'
 
 export default {
-  components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7Row, f7Button },
+  components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7Row, f7Button, f7Icon },
 
   computed: {
     workouts () {

@@ -28,9 +28,10 @@
             <span>Target:</span>
           </f7-list-item-cell>
           <f7-list-item-cell class="target-numbers">
-            <span>{{ exercise.weight }}&nbsp;lbs.</span>
-            <span>&times;</span>
-            <span>{{ exercise.reps }}&nbsp;rep{{ exercise.reps === 1 ? '' : 's' }}</span>
+            <set-numbers
+              :weight="exercise.weight"
+              :reps="exercise.reps"
+            />
           </f7-list-item-cell>
           <f7-list-item
             v-if="'rest' in exercise"
@@ -51,7 +52,7 @@
       <f7-button
         :href="`/editWorkout/${workout.id}`"
         class="col"
-        big
+        large
         fill
         raised
       >
@@ -63,7 +64,7 @@
       <f7-button
         :href="`/workout/${workout.id}/go`"
         class="col big-button"
-        big
+        large
         fill
         raised
         color="green"
@@ -76,13 +77,24 @@
       <f7-block-title>
         Last Workout:
       </f7-block-title>
-      <p>{{ (new Date(lastWorkout.lastWorkoutTime)).toLocaleString() }}</p>
+      <p>{{ (new Date(parseInt(lastWorkoutTime))).toLocaleString() }}</p>
       <f7-list>
         <f7-list-item
-          v-for="(exercise, i) in lastWorkout.exercises"
+          v-for="(exercise, i) in lastWorkout"
           :key="i"
         >
-          {{ exercise.exercise }}: {{ exercise.weight }} lbs. x {{ exercise.reps }} rep{{ exercise.reps > 1 ? 's' : '' }}
+          <f7-list-item-cell>
+            <span>{{ exercise.exercise }}</span>
+          </f7-list-item-cell>
+          <f7-list-item-cell>
+            <span>Round {{ exercise.round }}</span>
+          </f7-list-item-cell>
+          <f7-list-item-cell>
+            <set-numbers
+              :weight="exercise.weight"
+              :reps="exercise.reps"
+            />
+          </f7-list-item-cell>
         </f7-list-item>
       </f7-list>
 
@@ -104,20 +116,37 @@
           </thead>
           <tbody>
             <tr
-              v-for="(exercise, i) in lastWorkout.exercises"
+              v-for="i in workout.exercises.length * workout.rounds"
               :key="i"
             >
-              <td>{{ exercise.exercise }} Round {{ exercise.round }}</td>
+              <td>
+                <span>{{ workout.exercises[(i-1) % workout.exercises.length].name.replace('-', '&#8209;') }}</span>
+                <span> Round&nbsp;{{ Math.floor((i-1) / workout.exercises.length) + 1 }}</span>
+              </td>
               <td
                 v-for="(sequence, time) in displayCompleted"
                 :key="time"
               >
-                {{ sequence.exercises[i].weight }} lbs. x {{ sequence.exercises[i].reps }} rep{{ sequence.exercises[i].reps > 1 ? 's' : '' }}
+                <set-numbers
+                  v-if="i <= sequence.exercises.length"
+                  :weight="sequence.exercises[i-1].weight"
+                  :reps="sequence.exercises[i-1].reps"
+                />
               </td>
             </tr>
           </tbody>
         </table>
       </div>
+      <br>
+      <f7-button
+        :href="`/workout/${workout.id}/editHistory`"
+        class="col"
+        large
+        fill
+        raised
+      >
+        Edit History
+      </f7-button>
     </f7-block>
   </f7-page>
 </template>
@@ -125,40 +154,37 @@
 <script>
 import { mapState } from 'vuex'
 import { f7Page, f7Navbar, f7Block, f7BlockTitle, f7List, f7BlockFooter, f7ListItem, f7ListItemCell, f7Button } from 'framework7-vue'
+import SetNumbers from '../components/SetNumbers'
 
 export default {
-  components: { f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
+  components: { SetNumbers, f7Page, f7Navbar, f7Block, f7BlockTitle, f7BlockFooter, f7List, f7ListItem, f7ListItemCell, f7Button },
 
   computed: {
     ...mapState([
-      'workouts'
+      'workouts',
+      'completed'
     ]),
     workout () {
       return this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
     },
     allCompleted () {
-      if (this.workout && this.workout.id in this.$store.state.completed) {
-        return this.$store.state.completed[this.workout.id]
-      }
-      return null
+      return this.workout && this.workout.id in this.completed
+        ? this.completed[this.workout.id] : null
     },
-    displayCompleted () {
+    sortedWorkoutTimes () {
       return Object.keys(this.allCompleted)
         .filter(key => key !== 'lastWorkoutTime')
         .slice().sort()
+    },
+    displayCompleted () {
+      return this.sortedWorkoutTimes
         .reduce((obj, key) => ({
           ...obj,
           [key]: this.allCompleted[key]
         }), {})
     },
-    lastWorkout () {
-      if (this.allCompleted) {
-        const lastWorkoutTime = this.allCompleted.lastWorkoutTime
-        const lastCompleted = this.allCompleted[lastWorkoutTime]
-        return { lastWorkoutTime, exercises: lastCompleted.exercises }
-      }
-      return null
-    }
+    lastWorkoutTime () { return this.allCompleted ? this.sortedWorkoutTimes.slice(-1)[0] : null },
+    lastWorkout () { return this.allCompleted ? this.allCompleted[this.lastWorkoutTime].exercises : null }
   }
 }
 </script>

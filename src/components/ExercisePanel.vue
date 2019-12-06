@@ -1,6 +1,6 @@
 <template>
   <f7-block
-    :class="'exercise-block bg-color-'+(completed ? 'green' : 'red')"
+    :class="'exercise-block bg-color-'+(rest ? 'green' : 'red')"
   >
     <!-- Status & Exercise -->
     <p
@@ -9,70 +9,54 @@
     >
       <span>{{ adjective }}:</span>
     </p>
-    <p :class=" (completed && numbersEntered ? 'numbers-entered numbers-entered-' : '') + 'exercise-name text-shadow'">
+    <p :class=" (rest && numbersEntered ? 'numbers-entered numbers-entered-' : '') + 'exercise-name text-shadow'">
       <span>{{ exercise.name }}</span>
     </p>
 
     <!-- Weight & Reps Target -->
     <div
-      v-if="!completed"
+      v-if="!rest"
       class="exercise-target text-shadow display-flex justify-content-center"
-      style="flex-wrap: wrap;"
     >
-      <div class="display-flex align-items-center">
-        <span>Target:&nbsp;&nbsp;</span>
+      <div
+        class="display-flex align-items-center"
+        style="padding-right: 24px;"
+      >
+        <span>Target:</span>
       </div>
-      <div>
+      <div style="font-size: 34px;">
+        <div v-if="weight > 0">
+          <span>{{ weight }} lbs.</span>
+        </div>
         <div>
           <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
         </div>
-        <div>
-          <span>{{ weight }} lbs.</span>
-        </div>
       </div>
-      <div style="flex-basis: 91.61px;" />
+      <div style="flex: 1; max-width: 117.41px;" />
     </div>
 
     <div
-      v-if="completed && numbersEntered"
+      v-if="rest && numbersEntered"
       class="numbers-entered text-shadow"
       style="margin: 0;"
     >
       <div>
-        <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }} &times; {{ weight }} lbs.</span>
+        <set-numbers
+          :weight="weight"
+          :reps="reps"
+        />
       </div>
     </div>
 
     <!-- Weight & Reps Inputs -->
     <f7-block
-      v-if="completed && !numbersEntered"
+      v-if="rest && !numbersEntered"
       class="input-block display-flex justify-content-center"
     >
       <f7-list
         class="input-list"
         no-hairlines-md
       >
-        <f7-list-input
-          id="rep-picker"
-          class="input-item color-white"
-          inline-label
-          type="text"
-          readonly
-          error-message="Only positive numbers please!"
-          validate
-          min="1"
-          pattern="[0-9]*"
-          outline
-          @change="reps = parseInt($event.target.value)"
-        >
-          <div
-            slot="inner"
-            class="item-label"
-          >
-            <span>&nbsp;&nbsp;&nbsp;reps</span>
-          </div>
-        </f7-list-input>
-
         <f7-list-input
           id="weight-picker"
           class="input-item color-white"
@@ -94,13 +78,34 @@
           </div>
         </f7-list-input>
 
+        <f7-list-input
+          id="rep-picker"
+          class="input-item color-white"
+          inline-label
+          type="text"
+          readonly
+          error-message="Only positive numbers please!"
+          validate
+          min="1"
+          pattern="[0-9]*"
+          outline
+          @change="reps = parseInt($event.target.value)"
+        >
+          <div
+            slot="inner"
+            class="item-label"
+          >
+            <span>&nbsp;&nbsp;&nbsp;reps</span>
+          </div>
+        </f7-list-input>
+
         <f7-button
           id="enter-button"
-          big
+          class="big-button submit-button"
+          large
           fill
           raised
-          class="big-button submit-button"
-          @click="enterSet"
+          @click="enterNumbers(weight, reps)"
         >
           Enter
         </f7-button>
@@ -112,11 +117,10 @@
       v-if="!rest"
       class="big-button submit-button"
       large
-      strong
-      raised
       fill
+      raised
       color="green"
-      @click="finishExercise"
+      @click="onEndSet"
     >
       Done
     </f7-button>
@@ -125,39 +129,30 @@
 
 <script>
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
-import { mapState, mapMutations } from 'vuex'
+import SetNumbers from './SetNumbers'
 
 export default {
 
   name: 'ExercisePanel',
-  components: { f7Block, f7List, f7ListInput, f7Button },
+  components: { SetNumbers, f7Block, f7List, f7ListInput, f7Button },
   props: {
     exercise: {
       type: Object,
       default: () => null
     },
-    rest: Boolean,
-    completed: {
+    rest: {
       type: Boolean,
       default: false
     },
-    workoutId: {
-      type: String,
-      default: 'Workout'
+    numbersEntered: {
+      type: Boolean,
+      default: false
     },
-    workoutTime: {
-      type: Number,
-      default: 0
+    onEndSet: {
+      type: Function,
+      default: () => null
     },
-    startTime: {
-      type: Number,
-      default: 0
-    },
-    lastCompletedExerciseTime: {
-      type: Number,
-      default: 0
-    },
-    finishExercise: {
+    enterNumbers: {
       type: Function,
       default: () => null
     }
@@ -167,19 +162,15 @@ export default {
     weight: null
   }),
   computed: {
-    ...mapState([
-      'numbersEntered'
-    ]),
-    adjective () { return this.rest ? (this.completed ? 'Completed' : 'Next') : 'Now' }
+    adjective () { return this.rest ? (this.rest ? 'Completed' : 'Next') : 'Now' }
   },
   watch: {
     exercise: function (newExercise) {
       this.weight = newExercise.weight
       this.reps = newExercise.reps
-      this.resetNumbersEntered()
     },
-    completed: function (completed) {
-      if (completed) {
+    rest: function (rest) {
+      if (rest) {
         const self = this
         const app = self.$f7
 
@@ -204,11 +195,11 @@ export default {
                 textAlign: 'left',
                 values: Object.keys(weightOptions),
                 onChange: function (picker, step) {
-                  let currentValue = parseInt(picker.value[1])
-                  if (step === step5 && currentValue % 5 !== 0) {
-                    currentValue = Math.round(currentValue / 5) * 5
-                  }
                   if (picker.cols[1].replaceValues) {
+                    let currentValue = parseInt(picker.value[1])
+                    if (step === step5 && currentValue % 5 !== 0) {
+                      currentValue = Math.round(currentValue / 5) * 5
+                    }
                     picker.cols[1].replaceValues(weightOptions[step])
                     picker.cols[1].setValue(currentValue, 0)
                   }
@@ -219,7 +210,15 @@ export default {
                 width: 160
               }
             ],
-            value: [this.weight % 5 === 0 ? step5 : step1, this.weight]
+            value: [this.weight % 5 === 0 ? step5 : step1, this.weight],
+            on: {
+              open: function (picker) {
+                picker.$inputEl.trigger('focus')
+              },
+              close: function (picker) {
+                picker.$inputEl.trigger('blur')
+              }
+            }
           })
           self.repPicker = app.picker.create({
             inputEl: '#rep-picker input',
@@ -229,13 +228,23 @@ export default {
                 values: [...Array(maxReps).keys()].map(x => x + 1)
               }
             ],
-            value: [this.reps]
+            value: [this.reps],
+            on: {
+              open: function (picker) {
+                picker.$inputEl.trigger('focus')
+              },
+              close: function (picker) {
+                picker.$inputEl.trigger('blur')
+              }
+            }
           })
-          self.repPicker.open()
+
+          if (this.weight > 0) {
+            self.weightPicker.open()
+          } else {
+            self.repPicker.open()
+          }
         })
-      } else if (this.weightPicker || this.repPicker) {
-        this.weightPicker.destroy()
-        this.repPicker.destroy()
       }
     }
   },
@@ -243,22 +252,6 @@ export default {
     if (this.exercise) {
       this.weight = this.exercise.weight
       this.reps = this.exercise.reps
-    }
-  },
-  methods: {
-    ...mapMutations([
-      'addCompletedSet',
-      'resetNumbersEntered'
-    ]),
-
-    enterSet () {
-      this.addCompletedSet({
-        workoutId: this.workoutId,
-        workoutTime: this.workoutTime,
-        completedTime: this.lastCompletedExerciseTime,
-        weight: this.weight,
-        reps: this.reps
-      })
     }
   }
 }
@@ -284,11 +277,11 @@ export default {
     text-align: center;
   }
   .exercise-target {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     text-align: center;
-    margin-top: 12px;
     margin-bottom: 24px;
+    flex-wrap: wrap;
   }
   /*noinspection CssUnusedSymbol*/
   .numbers-entered-exercise-name {
