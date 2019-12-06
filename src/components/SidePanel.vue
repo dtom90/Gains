@@ -106,7 +106,7 @@ export default {
       }
     },
     saveData () {
-      fileStorage.saveData(this.$store.state,
+      fileStorage.saveData(JSON.stringify(this.$store.state),
         message => { this.$f7.dialog.alert(message, 'Save Data to iCloud') },
         errMessage => { this.$f7.dialog.alert(errMessage, 'Error') }
       )
