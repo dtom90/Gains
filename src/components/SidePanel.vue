@@ -37,7 +37,7 @@
             </f7-button>
           </div>
           <br>
-          <div v-if="canStore">
+          <div v-if="isCordova">
             <f7-button
               v-if="localContents"
               fill
@@ -88,16 +88,17 @@ export default {
   name: 'SidePanel',
   components: { f7Panel, f7View, f7Page, f7Block, f7BlockTitle, f7Button },
   data: () => ({
-    canStore: false,
+    isCordova: false,
     localContents: '',
     iCloudContents: ''
   }),
   mounted () {
     this.$f7ready(f7 => {
-      this.canStore = this.$f7.device.cordova
+      this.isCordova = this.$f7.device.cordova
     })
   },
   methods: {
+    errorCallback (errMessage) { this.$f7.dialog.alert(errMessage, 'Error') },
     loadState () {
       if (!this.localContents) {
         this.localContents = JSON.stringify(this.$store.state, null, 2)
@@ -108,7 +109,7 @@ export default {
     saveData () {
       fileStorage.saveData(JSON.stringify(this.$store.state),
         message => { this.$f7.dialog.alert(message, 'Save Data to iCloud') },
-        errMessage => { this.$f7.dialog.alert(errMessage, 'Error') }
+        this.errorCallback
       )
     },
     readData () {
@@ -116,27 +117,33 @@ export default {
         fileStorage.readData(content => {
           this.iCloudContents = JSON.stringify(JSON.parse(content), null, 2)
         },
-        errMessage => { this.$f7.dialog.alert(errMessage, 'Error') })
+        this.errorCallback)
       } else {
         this.iCloudContents = ''
       }
     },
     copyToClipboard (refId) {
-      /* Get the text field */
-      var copyText = this.$refs[refId]
+      const textElement = this.$refs[refId]
 
-      /* Select the text field */
-      copyText.select()
-      copyText.setSelectionRange(0, 99999) /* For mobile devices */
+      const successCallback = () => {
+        this.$f7.dialog.alert(
+          `Data from ${refId === 'localContents' ? 'Local Storage' : 'iCloud'} has been copied to the clipboard`,
+          'Copied data'
+        )
+      }
 
-      /* Copy the text inside the text field */
-      document.execCommand('copy')
+      if (this.isCordova) {
+        cordova.plugins.clipboard.copy(textElement.value, successCallback, this.errorCallback) // eslint-disable-line no-undef
+      } else {
+        /* Select the text field */
+        textElement.select()
+        textElement.setSelectionRange(0, 99999) /* For mobile devices */
 
-      /* Alert the copied text */
-      this.$f7.dialog.alert(
-        `Data from ${refId === 'localContents' ? 'Local Storage' : 'iCloud'} has been copied to the clipboard`,
-        'Copied data'
-      )
+        /* Copy the text inside the text field */
+        document.execCommand('copy')
+
+        successCallback()
+      }
     }
   }
 }
