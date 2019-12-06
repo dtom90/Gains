@@ -8,4 +8,4 @@ const baseUrl = process.env.BASE_URL || '/'
 app.use(baseUrl, express.static(path.join(__dirname, 'www')))
 
 // eslint-disable-next-line no-console
-app.listen(port, () => console.log(`Serving Gains at http://localhost:${port}${baseUrl}`))
+app.listen(port, () => console.log(`Serving GainsTrack at http://localhost:${port}${baseUrl}`))
