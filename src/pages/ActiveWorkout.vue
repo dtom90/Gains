@@ -2,7 +2,6 @@
   <f7-page id="active-workout">
     <f7-navbar
       :title="workout.name"
-      :title-large="workout.name"
       large
       class="no-hairline no-shadow"
       inner-class="text-align-center"
@@ -20,6 +19,7 @@
     </f7-navbar>
 
     <f7-toolbar
+      v-show="portraitMode"
       bottom
       :inner="false"
       class="no-hairline no-shadow"
@@ -46,7 +46,7 @@
       </f7-block>
     </f7-toolbar>
 
-    <f7-block style="margin-top: 12px;">
+    <f7-block>
       <!-- Finish Workout Button -->
       <div
         v-show="done && numbersEntered"
@@ -89,6 +89,11 @@ import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 
+let deviceready = false
+document.addEventListener('deviceready', function () {
+  deviceready = true
+})
+
 export default {
 
   components: {
@@ -104,6 +109,7 @@ export default {
   },
 
   data: () => ({
+    portraitMode: true,
     workout: {},
     exerciseSequence: [],
     startTime: null,
@@ -145,6 +151,19 @@ export default {
     this.startTime = Date.now()
     this.now = Date.now()
     this.workoutTimer = setInterval(this.incrementTimeElapsed, 1000)
+
+    if (deviceready) {
+      this.portraitMode = screen.orientation.type.includes('portrait')
+      window.addEventListener('orientationchange', () => {
+        this.portraitMode = screen.orientation.type.includes('portrait')
+        if (!this.portraitMode) {
+          document.querySelector('#active-workout > .page-content').scroll({
+            top: 70,
+            left: 0
+          })
+        }
+      })
+    }
   },
 
   methods: {

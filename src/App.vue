@@ -30,7 +30,10 @@ export default {
         id: 'io.framework7.testapp', // App bundle ID
         name: 'Framework7', // App name
         theme: 'auto', // Automatic theme detection
-        routes: routes // App routes
+        routes: routes, // App routes
+        navbar: {
+          mdCenterTitle: true
+        }
       }
     }
   }
