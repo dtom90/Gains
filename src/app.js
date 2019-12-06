@@ -7,6 +7,7 @@ import Framework7 from 'framework7'
 import Picker from 'framework7/components/picker/picker'
 import Sheet from 'framework7/components/sheet/sheet'
 import Dialog from 'framework7/components/dialog/dialog'
+import Panel from 'framework7/components/panel/panel'
 
 // Framework7 Vue Plugin
 import Framework7Vue from 'framework7-vue'
@@ -28,22 +29,19 @@ import FastClick from 'fastclick'
 // import 'default-passive-events'
 
 // install additional modules
-Framework7.use([Framework7Vue, Dialog, Picker, Sheet])
+Framework7.use([Framework7Vue, Dialog, Picker, Sheet, Panel])
 
-// attach FastClick
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function () {
-    FastClick.attach(document.body)
+    FastClick.attach(document.body) // attach FastClick
   }, false)
 
   document.addEventListener('deviceready', function () {
-    console.log('deviceready')
     Keyboard.shrinkView(true) // eslint-disable-line no-undef
     Keyboard.disableScrollingInShrinkView(true) // eslint-disable-line no-undef
     window.addEventListener('keyboardDidShow', function () {
       document.activeElement.scrollIntoViewIfNeeded()
     })
-    console.log(cordova.file)
   }, false)
 }
 
