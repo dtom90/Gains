@@ -1,4 +1,4 @@
-# Gains
+# GainsTrack
 A workout tracker mobile app
 
 [![Build Status](https://travis-ci.org/dtom90/Gains.svg?branch=master)](https://travis-ci.org/dtom90/Gains)

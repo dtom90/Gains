@@ -1,5 +1,6 @@
 <template>
   <f7-page id="active-workout">
+    <!-- Navbar -->
     <f7-navbar
       :title="workout.name"
       large
@@ -18,6 +19,7 @@
       </f7-link>
     </f7-navbar>
 
+    <!-- Toolbar -->
     <f7-toolbar
       v-show="portraitMode"
       bottom
@@ -25,25 +27,12 @@
       class="no-hairline no-shadow"
       style="height: auto"
     >
-      <f7-block style="margin-top: 8px;">
-        <div class="display-flex">
-          <!-- Round Counter -->
-          <div id="workout-round">
-            Round {{ currentRound }} of {{ workout.rounds }}
-          </div>
-          <!-- Time Elapsed -->
-          <div id="time-elapsed">
-            {{ elapsedWorkoutTime }}
-          </div>
-        </div>
-        <div id="progress-container">
-          <span class="progress-text">Progress: {{ workoutPercentage }} %</span>
-          <span
-            class="progress-bar"
-            :style="`width: ${workoutPercentage}%;`"
-          />
-        </div>
-      </f7-block>
+      <workout-progress
+        :current-round="currentRound"
+        :total-rounds="workout.rounds"
+        :elapsed-workout-time="elapsedWorkoutTime"
+        :workout-percentage="workoutPercentage"
+      />
     </f7-toolbar>
 
     <f7-block>
@@ -62,7 +51,7 @@
         </f7-button>
       </div>
 
-      <!-- Active Rest -->
+      <!-- Rest Panel -->
       <rest-panel
         v-if="rest && !done"
         v-show="numbersEntered"
@@ -71,13 +60,22 @@
         :next-exercise-name="nextExercise.name"
       />
 
-      <!-- Completed Exercise -->
+      <!-- Exercise Panel -->
       <exercise-panel
         :exercise="currentExercise"
         :rest="rest"
         :numbers-entered="numbersEntered"
         :on-end-set="onEndSet"
         :enter-numbers="enterNumbers"
+      />
+
+      <!-- Workout Progress (Landscape Mode) -->
+      <workout-progress
+        v-if="!portraitMode"
+        :current-round="currentRound"
+        :total-rounds="workout.rounds"
+        :elapsed-workout-time="elapsedWorkoutTime"
+        :workout-percentage="workoutPercentage"
       />
     </f7-block>
   </f7-page>
@@ -88,6 +86,7 @@ import { f7Page, f7Navbar, f7Link, f7Icon, f7Block, f7Toolbar, f7Button } from '
 import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
+import WorkoutProgress from '../components/WorkoutProgress'
 
 let deviceready = false
 document.addEventListener('deviceready', function () {
@@ -97,6 +96,7 @@ document.addEventListener('deviceready', function () {
 export default {
 
   components: {
+    WorkoutProgress,
     ExercisePanel,
     RestPanel,
     f7Page,
@@ -249,37 +249,5 @@ export default {
 <style scoped>
   #active-workout {
     background-color: #0A1344
-  }
-  #workout-round {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  #time-elapsed {
-    flex: 1;
-    text-align: right;
-    font-weight: bold;
-    font-size: 24px;
-  }
-  #progress-container {
-    background-color: #A6A6A6;
-    margin-top: 10px;
-    border-radius: 5px;
-    position: relative;
-    text-align: center;
-    font-weight: bold;
-    font-size: 24px;
-  }
-  .progress-bar {
-    background-color: #27AE60;
-    position: absolute;
-    left: 0;
-    height: 100%;
-    border-top-left-radius: inherit;
-    border-bottom-left-radius: inherit;
-  }
-  .progress-text {
-    position: relative;
-    z-index: 1;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
 </style>

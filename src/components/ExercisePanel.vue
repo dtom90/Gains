@@ -131,6 +131,23 @@
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
 import SetNumbers from './SetNumbers'
 
+function pickerToolbar (weight = true) {
+  return function () {
+    return '<div class="toolbar">' +
+    '<div class="toolbar-inner">' +
+    '<div class="left">' +
+    (weight
+      ? '<a class="link open-rep-picker"><i class="f7-icons">chevron_down</i></a>'
+      : '<a class="link open-weight-picker"><i class="f7-icons">chevron_up</i></a>') +
+    '</div>' +
+    '<div class="right">' +
+    '<a href="#" class="link sheet-close popover-close">Done</a>' +
+    '</div>' +
+    '</div>' +
+    '</div>'
+  }
+}
+
 export default {
 
   name: 'ExercisePanel',
@@ -187,6 +204,7 @@ export default {
         this.$nextTick(() => {
           self.weightPicker = app.picker.create({
             inputEl: '#weight-picker input',
+            renderToolbar: pickerToolbar(true),
             formatValue: function (values) {
               return values[1]
             },
@@ -194,7 +212,7 @@ export default {
               {
                 textAlign: 'left',
                 values: Object.keys(weightOptions),
-                onChange: function (picker, step) {
+                onChange (picker, step) {
                   if (picker.cols[1].replaceValues) {
                     let currentValue = parseInt(picker.value[1])
                     if (step === step5 && currentValue % 5 !== 0) {
@@ -212,16 +230,21 @@ export default {
             ],
             value: [this.weight % 5 === 0 ? step5 : step1, this.weight],
             on: {
-              open: function (picker) {
+              open (picker) {
                 picker.$inputEl.trigger('focus')
+                picker.$el.find('.open-rep-picker').on('click', () => {
+                  picker.close()
+                  self.repPicker.open()
+                })
               },
-              close: function (picker) {
+              close (picker) {
                 picker.$inputEl.trigger('blur')
               }
             }
           })
           self.repPicker = app.picker.create({
             inputEl: '#rep-picker input',
+            renderToolbar: pickerToolbar(false),
             cols: [
               {
                 textAlign: 'center',
@@ -230,10 +253,14 @@ export default {
             ],
             value: [this.reps],
             on: {
-              open: function (picker) {
+              open (picker) {
                 picker.$inputEl.trigger('focus')
+                picker.$el.find('.open-weight-picker').on('click', () => {
+                  picker.close()
+                  self.weightPicker.open()
+                })
               },
-              close: function (picker) {
+              close (picker) {
                 picker.$inputEl.trigger('blur')
               }
             }
@@ -253,6 +280,10 @@ export default {
       this.weight = this.exercise.weight
       this.reps = this.exercise.reps
     }
+  },
+  methods: {
+    openWeightPicker () { this.weightPicker.open() },
+    openRepsPicker () { this.repsPicker.open() }
   }
 }
 </script>

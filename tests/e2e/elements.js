@@ -17,7 +17,7 @@ const enterButton = Selector('div.exercise-block > a.button').withExactText('Ent
 const skipRestButton = Selector('div.rest-block > a.button').withExactText('Skip Rest')
 
 const expectHomePage = async t => {
-  await t.expect(Selector('div.title-large-text').withText('Gains Tracker').visible).ok()
+  await t.expect(Selector('div.title-large-text').withText('GainsTrack').visible).ok()
     .expect(blockTitle('Workouts').visible).ok()
     .expect(button('Circuit').visible).ok()
     .expect(button('HIIT').visible).ok()
