@@ -1,0 +1,66 @@
+/* Your app styles here */
+:root {
+  --f7-navbar-bg-color: #0A1344;
+  --f7-navbar-bg-color-rgb: 10, 19, 68;
+  --f7-toolbar-bg-color: #0A1344;
+  --f7-toolbar-bg-color-rgb: 10, 19, 68;
+  --f7-list-bg-color: #0A1344;
+  --f7-input-bg-color: #0A1344;
+  --f7-label-text-color: grey;
+  --f7-input-placeholder-color: grey;
+  --f7-input-text-color: white;
+  --f7-label-focused-text-color: white;
+  --f7-navbar-text-color: white;
+  --f7-button-text-color: white;
+  --f7-page-bg-color: #050A23;
+  --f7-block-strong-bg-color: #050A23;
+  --f7-block-title-text-color: white;
+  --f7-block-text-color: white;
+  --f7-block-footer-text-color: white;
+  --f7-text-color: white;
+  --f7-button-height: 44px;
+  --f7-block-title-font-size: 20px;
+  --f7-table-selected-row-bg-color: #0A1344;
+  --f7-table-head-text-color: white;
+}
+
+.md {
+  --f7-navbar-title-text-align: center;
+  --f7-navbar-large-title-font-weight: bold;
+}
+
+.color-red {
+  --f7-theme-color: #D7263D;
+  --f7-theme-color-rgb: 215,38,61;
+  --f7-theme-color-shade: #D7263D;
+  --f7-theme-color-tint: #D7263D;
+}
+
+.bg-color-red {
+  --f7-theme-color-bg-color: #D7263D;
+}
+
+.color-green {
+  --f7-theme-color: #27AE60;
+  --f7-theme-color-rgb: 39,174,96;
+  --f7-theme-color-shade: #229653;
+  --f7-theme-color-tint: #2FD073;
+}
+
+.bg-color-green {
+  --f7-theme-color-bg-color: #27AE60;
+}
+
+.md .button {
+  font-size: 18px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.data-table {
+  background-color: #0A1344;
+}
+
+.large-text {
+  font-size: x-large;
+}
