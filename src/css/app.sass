@@ -1,0 +1,79 @@
+/* iOS Cordova Tweak */
+.device-cordova.device-ios
+  height: 100vh
+
+
+/* Custom color theme properties */
+$brand-color: #0A1344
+$brand-color-rgb: 10, 19, 68
+$brand-shade: #050920
+$brand-tint: #0f1d68
+$brand-tint-rgb: 15, 29, 104
+$text-color: white
+$inactive-text-color: grey
+
+\:root
+  --f7-text-color: white
+  
+  --f7-navbar-bg-color: #{$brand-tint}
+  --f7-navbar-bg-color-rgb: #{$brand-tint-rgb}
+  --f7-navbar-text-color: #{$text-color}
+  --f7-page-bg-color: #{$brand-color}
+  
+  --f7-toolbar-bg-color: #{$brand-tint}
+  --f7-toolbar-bg-color-rgb: #{$brand-tint-rgb}
+
+  --f7-block-strong-bg-color: #{$brand-tint}
+  --f7-block-strong-text-color: #{$text-color}
+  --f7-block-title-text-color: #{$text-color}
+  --f7-block-text-color: #{$text-color}
+  --f7-block-footer-text-color: #{$text-color}
+  --f7-block-title-font-size: 20px
+
+  --f7-list-bg-color: #{$brand-tint}
+
+  --f7-label-text-color: #{$inactive-text-color}
+
+  --f7-input-bg-color: #{$brand-tint}
+  --f7-input-text-color: #{$text-color}
+  --f7-input-placeholder-color: #{$inactive-text-color}
+
+  --f7-button-height: 44px
+
+  --f7-table-selected-row-bg-color: #{$brand-color}
+  --f7-table-head-text-color: #{$text-color}
+
+.data-table
+  background-color: $brand-tint
+
+.color-red
+  --f7-theme-color: #D7263D
+  --f7-theme-color-rgb: 215,38,61
+  --f7-theme-color-shade: #D7263D
+  --f7-theme-color-tint: #D7263D
+
+.bg-color-red
+  --f7-theme-color-bg-color: #D7263D
+
+
+.color-green
+  --f7-theme-color: #27AE60
+  --f7-theme-color-rgb: 39,174,96
+  --f7-theme-color-shade: #229653
+  --f7-theme-color-tint: #2FD073
+
+.bg-color-green
+  --f7-theme-color-bg-color: #27AE60
+
+  
+/* Overrides */
+.md
+  --f7-navbar-title-text-align: center
+  --f7-navbar-large-title-font-weight: bold
+  .button
+    font-size: 18px
+    font-weight: 400
+    text-transform: none
+
+.large-text
+  font-size: x-large
