@@ -22,7 +22,7 @@ import '../css/icons.css'
 import '../css/app.scss'
 
 // Import App Component
-import App from '../components/app.vue'
+import App from '../components/App.vue'
 
 // Init Framework7-Vue Plugin and additional components
 Framework7.use([Framework7Vue, Dialog, Picker, Sheet, Panel])
