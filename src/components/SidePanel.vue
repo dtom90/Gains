@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import fileStorage from '../lib/fileStorage'
+import fileStorage from '../js/fileStorage'
 import { f7Panel, f7View, f7Page, f7Block, f7BlockTitle, f7Button } from 'framework7-vue'
 
 export default {

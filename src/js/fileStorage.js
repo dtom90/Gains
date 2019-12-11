@@ -53,7 +53,7 @@ function errorHandler (errorCallback) {
     if (typeof e === 'string') {
       errorCallback(e)
     } else if (typeof e === 'object' && 'code' in e) {
-      let msg = ''
+      let msg
       switch (e.code) {
         /* eslint-disable no-undef */
         case FileError.NOT_FOUND_ERR:
