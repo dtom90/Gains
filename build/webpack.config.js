@@ -40,13 +40,18 @@ module.exports = {
   devtool: env === 'production' ? 'source-map' : 'eval',
   devServer: {
     hot: true,
-    open: true,
+    open: !isCordova,
     compress: true,
-    contentBase: '/www/',
+    contentBase: isCordova ? path.join(__dirname, '../cordova/www') : '/www/',
     disableHostCheck: true,
     watchOptions: {
       poll: 1000,
     },
+    headers: isCordova ? {
+      'Access-Control-Allow-Origin': '*'
+    } : {},
+    host: isCordova ? '0.0.0.0' : 'localhost',
+    port: isCordova ? 8081 : 8080
   },
   optimization: {
     minimizer: [new TerserPlugin({
