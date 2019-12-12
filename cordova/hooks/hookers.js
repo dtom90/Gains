@@ -202,14 +202,13 @@ module.exports = function (ctx) {
             let defer = new Q.defer(),
                 outText = '',
                 isResultFound = false,
-                args = ['--config ./build/webpack.config.js'],
+                args = ['--config ./build/webpack.config.js', `--platform ${platform}`],
                 run = 'cross-env TARGET=cordova cross-env NODE_ENV=development webpack-dev-server'
 
             if (os.platform() === 'win32') {
                 run = `"${webpackDevServerPath}.cmd"`
             }
 
-            console.log(run, args)
             let devServerSpawn = spawn(run, args, {
                 shell: true,
                 cwd: pRoot,

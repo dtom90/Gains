@@ -16,6 +16,7 @@ function resolvePath(dir) {
 const env = process.env.NODE_ENV || 'development';
 const target = process.env.TARGET || 'web';
 const isCordova = target === 'cordova';
+const platformArg = process.argv.indexOf('--platform')
 
 
 module.exports = {
@@ -46,6 +47,9 @@ module.exports = {
     disableHostCheck: true,
     watchOptions: {
       poll: 1000,
+    },
+    stats: {
+      colors: true
     },
     headers: isCordova ? {
       'Access-Control-Allow-Origin': '*'
@@ -167,6 +171,7 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(env),
       'process.env.TARGET': JSON.stringify(target),
     }),
+    new webpack.EnvironmentPlugin(['LOAD_SAMPLE_STATE']),
     new VueLoaderPlugin(),
     ...(env === 'production' ? [
       new OptimizeCSSPlugin({
@@ -184,6 +189,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: './index.html',
       template: './src/index.html',
+      platform: platformArg >= 0 ? process.argv[platformArg + 1] : '',
       inject: true,
       minify: env === 'production' ? {
         collapseWhitespace: true,

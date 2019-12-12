@@ -33,8 +33,8 @@
               <span>Copy to Clipboard</span>
             </f7-button>
           </div>
-          <br>
           <div v-if="isIos">
+            <br>
             <f7-button
               v-if="localContents"
               fill

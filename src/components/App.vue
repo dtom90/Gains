@@ -8,9 +8,9 @@
 
     <!-- Main View -->
     <f7-view
-      id="main-view"
-      url="/"
       main
+      class="safe-areas"
+      url="/"
     />
   </f7-app>
 </template>
