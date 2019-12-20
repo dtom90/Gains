@@ -39,41 +39,33 @@
             class="exercise-target-numbers"
           >
             <f7-list-input
+              :id="'weight-target-'+i"
               label="Target weight:"
               inline-label
-              type="number"
-              :value="ex.weight"
-              error-message="Weight must be non-negative"
-              validate
-              min="0"
-              pattern="[0-9]*"
+              type="text"
+              readonly
               outline
-              @input="modifyExercise(i, 'weight', $event.target.value)"
             >
               <div
                 slot="inner"
                 class="item-label label-append"
               >
-                <span>&nbsp;&nbsp;lbs.</span>
+                <span>&nbsp;&nbsp;&nbsp;lbs.</span>
               </div>
             </f7-list-input>
             <f7-list-input
+              :id="'reps-target-'+i"
               label="Target reps:"
               inline-label
-              type="number"
-              :value="ex.reps"
-              error-message="Target reps must be positive"
-              validate
-              min="1"
-              pattern="[0-9]*"
+              type="text"
+              readonly
               outline
-              @input="modifyExercise(i, 'reps', $event.target.value)"
             >
               <div
                 slot="inner"
                 class="item-label label-append"
               >
-                <span>&nbsp;&nbsp;reps</span>
+                <span>&nbsp;&nbsp;&nbsp;reps</span>
               </div>
             </f7-list-input>
           </div>
@@ -139,6 +131,7 @@
 <script>
 import { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
+import picker from '../js/picker'
 
 const newExercise = () => Object.assign({}, {
   name: '',
@@ -166,7 +159,7 @@ export default {
     ]),
     workout () {
       return 'workoutId' in this.$f7route.params
-        ? this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+        ? this.workouts.filter(w => w.id === this.$f7route.params.workoutId)[0]
         : null
     }
   },
@@ -199,6 +192,38 @@ export default {
       this.$set(this.exercises[i], key, val)
       if (this.exercises[this.exercises.length - 1].name !== '') {
         this.exercises.push(newExercise())
+
+        const self = this
+        const modifyExercise = function (picker) {
+          const listInput = picker.$inputEl[0].parentNode.parentNode.parentNode.parentNode
+          if (listInput) {
+            const id = listInput.id
+            const [type, exerciseIndex] = id.split('-target-')
+            self.modifyExercise(exerciseIndex, type, parseInt(picker.$inputEl[0].value))
+          }
+        }
+
+        this.$nextTick(() => {
+          picker.weightPicker(this.$f7, `#weight-target-${i} input`, 0,
+            () => {
+              if (this.$device.cordova) {
+                window.Keyboard.hide()
+              } else {
+                document.activeElement.blur()
+              }
+            }, modifyExercise
+          )
+          picker.repPicker(this.$f7, `#reps-target-${i} input`, 1,
+            () => {
+              if (this.$device.cordova) {
+                window.Keyboard.hide()
+              } else {
+                document.activeElement.blur()
+              }
+            }, modifyExercise
+          )
+        })
+
         const offset = this.rounds > 1 ? 2 : 3
         if (this.exercises.length >= offset) {
           this.$set(this.exercises[this.exercises.length - offset], 'rest', this.defaultRest)
