@@ -1,22 +1,22 @@
 function pickerToolbar (weight = true) {
   return function () {
     return '<div class="toolbar">' +
-            '<div class="toolbar-inner">' +
-            '<div class="left">' +
-            (weight
-              ? '<a class="link open-rep-picker"><i class="f7-icons">chevron_down</i></a>'
-              : '<a class="link open-weight-picker"><i class="f7-icons">chevron_up</i></a>') +
-            '</div>' +
-            '<div class="right">' +
-            '<a href="#" class="link sheet-close popover-close">Done</a>' +
-            '</div>' +
-            '</div>' +
-            '</div>'
+           '<div class="toolbar-inner">' +
+           '<div class="left">' +
+           (weight
+             ? '<a class="link open-rep-picker"><i class="f7-icons">chevron_down</i></a>'
+             : '<a class="link open-weight-picker"><i class="f7-icons">chevron_up</i></a>') +
+           '</div>' +
+           '<div class="right">' +
+           '<a href="#" class="link sheet-close popover-close">Done</a>' +
+           '</div>' +
+           '</div>' +
+           '</div>'
   }
 }
 
 const picker = {
-  weightPicker (self, inputEl, initialWeight) {
+  weightPicker (self, inputEl, initialWeight, open = () => {}, close = () => {}) {
     const maxWeight = Math.max(500, initialWeight * 2)
     const step1 = '+/- 1'
     const step5 = '+/- 5'
@@ -52,22 +52,11 @@ const picker = {
         }
       ],
       value: [initialWeight % 5 === 0 ? step5 : step1, initialWeight],
-      on: {
-        open (picker) {
-          picker.$inputEl.trigger('focus')
-          picker.$el.find('.open-rep-picker').on('click', () => {
-            picker.close()
-            self.repPicker.open()
-          })
-        },
-        close (picker) {
-          picker.$inputEl.trigger('blur')
-        }
-      }
+      on: { open, close }
     })
   },
 
-  repPicker (self, inputEl, initialReps) {
+  repPicker (self, inputEl, initialReps, open = () => {}, close = () => {}) {
     const maxReps = Math.max(500, initialReps * 2)
 
     return self.$f7.picker.create({
@@ -80,18 +69,7 @@ const picker = {
         }
       ],
       value: [initialReps],
-      on: {
-        open (picker) {
-          picker.$inputEl.trigger('focus')
-          picker.$el.find('.open-weight-picker').on('click', () => {
-            picker.close()
-            self.weightPicker.open()
-          })
-        },
-        close (picker) {
-          picker.$inputEl.trigger('blur')
-        }
-      }
+      on: { open, close }
     })
   }
 }

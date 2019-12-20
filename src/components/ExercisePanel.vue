@@ -173,8 +173,30 @@ export default {
     rest: function (rest) {
       if (rest) {
         this.$nextTick(() => {
-          this.weightPicker = picker.weightPicker(this, '#weight-picker input', this.weight)
-          this.repPicker = picker.repPicker(this, '#rep-picker input', this.reps)
+          const self = this
+          this.weightPicker = picker.weightPicker(this, '#weight-picker input', this.weight,
+            function (picker) {
+              picker.$inputEl.trigger('focus')
+              picker.$el.find('.open-rep-picker').on('click', () => {
+                picker.close()
+                self.repPicker.open()
+              })
+            },
+            function (picker) {
+              picker.$inputEl.trigger('blur')
+            }
+          )
+          this.repPicker = picker.repPicker(this, '#rep-picker input', this.reps,
+            function (picker) {
+              picker.$inputEl.trigger('focus')
+              picker.$el.find('.open-weight-picker').on('click', () => {
+                picker.close()
+                self.weightPicker.open()
+              })
+            },
+            function (picker) {
+              picker.$inputEl.trigger('blur')
+            })
 
           if (this.weight > 0) {
             this.weightPicker.open()
