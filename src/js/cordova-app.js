@@ -1,10 +1,10 @@
-var cordovaApp = {
+const cordovaApp = {
   f7: null,
   /*
   This method hides splashscreen after 2 seconds
   */
   handleSplashscreen: function () {
-    var f7 = cordovaApp.f7
+    const f7 = cordovaApp.f7
     if (!window.navigator.splashscreen || f7.device.electron) return
     setTimeout(() => {
       window.navigator.splashscreen.hide()
@@ -16,7 +16,7 @@ var cordovaApp = {
   In case there is a current view with navigation history, it will go back instead.
   */
   handleAndroidBackButton: function () {
-    var f7 = cordovaApp.f7
+    const f7 = cordovaApp.f7
     const $ = f7.$
     if (f7.device.electron) return
 
@@ -80,9 +80,9 @@ var cordovaApp = {
     - hides keyboard accessory bar for all inputs except where it required
   */
   handleKeyboard: function () {
-    var f7 = cordovaApp.f7
+    const f7 = cordovaApp.f7
     if (!window.Keyboard || !window.Keyboard.shrinkView || f7.device.electron) return
-    var $ = f7.$
+    const $ = f7.$
     window.Keyboard.shrinkView(false)
     window.Keyboard.disableScrollingInShrinkView(true)
     window.addEventListener('keyboardWillShow', () => {
@@ -92,7 +92,7 @@ var cordovaApp = {
       f7.input.scrollIntoView(document.activeElement, 0, true, true)
     })
     window.addEventListener('keyboardHeightWillChange', (event) => {
-      var keyboardHeight = event.keyboardHeight
+      const keyboardHeight = event.keyboardHeight
       if (keyboardHeight > 0) {
         // Keyboard is going to be opened
         document.body.style.height = `calc(100% - ${keyboardHeight}px)`

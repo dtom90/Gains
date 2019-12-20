@@ -13,6 +13,7 @@ import Picker from 'framework7/components/picker/picker'
 import Sheet from 'framework7/components/sheet/sheet'
 import Dialog from 'framework7/components/dialog/dialog'
 import Panel from 'framework7/components/panel/panel'
+import Input from 'framework7/components/input/input'
 
 // Import Framework7 Styles
 import 'framework7/css/framework7.bundle.css'
@@ -25,7 +26,7 @@ import '../css/app.sass'
 import App from '../components/App.vue'
 
 // Init Framework7-Vue Plugin and additional components
-Framework7.use([Framework7Vue, Dialog, Picker, Sheet, Panel])
+Framework7.use([Framework7Vue, Dialog, Picker, Sheet, Panel, Input])
 
 // Init App
 new Vue({ // eslint-disable-line no-new
