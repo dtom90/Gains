@@ -80,6 +80,7 @@
 <script>
 import { f7Page, f7Navbar, f7Block, f7List, f7ListInput } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
+import picker from '../js/picker'
 
 export default {
   name: 'EditSetHistory',
@@ -112,7 +113,6 @@ export default {
   },
   mounted () {
     const self = this
-    const app = self.$f7
 
     const saveNubmer = function (picker) {
       const listInput = picker.$inputEl[0].parentNode.parentNode.parentNode.parentNode
@@ -131,59 +131,12 @@ export default {
 
     this.$nextTick(() => {
       this.completedWorkout.exercises.forEach((exercise, i) => {
-        const maxWeight = Math.max(500, exercise.weight * 2)
-        const step1 = '+/- 1'
-        const step5 = '+/- 5'
-        const weightOptions = {
-          [step5]: [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
-          [step1]: [...Array(maxWeight + 1).keys()]
-        }
-
-        const maxReps = Math.max(500, exercise.reps * 2)
-
-        app.picker.create({
-          inputEl: `#weight-picker-${i} input`,
-          formatValue: function (values) {
-            return values[1]
-          },
-          cols: [
-            {
-              textAlign: 'left',
-              values: Object.keys(weightOptions),
-              onChange: function (picker, step) {
-                if (picker.cols[1].replaceValues) {
-                  let currentValue = parseInt(picker.value[1])
-                  if (step === step5 && currentValue % 5 !== 0) {
-                    currentValue = Math.round(currentValue / 5) * 5
-                  }
-                  picker.cols[1].replaceValues(weightOptions[step])
-                  picker.cols[1].setValue(currentValue, 0)
-                }
-              }
-            },
-            {
-              values: Object.values(weightOptions)[0],
-              width: 160
-            }
-          ],
-          value: [exercise.weight % 5 === 0 ? step5 : step1, exercise.weight],
-          on: {
-            closed: saveNubmer
-          }
-        })
-        app.picker.create({
-          inputEl: `#reps-picker-${i} input`,
-          cols: [
-            {
-              textAlign: 'center',
-              values: [...Array(maxReps).keys()].map(x => x + 1)
-            }
-          ],
-          value: [exercise.reps],
-          on: {
-            closed: saveNubmer
-          }
-        })
+        picker.weightPicker(this.$f7, `#weight-picker-${i} input`, exercise.weight,
+          () => {}, saveNubmer
+        )
+        picker.repPicker(this.$f7, `#reps-picker-${i} input`, exercise.reps,
+          () => {}, saveNubmer
+        )
       })
     })
   },

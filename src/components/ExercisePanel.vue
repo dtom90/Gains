@@ -174,7 +174,7 @@ export default {
       if (rest) {
         this.$nextTick(() => {
           const self = this
-          this.weightPicker = picker.weightPicker(this, '#weight-picker input', this.weight,
+          this.weightPicker = picker.weightPicker(this.$f7, '#weight-picker input', this.weight,
             function (picker) {
               picker.$inputEl.trigger('focus')
               picker.$el.find('.open-rep-picker').on('click', () => {
@@ -186,7 +186,7 @@ export default {
               picker.$inputEl.trigger('blur')
             }
           )
-          this.repPicker = picker.repPicker(this, '#rep-picker input', this.reps,
+          this.repPicker = picker.repPicker(this.$f7, '#rep-picker input', this.reps,
             function (picker) {
               picker.$inputEl.trigger('focus')
               picker.$el.find('.open-weight-picker').on('click', () => {
