@@ -5,7 +5,7 @@
     <!-- Status & Exercise -->
     <p
       class="exercise-target text-shadow"
-      :style="'margin-bottom: ' + (true ? '0;' : '12px;')"
+      style="margin-bottom: 0;"
     >
       <span>{{ adjective }}:</span>
     </p>
@@ -130,23 +130,7 @@
 <script>
 import { f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
 import SetNumbers from './SetNumbers'
-
-function pickerToolbar (weight = true) {
-  return function () {
-    return '<div class="toolbar">' +
-    '<div class="toolbar-inner">' +
-    '<div class="left">' +
-    (weight
-      ? '<a class="link open-rep-picker"><i class="f7-icons">chevron_down</i></a>'
-      : '<a class="link open-weight-picker"><i class="f7-icons">chevron_up</i></a>') +
-    '</div>' +
-    '<div class="right">' +
-    '<a href="#" class="link sheet-close popover-close">Done</a>' +
-    '</div>' +
-    '</div>' +
-    '</div>'
-  }
-}
+import picker from '../js/picker'
 
 export default {
 
@@ -188,88 +172,14 @@ export default {
     },
     rest: function (rest) {
       if (rest) {
-        const self = this
-        const app = self.$f7
-
-        const maxWeight = Math.max(500, this.weight * 2)
-        const step1 = '+/- 1'
-        const step5 = '+/- 5'
-        const weightOptions = {
-          [step5]: [...Array(maxWeight / 5 + 1).keys()].map(x => x * 5),
-          [step1]: [...Array(maxWeight + 1).keys()]
-        }
-
-        const maxReps = Math.max(500, this.reps * 2)
-
         this.$nextTick(() => {
-          self.weightPicker = app.picker.create({
-            inputEl: '#weight-picker input',
-            renderToolbar: pickerToolbar(true),
-            formatValue: function (values) {
-              return values[1]
-            },
-            cols: [
-              {
-                textAlign: 'left',
-                values: Object.keys(weightOptions),
-                onChange (picker, step) {
-                  if (picker.cols[1].replaceValues) {
-                    let currentValue = parseInt(picker.value[1])
-                    if (step === step5 && currentValue % 5 !== 0) {
-                      currentValue = Math.round(currentValue / 5) * 5
-                    }
-                    picker.cols[1].replaceValues(weightOptions[step])
-                    picker.cols[1].setValue(currentValue, 0)
-                  }
-                }
-              },
-              {
-                values: Object.values(weightOptions)[0],
-                width: 160
-              }
-            ],
-            value: [this.weight % 5 === 0 ? step5 : step1, this.weight],
-            on: {
-              open (picker) {
-                picker.$inputEl.trigger('focus')
-                picker.$el.find('.open-rep-picker').on('click', () => {
-                  picker.close()
-                  self.repPicker.open()
-                })
-              },
-              close (picker) {
-                picker.$inputEl.trigger('blur')
-              }
-            }
-          })
-          self.repPicker = app.picker.create({
-            inputEl: '#rep-picker input',
-            renderToolbar: pickerToolbar(false),
-            cols: [
-              {
-                textAlign: 'center',
-                values: [...Array(maxReps).keys()].map(x => x + 1)
-              }
-            ],
-            value: [this.reps],
-            on: {
-              open (picker) {
-                picker.$inputEl.trigger('focus')
-                picker.$el.find('.open-weight-picker').on('click', () => {
-                  picker.close()
-                  self.weightPicker.open()
-                })
-              },
-              close (picker) {
-                picker.$inputEl.trigger('blur')
-              }
-            }
-          })
+          this.weightPicker = picker.weightPicker(this, '#weight-picker input', this.weight)
+          this.repPicker = picker.repPicker(this, '#rep-picker input', this.reps)
 
           if (this.weight > 0) {
-            self.weightPicker.open()
+            this.weightPicker.open()
           } else {
-            self.repPicker.open()
+            this.repPicker.open()
           }
         })
       }
