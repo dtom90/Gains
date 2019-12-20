@@ -2,8 +2,8 @@ import HomePage from '../pages/Home.vue'
 import FormPage from '../pages/NewWorkout.vue'
 import WorkoutPage from '../pages/Workout.vue'
 import ActiveWorkout from '../pages/ActiveWorkout.vue'
-import EditHistory from '../pages/EditHistory.vue'
-import EditWorkout from '../pages/EditWorkout.vue'
+import EditWorkoutHistory from '../pages/EditWorkoutHistory.vue'
+import EditSetHistory from '../pages/EditSetHistory.vue'
 import NotFoundPage from '../pages/NotFound.vue'
 
 const routes = [
@@ -29,11 +29,11 @@ const routes = [
   },
   {
     path: '/workout/:workoutId/editHistory',
-    component: EditHistory
+    component: EditWorkoutHistory
   },
   {
     path: '/workout/:workoutId/editHistory/:workoutTime',
-    component: EditWorkout
+    component: EditSetHistory
   },
   {
     path: '(.*)',

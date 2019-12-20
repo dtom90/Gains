@@ -82,7 +82,7 @@ import { f7Page, f7Navbar, f7Block, f7List, f7ListInput } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  name: 'EditWorkout',
+  name: 'EditSetHistory',
   components: { f7Page, f7Navbar, f7Block, f7List, f7ListInput },
   data: () => ({
     selected: []

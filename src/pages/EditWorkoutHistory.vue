@@ -77,7 +77,7 @@ import { f7Page, f7Navbar, f7Block, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  name: 'EditHistory',
+  name: 'EditWorkoutHistory',
   components: { f7Page, f7Navbar, f7Block, f7Button },
   data: () => ({
     selected: []
@@ -89,12 +89,12 @@ export default {
     ]),
     workout () {
       return 'workoutId' in this.$f7route.params
-        ? this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+        ? this.workouts.filter(w => w.id === this.$f7route.params.workoutId)[0]
         : null
     },
     completedWorkouts () {
       if ('workoutId' in this.$f7route.params) {
-        const completed = this.completed[this.$f7route.params['workoutId']]
+        const completed = this.completed[this.$f7route.params.workoutId]
         const { lastWorkoutTime, ...completedWorkouts } = completed
         return completedWorkouts
       }
