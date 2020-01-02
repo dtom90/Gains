@@ -165,7 +165,7 @@ export default {
       'completed'
     ]),
     workout () {
-      return this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+      return this.workouts.filter(w => w.id === this.$f7route.params.workoutId)[0]
     },
     allCompleted () {
       return this.workout && this.workout.id in this.completed

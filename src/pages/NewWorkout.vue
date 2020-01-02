@@ -166,7 +166,7 @@ export default {
     ]),
     workout () {
       return 'workoutId' in this.$f7route.params
-        ? this.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+        ? this.workouts.filter(w => w.id === this.$f7route.params.workoutId)[0]
         : null
     }
   },
