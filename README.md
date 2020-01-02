@@ -1,7 +1,7 @@
 # GainsTrack
 A workout tracker mobile app
 
-[![Build Status](https://travis-ci.org/dtom90/Gains.svg?branch=master)](https://travis-ci.org/dtom90/Gains)
+[![Build Status](https://travis-ci.org/dtom90/GainsTrack.svg?branch=master)](https://travis-ci.org/dtom90/GainsTrack)
 
 ## Software Requirements Specification
 
@@ -23,10 +23,10 @@ This application allows a user to:
 
 ### 1. Download this repository
 ```
-git clone https://github.com/dtom90/Gains
+git clone https://github.com/dtom90/GainsTrack
 ```
 
-Repository will be downloaded into `Gains/` folder
+Repository will be downloaded into `GainsTrack/` folder
 
 ### 2. Install dependencies
 
