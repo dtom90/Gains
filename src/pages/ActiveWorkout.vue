@@ -143,7 +143,7 @@ export default {
   },
 
   created: function () {
-    this.workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params['workoutId'])[0]
+    this.workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params.workoutId)[0]
     this.exerciseSequence = []
     for (let i = 0; i < this.workout.rounds; i++) {
       this.exerciseSequence.push(...this.workout.exercises)

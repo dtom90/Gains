@@ -3,3 +3,12 @@ node_js: lts/*
 cache: yarn
 addons:
   chrome: stable
+
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GH_TOKEN
+    local_dir: www
+    on:
+      repo: dtom90/GainsTrack
+      branch: master

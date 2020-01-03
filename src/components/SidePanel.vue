@@ -7,25 +7,22 @@
     <f7-view>
       <f7-page>
         <f7-block-title>Data</f7-block-title>
-        <f7-block>
-          <br>
+        <f7-block strong>
           <f7-button
+            :disabled="iCloudContents.length > 0"
             fill
             large
             @click="loadState"
           >
-            <span>{{ localContents ? 'Clear' : 'View Local Data' }}</span>
+            <span>{{ localContents ? 'Hide' : 'View' }} Local Data</span>
           </f7-button>
           <div v-if="localContents">
-            <p>
-              <strong>Local Data:</strong>
-            </p>
+            <br>
             <textarea
               ref="localContents"
               v-model="localContents"
               readonly="readonly"
-              :rows="Math.min(localContents.split('\n').length, 20)"
-              style="width: 100%; white-space: pre; overflow: auto;"
+              style="width: 100%; height: 300px; white-space: pre; overflow: auto;"
             />
             <br>
             <f7-button
@@ -36,8 +33,8 @@
               <span>Copy to Clipboard</span>
             </f7-button>
           </div>
-          <br>
-          <div v-if="isCordova">
+          <div v-if="isIos">
+            <br>
             <f7-button
               v-if="localContents"
               fill
@@ -46,33 +43,32 @@
             >
               <span>Save Data to iCloud</span>
             </f7-button>
-            <br>
-            <f7-button
-              fill
-              large
-              @click="readData"
-            >
-              <span>{{ iCloudContents ? 'Clear' : 'View iCloud Data' }}</span>
-            </f7-button>
-            <p v-if="iCloudContents">
-              <strong>iCloud Data:</strong>
-            </p>
-            <textarea
-              ref="iCloudContents"
-              v-model="iCloudContents"
-              readonly="readonly"
-              :rows="Math.min(iCloudContents.split('\n').length, 20)"
-              style="width: 100%; white-space: pre; overflow: auto;"
-            />
-            <br>
-            <f7-button
-              v-if="iCloudContents"
-              fill
-              large
-              @click="copyToClipboard('iCloudContents')"
-            >
-              <span>Copy to Clipboard</span>
-            </f7-button>
+            <div v-if="!localContents">
+              <f7-button
+                fill
+                large
+                @click="readData"
+              >
+                <span>{{ iCloudContents ? 'Hide' : 'View' }} iCloud Data</span>
+              </f7-button>
+              <div v-if="iCloudContents">
+                <br>
+                <textarea
+                  ref="iCloudContents"
+                  v-model="iCloudContents"
+                  readonly="readonly"
+                  style="width: 100%; height: 300px; white-space: pre; overflow: auto;"
+                />
+                <br>
+                <f7-button
+                  fill
+                  large
+                  @click="copyToClipboard('iCloudContents')"
+                >
+                  <span>Copy to Clipboard</span>
+                </f7-button>
+              </div>
+            </div>
           </div>
         </f7-block>
       </f7-page>
@@ -81,21 +77,18 @@
 </template>
 
 <script>
-import fileStorage from '../lib/fileStorage'
+import fileStorage from '../js/fileStorage'
 import { f7Panel, f7View, f7Page, f7Block, f7BlockTitle, f7Button } from 'framework7-vue'
 
 export default {
   name: 'SidePanel',
   components: { f7Panel, f7View, f7Page, f7Block, f7BlockTitle, f7Button },
   data: () => ({
-    isCordova: false,
     localContents: '',
     iCloudContents: ''
   }),
-  mounted () {
-    this.$f7ready(f7 => {
-      this.isCordova = this.$f7.device.cordova
-    })
+  computed: {
+    isIos () { return this.$device.ios }
   },
   methods: {
     errorCallback (errMessage) { this.$f7.dialog.alert(errMessage, 'Error') },
@@ -132,7 +125,7 @@ export default {
         )
       }
 
-      if (this.isCordova) {
+      if (this.$device.cordova) {
         cordova.plugins.clipboard.copy(textElement.value, successCallback, this.errorCallback) // eslint-disable-line no-undef
       } else {
         /* Select the text field */
