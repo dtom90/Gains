@@ -40,6 +40,7 @@
       <div
         v-show="done && numbersEntered"
       >
+        <BumpSuggestions :surpassed="surpassed" />
         <f7-button
           :href="`/workout/${workout.id}`"
           class="col big-button"
@@ -87,6 +88,7 @@ import { mapMutations } from 'vuex'
 import ExercisePanel from '@/components/ExercisePanel.vue'
 import RestPanel from '@/components/RestPanel.vue'
 import WorkoutProgress from '../components/WorkoutProgress'
+import BumpSuggestions from '../components/BumpSuggestions'
 
 let deviceready = false
 document.addEventListener('deviceready', function () {
@@ -99,6 +101,7 @@ export default {
     WorkoutProgress,
     ExercisePanel,
     RestPanel,
+    BumpSuggestions,
     f7Page,
     f7Navbar,
     f7Link,
@@ -122,6 +125,7 @@ export default {
     rest: false,
     restCountdown: false,
     numbersEntered: false,
+    surpassed: {},
     done: false
   }),
 
@@ -209,6 +213,29 @@ export default {
         reps,
         completedTime: this.lastCompletedSetTime
       })
+
+      if (weight > this.currentExercise.weight || reps > this.currentExercise.reps) {
+        if (this.currentExercise.name in this.surpassed) {
+          this.surpassed[this.currentExercise.name].sets.push({
+            weight,
+            reps,
+            round: this.currentRound
+          })
+        } else {
+          this.$set(this.surpassed, this.currentExercise.name, {
+            current: {
+              weight: this.currentExercise.weight,
+              reps: this.currentExercise.reps
+            },
+            sets: [{
+              weight,
+              reps,
+              round: this.currentRound
+            }]
+          })
+        }
+      }
+
       this.numbersEntered = true
       if (!this.restCountdown) {
         this.startNextSet()
