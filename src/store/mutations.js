@@ -42,6 +42,15 @@ const mutations = {
     times.forEach(time => {
       Vue.delete(state.completed[workoutId], time)
     })
+  },
+  deleteWorkout (state, { workoutId }) {
+    const index = state.workouts.findIndex(w => w.id === workoutId)
+    if (index > -1) {
+      state.workouts.splice(index, 1)
+    }
+    if (workoutId in state.completed) {
+      Vue.delete(state.completed, workoutId)
+    }
   }
 }
 

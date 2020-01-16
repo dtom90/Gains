@@ -1,5 +1,5 @@
 import HomePage from '../pages/Home.vue'
-import FormPage from '../pages/NewWorkout.vue'
+import WorkoutForm from '../pages/WorkoutForm.vue'
 import WorkoutPage from '../pages/Workout.vue'
 import ActiveWorkout from '../pages/ActiveWorkout.vue'
 import EditWorkoutHistory from '../pages/EditWorkoutHistory.vue'
@@ -13,7 +13,7 @@ const routes = [
   },
   {
     path: '/newWorkout/',
-    component: FormPage
+    component: WorkoutForm
   },
   {
     path: '/workout/:workoutId',
@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: '/editWorkout/:workoutId',
-    component: FormPage
+    component: WorkoutForm
   },
   {
     path: '/workout/:workoutId/go',
