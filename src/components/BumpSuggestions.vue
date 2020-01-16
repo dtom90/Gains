@@ -1,20 +1,20 @@
 <template>
   <div>
-    <h4>You surpassed your target for the following exercises:</h4>
-    <h4>Select the set numbers to update the target</h4>
+    <p>You surpassed your target in the following exercise{{ Object.keys(bumpSuggestions).length > 1 ? 's' : '' }}</p>
+    <p>Select the set numbers to update the target</p>
     <div
-      v-for="(exerciseNumbers, exerciseName, i) in surpassed"
+      v-for="(exerciseNumbers, exerciseName, i) in bumpSuggestions"
       :key="i"
     >
       <table>
         <tr>
           <th>{{ exerciseName }}</th>
           <td>&nbsp;&nbsp;</td>
-          <td>
-            <span>Current Target:</span>
+          <td style="padding: 5px;">
+            <span>{{ displayAdj(exerciseName) }} Target:</span>
             <set-numbers
-              :weight="exerciseNumbers.current.weight"
-              :reps="exerciseNumbers.current.reps"
+              :weight="displayNum(exerciseName, 'weight')"
+              :reps="displayNum(exerciseName, 'reps')"
             />
           </td>
         </tr>
@@ -40,7 +40,6 @@
         </tr>
       </table>
     </div>
-    {{ oldNumbers }}
     <br>
   </div>
 </template>
@@ -53,7 +52,7 @@ export default {
   name: 'BumpSuggestions',
   components: { SetNumbers, f7Button },
   props: {
-    surpassed: {
+    bumpSuggestions: {
       type: Object,
       default: () => null
     }
@@ -62,6 +61,14 @@ export default {
     oldNumbers: {}
   }),
   methods: {
+    displayNum (exerciseName, type) {
+      return exerciseName in this.oldNumbers
+        ? this.oldNumbers[exerciseName][type]
+        : this.bumpSuggestions[exerciseName].current[type]
+    },
+    displayAdj (exerciseName) {
+      return exerciseName in this.oldNumbers ? 'New' : 'Current'
+    },
     updateTarget (exerciseName, weight, reps) {
       this.$set(this.oldNumbers, exerciseName, {
         weight,

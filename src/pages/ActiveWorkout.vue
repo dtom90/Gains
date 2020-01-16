@@ -38,9 +38,9 @@
     <f7-block>
       <!-- Finish Workout Button -->
       <div
-        v-show="done && numbersEntered"
+        v-if="done && numbersEntered"
       >
-        <BumpSuggestions :surpassed="surpassed" />
+        <BumpSuggestions :bump-suggestions="bumpSuggestions" />
         <f7-button
           :href="`/workout/${workout.id}`"
           class="col big-button"
@@ -125,7 +125,7 @@ export default {
     rest: false,
     restCountdown: false,
     numbersEntered: false,
-    surpassed: {},
+    bumpSuggestions: {},
     done: false
   }),
 
@@ -215,14 +215,14 @@ export default {
       })
 
       if (weight > this.currentExercise.weight || reps > this.currentExercise.reps) {
-        if (this.currentExercise.name in this.surpassed) {
-          this.surpassed[this.currentExercise.name].sets.push({
+        if (this.currentExercise.name in this.bumpSuggestions) {
+          this.bumpSuggestions[this.currentExercise.name].sets.push({
             weight,
             reps,
             round: this.currentRound
           })
         } else {
-          this.$set(this.surpassed, this.currentExercise.name, {
+          this.$set(this.bumpSuggestions, this.currentExercise.name, {
             current: {
               weight: this.currentExercise.weight,
               reps: this.currentExercise.reps
