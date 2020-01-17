@@ -13,8 +13,8 @@
           <td style="padding: 5px;">
             <span>{{ displayAdj(exerciseName) }} Target:</span>
             <set-numbers
-              :weight="displayNum(exerciseName, 'weight')"
-              :reps="displayNum(exerciseName, 'reps')"
+              :weight="exercise(exerciseName).weight"
+              :reps="exercise(exerciseName).reps"
             />
           </td>
         </tr>
@@ -22,7 +22,7 @@
           v-for="(set, j) in exerciseNumbers.sets"
           :key="j"
         >
-          <td>Round {{ set.round }}: </td>
+          <td>Round{{ displayRounds(set.rounds) }}: </td>
           <td />
           <td>
             <f7-button
@@ -47,6 +47,7 @@
 <script>
 import SetNumbers from './SetNumbers'
 import { f7Button } from 'framework7-vue'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'BumpSuggestions',
@@ -55,12 +56,24 @@ export default {
     bumpSuggestions: {
       type: Object,
       default: () => null
+    },
+    workoutId: {
+      type: String,
+      default: null
     }
   },
   data: () => ({
     oldNumbers: {}
   }),
+  computed: {
+    ...mapGetters([
+      'getExercise'
+    ])
+  },
   methods: {
+    ...mapMutations([
+      'updateExerciseTarget'
+    ]),
     displayNum (exerciseName, type) {
       return exerciseName in this.oldNumbers
         ? this.oldNumbers[exerciseName][type]
@@ -69,10 +82,20 @@ export default {
     displayAdj (exerciseName) {
       return exerciseName in this.oldNumbers ? 'New' : 'Current'
     },
+    exercise (exerciseName) { return this.getExercise(this.workoutId, exerciseName) },
+    displayRounds (rounds) {
+      return rounds.length > 1 ? 's ' + rounds.join(' & ') : ' ' + rounds[0]
+    },
     updateTarget (exerciseName, weight, reps) {
-      this.$set(this.oldNumbers, exerciseName, {
+      this.updateExerciseTarget({
+        workoutId: this.workoutId,
+        exerciseName,
         weight,
         reps
+      })
+      this.$set(this.oldNumbers, exerciseName, {
+        weight: this.bumpSuggestions[exerciseName].current.weight,
+        reps: this.bumpSuggestions[exerciseName].current.reps
       })
     }
   }

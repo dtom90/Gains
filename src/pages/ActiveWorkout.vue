@@ -40,7 +40,10 @@
       <div
         v-if="done && numbersEntered"
       >
-        <BumpSuggestions :bump-suggestions="bumpSuggestions" />
+        <BumpSuggestions
+          :bump-suggestions="bumpSuggestions"
+          :workout-id="workout.id"
+        />
         <f7-button
           :href="`/workout/${workout.id}`"
           class="col big-button"
@@ -216,11 +219,16 @@ export default {
 
       if (weight > this.currentExercise.weight || reps > this.currentExercise.reps) {
         if (this.currentExercise.name in this.bumpSuggestions) {
-          this.bumpSuggestions[this.currentExercise.name].sets.push({
-            weight,
-            reps,
-            round: this.currentRound
-          })
+          const setIndex = this.bumpSuggestions[this.currentExercise.name].sets.findIndex(set => set.weight === weight && set.reps === reps)
+          if (setIndex > -1) {
+            this.bumpSuggestions[this.currentExercise.name].sets[setIndex].rounds.push(this.currentRound)
+          } else {
+            this.bumpSuggestions[this.currentExercise.name].sets.push({
+              weight,
+              reps,
+              rounds: [this.currentRound]
+            })
+          }
         } else {
           this.$set(this.bumpSuggestions, this.currentExercise.name, {
             current: {
@@ -230,7 +238,7 @@ export default {
             sets: [{
               weight,
               reps,
-              round: this.currentRound
+              rounds: [this.currentRound]
             }]
           })
         }
