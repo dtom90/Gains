@@ -198,11 +198,7 @@ export default {
               picker.$inputEl.trigger('blur')
             })
 
-          if (this.weight > 0) {
-            this.weightPicker.open()
-          } else {
-            this.repPicker.open()
-          }
+          this.repPicker.open()
         })
       }
     }
