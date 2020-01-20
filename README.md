@@ -3,15 +3,13 @@ A workout tracker mobile app
 
 [![Build Status](https://travis-ci.org/dtom90/GainsTrack.svg?branch=master)](https://travis-ci.org/dtom90/GainsTrack)
 
-## Software Requirements Specification
-
-### Purpose
+## Purpose
 
 #### Background
 
-I do weight / resistance training several times per week. Each time that I do it, I have a specific workout routine that I follow. As I continue working out from week to week, I would like to be able to record the progress that I am making for each exercise. I would also like to be able to visualize the progress that I am making over time.
+In order to make significant progress during workouts, one needs two elements: consistency and progress. This application assists the user in maintaining these two elements during their workouts.
 
-### Solution
+#### Solution
 
 This application allows a user to:
 
