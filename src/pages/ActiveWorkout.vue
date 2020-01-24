@@ -39,6 +39,7 @@
         v-if="done && numbersEntered"
       >
         <BumpSuggestions
+          v-if="anyBumpSuggestions"
           :bump-suggestions="bumpSuggestions"
           :workout-id="workout.id"
         />
@@ -86,8 +87,8 @@
 <script>
 import { f7Page, f7Navbar, f7Link, f7Icon, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
-import ExercisePanel from '@/components/ExercisePanel.vue'
-import RestPanel from '@/components/RestPanel.vue'
+import ExercisePanel from '../components/ExercisePanel.vue'
+import RestPanel from '../components/RestPanel.vue'
 import WorkoutProgress from '../components/WorkoutProgress'
 import BumpSuggestions from '../components/BumpSuggestions'
 
@@ -144,7 +145,8 @@ export default {
       const mins = Math.floor(secs / 60)
       secs -= (mins * 60)
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-    }
+    },
+    anyBumpSuggestions () { return Object.keys(this.bumpSuggestions).length > 0 }
   },
 
   created: function () {
