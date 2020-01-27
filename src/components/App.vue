@@ -34,12 +34,6 @@ export default {
         // App routes
         routes: routes,
 
-        // Input settings
-        input: {
-          scrollIntoViewOnFocus: this.$device.cordova && !this.$device.electron,
-          scrollIntoViewCentered: this.$device.cordova && !this.$device.electron
-        },
-
         // Cordova Statusbar settings
         statusbar: {
           iosOverlaysWebView: true,

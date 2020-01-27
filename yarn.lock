@@ -4398,15 +4398,24 @@ framework7-icons@^3.0.0:
   resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-3.0.0.tgz#7545c16694b21d04168c81d1b34d36cbb0b510ae"
   integrity sha512-+mB8XhEAaIjjfRNlqW2tk7kYfPrQvDmDVpRFUjeUOiPDqqOybYmC9McvVPwwmqmob4nD3iZFWfs+rAMkVs5vPQ==
 
+"framework7-source@https://github.com/dtom90/framework7#custom_picker_scrolltoel":
+  version "0.0.0"
+  resolved "https://github.com/dtom90/framework7#97a579acf87b5525818b1f55d5d48a8d833d923d"
+  dependencies:
+    dom7 "^2.1.3"
+    path-to-regexp "^6.1.0"
+    ssr-window "^1.0.1"
+    template7 "^1.4.2"
+
 framework7-vue@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-5.2.0.tgz#785f276a3e79e74d4f827215125c1fc974a0d27d"
   integrity sha512-Km2g7u5j6xh0chZDI4vpvLT8ZxNsol+o3MAfyBhkQEvF4Os1ikd76ZiQwV0pLrOIC9Lrkc7s1LZZA5FFVGiEGA==
 
 framework7@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/framework7/-/framework7-5.2.0.tgz#30bb6029a4cf0caf35b97bba8aba42cd1e207e64"
-  integrity sha512-rdeg1TVl6p758ANU9NAwoglkO46TOJc7aQXw5Pvku8FE/Wz6iHpC48CKA2RbB2yNUMR0K3e14t4EzRaEbDDLYA==
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/framework7/-/framework7-5.3.2.tgz#3e9a4a0b157f3b8a0c147667a7af8b8d9748e93d"
+  integrity sha512-pqsc0vVDwGOdZ7mFIPXX07tHzdtbAqEcfnw0rtURFdZuOxq9Aic65FGH1aIr2t/tTFebxkQ0XTVK0DKCVMmwBA==
   dependencies:
     dom7 "^2.1.3"
     path-to-regexp "^6.1.0"

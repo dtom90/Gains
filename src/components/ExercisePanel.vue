@@ -177,7 +177,8 @@ export default {
             },
             function (picker) {
               picker.$inputEl.trigger('blur')
-            }
+            },
+            '#enter-button'
           )
           this.repPicker = picker.repPicker(this.$f7, '#rep-picker input', this.reps,
             function (picker) {
@@ -189,8 +190,9 @@ export default {
             },
             function (picker) {
               picker.$inputEl.trigger('blur')
-            })
-
+            },
+            '#enter-button'
+          )
           this.repPicker.open()
         })
       }

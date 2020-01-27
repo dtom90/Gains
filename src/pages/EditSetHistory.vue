@@ -114,6 +114,8 @@ export default {
   mounted () {
     const self = this
 
+    const openPicker = picker => { picker.$inputEl.trigger('focus') }
+
     const saveNubmer = function (picker) {
       const listInput = picker.$inputEl[0].parentNode.parentNode.parentNode.parentNode
       if (listInput) {
@@ -126,16 +128,17 @@ export default {
           type,
           value: parseInt(picker.$inputEl[0].value)
         })
+        picker.$inputEl.trigger('blur')
       }
     }
 
     this.$nextTick(() => {
       this.completedWorkout.exercises.forEach((exercise, i) => {
         picker.weightPicker(this.$f7, `#weight-picker-${i} input`, exercise.weight,
-          () => {}, saveNubmer
+          openPicker, saveNubmer
         )
         picker.repPicker(this.$f7, `#reps-picker-${i} input`, exercise.reps,
-          () => {}, saveNubmer
+          openPicker, saveNubmer
         )
       })
     })
