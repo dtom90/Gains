@@ -19,21 +19,21 @@
           </td>
         </tr>
         <tr
-          v-for="(set, j) in exerciseNumbers.sets"
+          v-for="(set, j) in (exerciseName in oldNumbers ? [exerciseNumbers.sets[0]] : exerciseNumbers.sets)"
           :key="j"
         >
-          <td>Round{{ displayRounds(set.rounds) }}: </td>
+          <td>{{ buttonLabel(exerciseName, set.rounds) }}</td>
           <td />
           <td>
             <f7-button
               large
               fill
               raised
-              @click="updateTarget(exerciseName, set.weight, set.reps)"
+              @click="updateTarget(exerciseName, buttonNum(exerciseName, set, 'weight'), buttonNum(exerciseName, set, 'reps'))"
             >
               <set-numbers
-                :weight="set.weight"
-                :reps="set.reps"
+                :weight="buttonNum(exerciseName, set, 'weight')"
+                :reps="buttonNum(exerciseName, set, 'reps')"
               />
             </f7-button>
           </td>
@@ -74,17 +74,20 @@ export default {
     ...mapMutations([
       'updateExerciseTarget'
     ]),
-    displayNum (exerciseName, type) {
-      return exerciseName in this.oldNumbers
-        ? this.oldNumbers[exerciseName][type]
-        : this.bumpSuggestions[exerciseName].current[type]
-    },
     displayAdj (exerciseName) {
       return exerciseName in this.oldNumbers ? 'New' : 'Current'
     },
     exercise (exerciseName) { return this.getExercise(this.workoutId, exerciseName) },
-    displayRounds (rounds) {
-      return rounds.length > 1 ? 's ' + rounds.join(' & ') : ' ' + rounds[0]
+    buttonLabel (exerciseName, rounds) {
+      if (exerciseName in this.oldNumbers) {
+        return 'Old Target:'
+      }
+      return `Round ${rounds.length > 1 ? 's ' + rounds.join(' & ') : ' ' + rounds[0]}:`
+    },
+    buttonNum (exerciseName, set, type) {
+      return exerciseName in this.oldNumbers
+        ? this.oldNumbers[exerciseName][type]
+        : set[type]
     },
     updateTarget (exerciseName, weight, reps) {
       this.updateExerciseTarget({
@@ -93,10 +96,14 @@ export default {
         weight,
         reps
       })
-      this.$set(this.oldNumbers, exerciseName, {
-        weight: this.bumpSuggestions[exerciseName].current.weight,
-        reps: this.bumpSuggestions[exerciseName].current.reps
-      })
+      if (exerciseName in this.oldNumbers) {
+        this.$delete(this.oldNumbers, exerciseName)
+      } else {
+        this.$set(this.oldNumbers, exerciseName, {
+          weight: this.bumpSuggestions[exerciseName].current.weight,
+          reps: this.bumpSuggestions[exerciseName].current.reps
+        })
+      }
     }
   }
 }
