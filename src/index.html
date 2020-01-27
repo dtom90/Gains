@@ -71,19 +71,16 @@
   <!-- built styles file will be auto injected -->
 </head>
 <body>
-  <% if (process.env.TARGET !== 'cordova') { %>
+  <% if (process.env.TARGET === 'cordova') { %>
+  <div id="app"></div>
+  <script src="cordova.js"></script>
+  <% } else { %>
   <br>
   <div class="smartphone">
     <div class="content">
       <div id="app"></div>
     </div>
   </div>
-  <% } else { %>
-  <div id="app"></div>
-  <% } %>
-
-  <% if (process.env.TARGET === 'cordova') { %>
-  <script src="cordova.js"></script>
   <% } %>
   <!-- built script files will be auto injected -->
 </body>
