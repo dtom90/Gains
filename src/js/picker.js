@@ -16,7 +16,7 @@ function pickerToolbar (weight = true) {
 }
 
 const picker = {
-  weightPicker (f7, inputEl, initialWeight, open = () => {}, close = () => {}) {
+  weightPicker (f7, inputEl, initialWeight, open = () => {}, close = () => {}, scrollToEl = undefined) {
     const maxWeight = Math.max(500, initialWeight * 2)
     const step1 = '+/- 1'
     const step5 = '+/- 5'
@@ -27,6 +27,7 @@ const picker = {
 
     return f7.picker.create({
       inputEl,
+      scrollToEl,
       renderToolbar: pickerToolbar(true),
       formatValue: function (values) {
         return values[1]
@@ -56,11 +57,12 @@ const picker = {
     })
   },
 
-  repPicker (f7, inputEl, initialReps, open = () => {}, close = () => {}) {
+  repPicker (f7, inputEl, initialReps, open = () => {}, close = () => {}, scrollToEl = undefined) {
     const maxReps = Math.max(500, initialReps * 2)
 
     return f7.picker.create({
-      inputEl: inputEl,
+      inputEl,
+      scrollToEl,
       renderToolbar: pickerToolbar(false),
       cols: [
         {

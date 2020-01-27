@@ -120,7 +120,7 @@
         />
       </f7-list>
 
-      <f7-row tag="p">
+      <p>
         <f7-button
           class="col"
           large
@@ -131,13 +131,27 @@
         >
           {{ workout ? 'Update Workout' : 'Create Workout' }}
         </f7-button>
-      </f7-row>
+      </p>
+
+      <p style="margin-top: 40px;">
+        <f7-button
+          v-if="workout"
+          class="col"
+          large
+          fill
+          raised
+          color="red"
+          @click="deleteWorkoutBtn"
+        >
+          Delete Workout
+        </f7-button>
+      </p>
     </f7-block>
   </f7-page>
 </template>
 
 <script>
-import { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button } from 'framework7-vue'
+import { f7Page, f7Navbar, f7Block, f7List, f7ListInput, f7Button } from 'framework7-vue'
 import { mapState, mapMutations } from 'vuex'
 
 const newExercise = () => Object.assign({}, {
@@ -149,7 +163,7 @@ const newExercise = () => Object.assign({}, {
 export default {
   name: 'NewWorkout',
 
-  components: { f7Page, f7Navbar, f7Block, f7List, f7Row, f7ListInput, f7Button },
+  components: { f7Page, f7Navbar, f7Block, f7List, f7ListInput, f7Button },
 
   data: () => ({
     name: '',
@@ -183,7 +197,8 @@ export default {
 
     ...mapMutations([
       'addWorkout',
-      'editWorkout'
+      'editWorkout',
+      'deleteWorkout'
     ]),
 
     modifyExercise (i, key, val) {
@@ -245,8 +260,18 @@ export default {
         this.nameError = false
         this.nameErrorMessage = ''
       }
-    }
+    },
 
+    deleteWorkoutBtn () {
+      this.$f7.dialog.confirm(
+        `Are you sure that you want to delete the workout "${this.workout.name}"? All data will be permanently deleted.`,
+        'Delete Workout',
+        () => {
+          this.deleteWorkout({ workoutId: this.workout.id })
+          this.$f7router.navigate('/')
+        }
+      )
+    }
   }
 }
 </script>

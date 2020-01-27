@@ -18,13 +18,7 @@
       v-if="!rest"
       class="exercise-target text-shadow display-flex justify-content-center"
     >
-      <div
-        class="display-flex align-items-center"
-        style="padding-right: 24px;"
-      >
-        <span>Target:</span>
-      </div>
-      <div style="font-size: 34px;">
+      <div style="font-size: 40px;">
         <div v-if="weight > 0">
           <span>{{ weight }} lbs.</span>
         </div>
@@ -32,7 +26,6 @@
           <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
         </div>
       </div>
-      <div style="flex: 1; max-width: 117.41px;" />
     </div>
 
     <div
@@ -184,7 +177,8 @@ export default {
             },
             function (picker) {
               picker.$inputEl.trigger('blur')
-            }
+            },
+            '#enter-button'
           )
           this.repPicker = picker.repPicker(this.$f7, '#rep-picker input', this.reps,
             function (picker) {
@@ -196,13 +190,10 @@ export default {
             },
             function (picker) {
               picker.$inputEl.trigger('blur')
-            })
-
-          if (this.weight > 0) {
-            this.weightPicker.open()
-          } else {
-            this.repPicker.open()
-          }
+            },
+            '#enter-button'
+          )
+          this.repPicker.open()
         })
       }
     }

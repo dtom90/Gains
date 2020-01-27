@@ -11,9 +11,7 @@
       <f7-link
         id="close-button"
         slot="left"
-        :href="'/workout/'+workout.id"
-        small
-        round
+        @click="exitWorkout"
       >
         <f7-icon material="close" />
       </f7-link>
@@ -38,8 +36,13 @@
     <f7-block>
       <!-- Finish Workout Button -->
       <div
-        v-show="done && numbersEntered"
+        v-if="done && numbersEntered"
       >
+        <BumpSuggestions
+          v-if="anyBumpSuggestions"
+          :bump-suggestions="bumpSuggestions"
+          :workout-id="workout.id"
+        />
         <f7-button
           :href="`/workout/${workout.id}`"
           class="col big-button"
@@ -84,9 +87,10 @@
 <script>
 import { f7Page, f7Navbar, f7Link, f7Icon, f7Block, f7Toolbar, f7Button } from 'framework7-vue'
 import { mapMutations } from 'vuex'
-import ExercisePanel from '@/components/ExercisePanel.vue'
-import RestPanel from '@/components/RestPanel.vue'
+import ExercisePanel from '../components/ExercisePanel.vue'
+import RestPanel from '../components/RestPanel.vue'
 import WorkoutProgress from '../components/WorkoutProgress'
+import BumpSuggestions from '../components/BumpSuggestions'
 
 let deviceready = false
 document.addEventListener('deviceready', function () {
@@ -99,6 +103,7 @@ export default {
     WorkoutProgress,
     ExercisePanel,
     RestPanel,
+    BumpSuggestions,
     f7Page,
     f7Navbar,
     f7Link,
@@ -122,6 +127,7 @@ export default {
     rest: false,
     restCountdown: false,
     numbersEntered: false,
+    bumpSuggestions: {},
     done: false
   }),
 
@@ -139,7 +145,8 @@ export default {
       const mins = Math.floor(secs / 60)
       secs -= (mins * 60)
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-    }
+    },
+    anyBumpSuggestions () { return Object.keys(this.bumpSuggestions).length > 0 }
   },
 
   created: function () {
@@ -209,6 +216,34 @@ export default {
         reps,
         completedTime: this.lastCompletedSetTime
       })
+
+      if (weight > this.currentExercise.weight || reps > this.currentExercise.reps) {
+        if (this.currentExercise.name in this.bumpSuggestions) {
+          const setIndex = this.bumpSuggestions[this.currentExercise.name].sets.findIndex(set => set.weight === weight && set.reps === reps)
+          if (setIndex > -1) {
+            this.bumpSuggestions[this.currentExercise.name].sets[setIndex].rounds.push(this.currentRound)
+          } else {
+            this.bumpSuggestions[this.currentExercise.name].sets.push({
+              weight,
+              reps,
+              rounds: [this.currentRound]
+            })
+          }
+        } else {
+          this.$set(this.bumpSuggestions, this.currentExercise.name, {
+            current: {
+              weight: this.currentExercise.weight,
+              reps: this.currentExercise.reps
+            },
+            sets: [{
+              weight,
+              reps,
+              rounds: [this.currentRound]
+            }]
+          })
+        }
+      }
+
       this.numbersEntered = true
       if (!this.restCountdown) {
         this.startNextSet()
@@ -241,6 +276,16 @@ export default {
 
       // End the rest
       this.rest = false
+    },
+
+    exitWorkout () {
+      this.$f7.dialog.confirm(
+        'Are you sure that you wish to exit the workout? All sets recorded so far will be saved',
+        'Exit Workout',
+        () => {
+          this.$f7router.navigate('/workout/' + this.workout.id)
+        }
+      )
     }
   }
 }

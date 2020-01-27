@@ -406,7 +406,7 @@ module.exports = function (ctx) {
         sys.checkNodeModules()
             .then(() => {
                 if (isBuild || ((isRun || isEmulate || isPrepare) && !isLiveReload && !isNoBuild)) {
-                    return sys.makeNonDevServerChanges().then(() => sys.startWebpackBuild(isRelease))
+                    // return sys.makeNonDevServerChanges().then(() => sys.startWebpackBuild(isRelease))
                 } else if (isServe || (isRun || isEmulate) && isLiveReload) {
                     return sys.makeDevServerChanges().then(() => sys.startWebpackDevServer(ctx.opts.platforms[0]))
                 }
