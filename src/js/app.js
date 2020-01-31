@@ -9,7 +9,7 @@ import Framework7 from 'framework7'
 import Framework7Vue from 'framework7-vue'
 
 // Import additional Framework7 components
-import Picker from 'framework7-source/src/core/components/picker/picker'
+import Picker from 'framework7/components/picker/picker'
 import Sheet from 'framework7/components/sheet/sheet'
 import Dialog from 'framework7/components/dialog/dialog'
 import Panel from 'framework7/components/panel/panel'
