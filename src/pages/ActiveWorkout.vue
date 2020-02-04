@@ -125,6 +125,7 @@ export default {
     lastCompletedSetTime: null,
     workoutTimer: null,
     rest: false,
+    intervalAlertSound: null,
     restCountdown: false,
     numbersEntered: false,
     bumpSuggestions: {},
@@ -170,6 +171,10 @@ export default {
           })
         }
       })
+      // eslint-disable-next-line no-undef
+      this.intervalAlertSound = new Media('static/alert-short.wav')
+    } else {
+      this.intervalAlertSound = new Audio('static/alert-short.wav')
     }
   },
 
@@ -252,6 +257,9 @@ export default {
 
     onEndRest () {
       this.restCountdown = false
+      if (this.intervalAlertSound) {
+        this.intervalAlertSound.play({ numberOfLoops: 1 })
+      }
       if (this.numbersEntered) {
         this.startNextSet()
       }
