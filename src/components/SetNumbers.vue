@@ -1,7 +1,7 @@
 <template>
-  <span v-if="weight !== NaN || reps !== NaN">
-    <span v-if="weight > 0">{{ weight }} lbs. &times; </span>
-    <span>{{ reps }} rep{{ reps > 1 ? 's' : '' }}</span>
+  <span v-if="!isNaN(weight) || !isNaN(reps)">
+    <span v-if="weight > 0">{{ weight }}&nbsp;lbs.&nbsp;&times;&nbsp;</span>
+    <span>{{ reps }}&nbsp;rep{{ reps > 1 ? 's' : '' }}</span>
   </span>
 </template>
 

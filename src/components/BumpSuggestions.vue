@@ -2,42 +2,49 @@
   <div>
     <p>You surpassed your target in the following exercise{{ Object.keys(bumpSuggestions).length > 1 ? 's' : '' }}</p>
     <p>Select the set numbers to update the target</p>
-    <div
-      v-for="(exerciseNumbers, exerciseName, i) in bumpSuggestions"
-      :key="i"
-    >
+
+    <div class="data-table">
       <table>
-        <tr>
-          <th>{{ exerciseName }}</th>
-          <td>&nbsp;&nbsp;</td>
-          <td style="padding: 5px;">
-            <span>{{ displayAdj(exerciseName) }} Target:</span>
-            <set-numbers
-              :weight="exercise(exerciseName).weight"
-              :reps="exercise(exerciseName).reps"
-            />
-          </td>
-        </tr>
-        <tr
-          v-for="(set, j) in (exerciseName in oldNumbers ? [exerciseNumbers.sets[0]] : exerciseNumbers.sets)"
-          :key="j"
+        <template
+          v-for="(exerciseNumbers, exerciseName, i) in bumpSuggestions"
         >
-          <td>{{ buttonLabel(exerciseName, set.rounds) }}</td>
-          <td />
-          <td>
-            <f7-button
-              large
-              fill
-              raised
-              @click="updateTarget(exerciseName, buttonNum(exerciseName, set, 'weight'), buttonNum(exerciseName, set, 'reps'))"
+          <thead :key="i">
+            <tr>
+              <th class="exercise-name">
+                {{ exerciseName }}
+              </th>
+              <th>
+                <span>{{ displayAdj(exerciseName) }} Target: </span>
+                <set-numbers
+                  :weight="exercise(exerciseName).weight"
+                  :reps="exercise(exerciseName).reps"
+                  class="current-numbers"
+                />
+              </th>
+            </tr>
+          </thead>
+          <tbody :key="i">
+            <tr
+              v-for="(set, j) in (exerciseName in oldNumbers ? [exerciseNumbers.sets[0]] : exerciseNumbers.sets)"
+              :key="j"
             >
-              <set-numbers
-                :weight="buttonNum(exerciseName, set, 'weight')"
-                :reps="buttonNum(exerciseName, set, 'reps')"
-              />
-            </f7-button>
-          </td>
-        </tr>
+              <td>{{ buttonLabel(exerciseName, set.rounds) }}</td>
+              <td>
+                <f7-button
+                  fill
+                  raised
+                  :color="exerciseName in oldNumbers ? 'red' : ''"
+                  @click="updateTarget(exerciseName, buttonNum(exerciseName, set, 'weight'), buttonNum(exerciseName, set, 'reps'))"
+                >
+                  <set-numbers
+                    :weight="buttonNum(exerciseName, set, 'weight')"
+                    :reps="buttonNum(exerciseName, set, 'reps')"
+                  />
+                </f7-button>
+              </td>
+            </tr>
+          </tbody>
+        </template>
       </table>
     </div>
     <br>
@@ -82,7 +89,7 @@ export default {
       if (exerciseName in this.oldNumbers) {
         return 'Old Target:'
       }
-      return `Round ${rounds.length > 1 ? 's ' + rounds.join(' & ') : ' ' + rounds[0]}:`
+      return `Round${rounds.length > 1 ? 's ' + rounds.join(' & ') : ' ' + rounds[0]}:`
     },
     buttonNum (exerciseName, set, type) {
       return exerciseName in this.oldNumbers
@@ -109,6 +116,20 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  .data-table thead th {
+    font-size: 16px;
+    white-space: normal;
+  }
+  .exercise-name {
+    font-weight: bold;
+  }
+  .current-numbers {
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .data-table th, .data-table td {
+    padding-left: 12px;
+    padding-right: 0;
+  }
 </style>
