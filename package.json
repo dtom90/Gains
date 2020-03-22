@@ -140,6 +140,9 @@
     "webpack-dev-server": "^3.9.0"
   },
   "resolutions": {
+    "acorn" : ">=6.4.1",
+    "kind-of" :  ">=6.0.3",
+    "minimist" : ">=1.2.3",
     "tree-kill": ">=1.2.2"
   }
 }
