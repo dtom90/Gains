@@ -252,6 +252,9 @@ export default {
 
     onEndRest () {
       this.restCountdown = false
+      if (navigator) {
+        navigator.notification.beep(1)
+      }
       if (this.numbersEntered) {
         this.startNextSet()
       }
