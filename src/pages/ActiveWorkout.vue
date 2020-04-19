@@ -11,7 +11,7 @@
       <f7-link
         id="close-button"
         slot="left"
-        @click="exitWorkout"
+        @click="prematureExit"
       >
         <f7-icon material="close" />
       </f7-link>
@@ -44,11 +44,11 @@
           :workout-id="workout.id"
         />
         <f7-button
-          :href="`/workout/${workout.id}`"
           class="col big-button"
           large
           fill
           raised
+          @click="exitWorkout"
         >
           Finish Workout
         </f7-button>
@@ -284,14 +284,18 @@ export default {
       this.rest = false
     },
 
-    exitWorkout () {
+    prematureExit () {
       this.$f7.dialog.confirm(
         'Are you sure that you wish to exit the workout? All sets recorded so far will be saved',
         'Exit Workout',
         () => {
-          this.$f7router.navigate('/workout/' + this.workout.id)
+          this.exitWorkout()
         }
       )
+    },
+
+    exitWorkout () {
+      this.$f7router.back('/workout/' + this.workout.id)
     }
   }
 }
