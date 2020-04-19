@@ -171,6 +171,9 @@ export default {
         }
       })
     }
+    if (navigator) {
+      navigator.notification.beep(1)
+    }
   },
 
   methods: {
