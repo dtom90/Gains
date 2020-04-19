@@ -171,6 +171,9 @@ export default {
         }
       })
     }
+    if (window) {
+      window.plugins.insomnia.keepAwake()
+    }
     if (navigator) {
       navigator.notification.beep(1)
     }
@@ -295,6 +298,9 @@ export default {
     },
 
     exitWorkout () {
+      if (window) {
+        window.plugins.insomnia.allowSleepAgain()
+      }
       this.$f7router.back('/workout/' + this.workout.id)
     }
   }
