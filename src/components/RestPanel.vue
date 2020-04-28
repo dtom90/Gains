@@ -7,7 +7,7 @@
       Rest: {{ countdown }}
     </p>
     <div
-      class="display-flex justify-content-center large-text"
+      class="display-flex justify-content-space-between large-text"
       style="flex-wrap: wrap;"
     >
       <div
@@ -15,8 +15,15 @@
       >
         <span>Next:&nbsp;&nbsp;</span>
       </div>
-      <strong style="font-size: 36px; text-align: center;">{{ nextExerciseName }}</strong>
+      <strong style="font-size: 36px; text-align: center;">{{ nextExercise.name }}</strong>
       <span style="flex-basis: 68.2px;" />
+    </div>
+    <div class="display-flex justify-content-center">
+      <SetNumbers
+        :weight="nextExercise.weight"
+        :reps="nextExercise.reps"
+        class="large-text"
+      />
     </div>
     <f7-button
       class="col big-button"
@@ -33,12 +40,13 @@
 
 <script>
 import { f7Block, f7Button } from 'framework7-vue'
+import SetNumbers from './SetNumbers'
 
 export default {
   name: 'RestPanel',
-
-  components: { f7Block, f7Button },
-
+  
+  components: { SetNumbers, f7Block, f7Button },
+  
   props: {
     restTime: {
       type: Number,
@@ -46,26 +54,27 @@ export default {
     },
     onEndRest: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
-    nextExerciseName: {
-      type: String,
-      default: ''
+    nextExercise: {
+      type: Object,
+      default: () => ({})
     }
   },
-
+  
   data: () => ({
     timer: null,
     countdown: null
   }),
-
+  
   created () {
     this.countdown = this.restTime
     this.timer = setInterval(this.decrementCountdown, 1000)
   },
-
+  
   methods: {
-
+    
     // Countdown function during rest
     decrementCountdown () {
       if (this.countdown > 1) {
@@ -74,7 +83,7 @@ export default {
         this.endRest()
       }
     },
-
+    
     // Finish countdown, clear timer, call onEndRest
     endRest () {
       clearInterval(this.timer)
@@ -86,18 +95,20 @@ export default {
 </script>
 
 <style scoped>
-  p {
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
-  .big-button {
-    margin: 12px;
-  }
-  .rest-block {
-    background-color: darkred;
-    border-radius: 5px;
-    padding: 16px;
-    margin-top: 28px;
-    margin-bottom: 28px;
-  }
+p {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.big-button {
+  margin: 12px;
+}
+
+.rest-block {
+  background-color: darkred;
+  border-radius: 5px;
+  padding: 16px;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
 </style>
