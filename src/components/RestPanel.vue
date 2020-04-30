@@ -8,7 +8,6 @@
     </p>
     <div
       class="display-flex justify-content-space-between large-text"
-      style="flex-wrap: wrap;"
     >
       <div
         class="display-flex align-items-center"
