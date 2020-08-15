@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  test:
+  test-basic:
     docker:
       - image: cimg/node:lts
     steps:
@@ -13,10 +13,10 @@ jobs:
           command: yarn
       - run:
           name: Run Packages Audit, Lint, Unit Tests, and E2E Tests
-          command: yarn test
+          command: yarn test-basic
 
 workflows:
   version: 2
   test:
     jobs:
-      - test
+      - test-basic
