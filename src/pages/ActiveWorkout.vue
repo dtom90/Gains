@@ -11,12 +11,12 @@
       <f7-link
         id="close-button"
         slot="left"
-        @click="exitWorkout"
+        @click="prematureExit"
       >
         <f7-icon material="close" />
       </f7-link>
     </f7-navbar>
-
+    
     <!-- Toolbar -->
     <f7-toolbar
       v-show="portraitMode"
@@ -25,14 +25,14 @@
       class="no-hairline no-shadow"
       style="height: auto"
     >
-      <workout-progress
+      <WorkoutProgress
         :current-round="currentRound"
         :total-rounds="workout.rounds"
         :elapsed-workout-time="elapsedWorkoutTime"
         :workout-percentage="workoutPercentage"
       />
     </f7-toolbar>
-
+    
     <f7-block>
       <!-- Finish Workout Button -->
       <div
@@ -44,36 +44,36 @@
           :workout-id="workout.id"
         />
         <f7-button
-          :href="`/workout/${workout.id}`"
           class="col big-button"
           large
           fill
           raised
+          @click="exitWorkout"
         >
           Finish Workout
         </f7-button>
       </div>
-
+      
       <!-- Rest Panel -->
-      <rest-panel
+      <RestPanel
         v-if="rest && !done"
         v-show="numbersEntered"
         :rest-time="currentExercise.rest"
         :on-end-rest="onEndRest"
-        :next-exercise-name="nextExercise.name"
+        :next-exercise="nextExercise"
       />
-
+      
       <!-- Exercise Panel -->
-      <exercise-panel
+      <ExercisePanel
         :exercise="currentExercise"
         :rest="rest"
         :numbers-entered="numbersEntered"
         :on-end-set="onEndSet"
         :enter-numbers="enterNumbers"
       />
-
+      
       <!-- Workout Progress (Landscape Mode) -->
-      <workout-progress
+      <WorkoutProgress
         v-if="!portraitMode"
         :current-round="currentRound"
         :total-rounds="workout.rounds"
@@ -98,7 +98,7 @@ document.addEventListener('deviceready', function () {
 })
 
 export default {
-
+  
   components: {
     WorkoutProgress,
     ExercisePanel,
@@ -112,7 +112,7 @@ export default {
     f7Toolbar,
     f7Button
   },
-
+  
   data: () => ({
     portraitMode: true,
     workout: {},
@@ -130,15 +130,29 @@ export default {
     bumpSuggestions: {},
     done: false
   }),
-
+  
   computed: {
-    currentExercise () { return this.exerciseSequence[this.currentExerciseIndex] },
-    nextExercise () { return this.exerciseSequence[this.currentExerciseIndex + 1] },
-    workoutPercentage () { return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100) },
-    firstExerciseOfWorkout () { return this.currentRound === 1 && this.currentExerciseIndex === 0 },
-    firstExerciseOfRound () { return this.currentExerciseIndex % this.workout.exercises.length === 0 },
-    lastExerciseOfWorkout () { return this.currentExerciseIndex === this.exerciseSequence.length - 1 },
-    completed () { return this.$store.state.completed },
+    currentExercise () {
+      return this.exerciseSequence[this.currentExerciseIndex]
+    },
+    nextExercise () {
+      return this.exerciseSequence[this.currentExerciseIndex + 1]
+    },
+    workoutPercentage () {
+      return Math.round((this.currentExerciseIndex + (this.rest ? 1 : 0)) / this.exerciseSequence.length * 100)
+    },
+    firstExerciseOfWorkout () {
+      return this.currentRound === 1 && this.currentExerciseIndex === 0
+    },
+    firstExerciseOfRound () {
+      return this.currentExerciseIndex % this.workout.exercises.length === 0
+    },
+    lastExerciseOfWorkout () {
+      return this.currentExerciseIndex === this.exerciseSequence.length - 1
+    },
+    completed () {
+      return this.$store.state.completed
+    },
     elapsedWorkoutTime () {
       const ms = (this.endTime || this.now) - this.startTime
       let secs = Math.round(ms / 1000)
@@ -146,9 +160,11 @@ export default {
       secs -= (mins * 60)
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
     },
-    anyBumpSuggestions () { return Object.keys(this.bumpSuggestions).length > 0 }
+    anyBumpSuggestions () {
+      return Object.keys(this.bumpSuggestions).length > 0
+    }
   },
-
+  
   created: function () {
     this.workout = this.$store.state.workouts.filter(w => w.id === this.$f7route.params.workoutId)[0]
     this.exerciseSequence = []
@@ -158,7 +174,7 @@ export default {
     this.startTime = Date.now()
     this.now = Date.now()
     this.workoutTimer = setInterval(this.incrementTimeElapsed, 1000)
-
+    
     if (deviceready) {
       this.portraitMode = screen.orientation.type.includes('portrait')
       window.addEventListener('orientationchange', () => {
@@ -171,24 +187,30 @@ export default {
         }
       })
     }
+    if (window && window.plugins && window.plugins.insomnia) {
+      window.plugins.insomnia.keepAwake()
+    }
+    if (navigator && navigator.notification) {
+      navigator.notification.beep(1)
+    }
   },
-
+  
   methods: {
-
+    
     ...mapMutations([
       'startActiveWorkout',
       'addCompletedSet'
     ]),
-
+    
     // Handle completed set
     onEndSet () {
       // Record completed time of exercise
       this.lastCompletedSetTime = Date.now()
-
+      
       // Mark that we're resting
       this.rest = true
       this.restCountdown = true
-
+      
       // If this is the last exercise of the workout
       if (this.lastExerciseOfWorkout) {
         // Mark that we're done and record the end time of the workout
@@ -196,7 +218,7 @@ export default {
         this.endTime = Date.now()
       }
     },
-
+    
     enterNumbers (weight, reps) {
       // Initialize the workout record if this is the first exercise
       if (this.firstExerciseOfWorkout) {
@@ -205,7 +227,7 @@ export default {
           startTime: this.startTime
         })
       }
-
+      
       // Record completed set
       this.addCompletedSet({
         workoutId: this.workout.id,
@@ -216,7 +238,7 @@ export default {
         reps,
         completedTime: this.lastCompletedSetTime
       })
-
+      
       if (weight > this.currentExercise.weight || reps > this.currentExercise.reps) {
         if (this.currentExercise.name in this.bumpSuggestions) {
           const setIndex = this.bumpSuggestions[this.currentExercise.name].sets.findIndex(set => set.weight === weight && set.reps === reps)
@@ -243,23 +265,23 @@ export default {
           })
         }
       }
-
+      
       this.numbersEntered = true
       if (!this.restCountdown) {
         this.startNextSet()
       }
     },
-
+    
     onEndRest () {
       this.restCountdown = false
-      if (navigator) {
+      if (navigator && navigator.notification) {
         navigator.notification.beep(1)
       }
       if (this.numbersEntered) {
         this.startNextSet()
       }
     },
-
+    
     incrementTimeElapsed () {
       if (this.done) {
         clearInterval(this.workoutTimer)
@@ -267,35 +289,42 @@ export default {
         this.now = Date.now()
       }
     },
-
+    
     startNextSet () {
       this.numbersEntered = false
-
+      
       // Increment the currentExerciseIndex
       this.currentExerciseIndex++
       if (this.firstExerciseOfRound) {
         this.currentRound += 1
       }
-
+      
       // End the rest
       this.rest = false
     },
-
-    exitWorkout () {
+    
+    prematureExit () {
       this.$f7.dialog.confirm(
         'Are you sure that you wish to exit the workout? All sets recorded so far will be saved',
         'Exit Workout',
         () => {
-          this.$f7router.navigate('/workout/' + this.workout.id)
+          this.exitWorkout()
         }
       )
+    },
+    
+    exitWorkout () {
+      if (window && window.plugins) {
+        window.plugins.insomnia.allowSleepAgain()
+      }
+      this.$f7router.back('/workout/' + this.workout.id)
     }
   }
 }
 </script>
 
 <style scoped>
-  #active-workout {
-    background-color: #0A1344
-  }
+#active-workout {
+  background-color: #0A1344
+}
 </style>

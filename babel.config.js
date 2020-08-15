@@ -9,13 +9,13 @@ module.exports = {
           'Safari >= 11',
           'Chrome >= 49',
           'Firefox >= 31',
-          'Samsung >= 5',
-        ],
-      },
-    }],
+          'Samsung >= 5'
+        ]
+      }
+    }]
   ],
   plugins: [
     'transform-vue-jsx',
-    '@babel/plugin-syntax-dynamic-import',
-  ],
-};
+    '@babel/plugin-syntax-dynamic-import'
+  ]
+}

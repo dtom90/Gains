@@ -1,0 +1,22 @@
+version: 2
+
+jobs:
+  test-basic:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn
+      - run:
+          name: Run Packages Audit, Lint, Unit Tests, and E2E Tests
+          command: yarn test-basic
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test-basic

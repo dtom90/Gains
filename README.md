@@ -1,7 +1,8 @@
 # GainsTrack
 A workout tracker mobile app
 
-[![Build Status](https://travis-ci.org/dtom90/GainsTrack.svg?branch=master)](https://travis-ci.org/dtom90/GainsTrack)
+[![TravisCI](https://travis-ci.org/dtom90/GainsTrack.svg?branch=master)](https://travis-ci.org/dtom90/GainsTrack)
+[![CircleCI](https://circleci.com/gh/dtom90/GainsTrack.svg?style=svg)](https://circleci.com/gh/dtom90/GainsTrack)
 
 ## Purpose
 

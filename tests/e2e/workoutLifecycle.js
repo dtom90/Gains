@@ -7,7 +7,7 @@ const hostname = 'localhost'
 const port = process.env.PORT || '8080'
 const page = `http://${hostname}:${port}`
 
-fixture(`Workout Lifecycle`)
+fixture('Workout Lifecycle')
   .page(page)
   .beforeEach(expectHomePage)
 

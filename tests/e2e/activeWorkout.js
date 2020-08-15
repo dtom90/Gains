@@ -10,7 +10,7 @@ const hostname = 'localhost'
 const port = process.env.PORT || '8080'
 const page = `http://${hostname}:${port}`
 
-fixture(`Active Workout`)
+fixture('Active Workout')
   .page(page)
   .beforeEach(expectHomePage)
 

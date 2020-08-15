@@ -34,6 +34,10 @@ export default {
         // App routes
         routes: routes,
 
+        touch: {
+          fastClicks: true // Enable fast clicks
+        },
+
         // Cordova Statusbar settings
         statusbar: {
           iosOverlaysWebView: true,

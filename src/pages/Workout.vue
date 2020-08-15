@@ -11,8 +11,14 @@
     />
 
     <f7-block v-if="workout">
-      <f7-block-title>
-        Exercises:
+      <f7-block-title class="display-flex align-items-center">
+        <span style="flex: 1">Exercises:</span>
+        <f7-button
+          :href="`/editWorkout/${workout.id}`"
+          icon-f7="pencil"
+          fill
+          raised
+        />
       </f7-block-title>
 
       <f7-list>
@@ -48,16 +54,6 @@
       <f7-block-footer>
         <p>x {{ workout.rounds }} Round{{ workout.rounds === 1 ? '' : 's' }}</p>
       </f7-block-footer>
-      <br>
-      <f7-button
-        :href="`/editWorkout/${workout.id}`"
-        class="col"
-        large
-        fill
-        raised
-      >
-        Edit Workout
-      </f7-button>
     </f7-block>
 
     <f7-block v-if="workout">
