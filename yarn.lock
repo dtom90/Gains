@@ -3601,6 +3601,13 @@ dom7@^2.1.3:
   dependencies:
     ssr-window "^1.0.1"
 
+dom7@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/dom7/-/dom7-2.1.5.tgz#a79411017800b31d8400070cdaebbfc92c1f6377"
+  integrity sha512-xnhwVgyOh3eD++/XGtH+5qBwYTgCm0aW91GFgPJ3XG+jlsRLyJivnbP0QmUBFhI+Oaz9FV0s7cxgXHezwOEBYA==
+  dependencies:
+    ssr-window "^2.0.0"
+
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
@@ -4453,19 +4460,19 @@ framework7-icons@^3.0.0:
   resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-3.0.0.tgz#7545c16694b21d04168c81d1b34d36cbb0b510ae"
   integrity sha512-+mB8XhEAaIjjfRNlqW2tk7kYfPrQvDmDVpRFUjeUOiPDqqOybYmC9McvVPwwmqmob4nD3iZFWfs+rAMkVs5vPQ==
 
-framework7-vue@^5.5.3:
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-5.5.3.tgz#5f6190d4eb4b00be89411f90e2adf0f7f2e963b7"
-  integrity sha512-5u1zhCKYVC23Gb4g4N9D4VXvYvlV8vqRM67tFTcDS9JOz55TVops5lszJ+nTHpm3r4k49X52pBRtTkx3f6XA+A==
+framework7-vue@^5.7.10:
+  version "5.7.10"
+  resolved "https://registry.yarnpkg.com/framework7-vue/-/framework7-vue-5.7.10.tgz#ddf228759e0f804f1b21333d6b2f3fe8203a1a0a"
+  integrity sha512-7bO8qES2TMB9gkcFkudohSc2v/9A+yPG5zba8hkHDrpQvBK7hsojvmzSrTuxi5BZaoIP5XgcexlhmEZNP4xxqA==
 
-framework7@^5.5.3:
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/framework7/-/framework7-5.5.3.tgz#cfc7f9a99aaf2c0674b526b4393ee71606d61826"
-  integrity sha512-FtdLk0PJpOFfJdmHkK82Udbs+Bh47+yxyCh21JfcqMeH4qervmF/hPjD56DnmneVfnEm5xxQS+7FNfZV5mPr7Q==
+framework7@^5.7.10:
+  version "5.7.10"
+  resolved "https://registry.yarnpkg.com/framework7/-/framework7-5.7.10.tgz#f0bbdcef25956630c2cfac055e876c8d5b5e5d1a"
+  integrity sha512-OkKou1R4MrM5jL55XkhvJz0RO+FlNCnAgJTdSPXPSALVZt+30YAdJ0mPtcTfG9S7HHFYX6LzYodJf8HQfDsHhw==
   dependencies:
-    dom7 "^2.1.3"
+    dom7 "^2.1.5"
     path-to-regexp "^6.1.0"
-    ssr-window "^1.0.1"
+    ssr-window "^2.0.0"
     template7 "^1.4.2"
 
 fresh@0.5.2:
@@ -9132,6 +9139,11 @@ ssr-window@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-1.0.1.tgz#30752a6a4666e7767f0b7e6aa6fc2fdbd0d9b369"
   integrity sha512-dgFqB+f00LJTEgb6UXhx0h+SrG50LJvti2yMKMqAgzfUmUXZrLSv2fjULF7AWGwK25EXu8+smLR3jYsJQChPsg==
+
+ssr-window@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ssr-window/-/ssr-window-2.0.0.tgz#98c301aef99523317f8d69618f0010791096efc4"
+  integrity sha512-NXzN+/HPObKAx191H3zKlYomE5WrVIkoCB5IaSdvKokxTpjBdWfr0RaP+1Z5KOfDT0ZVz+2tdtiBkhsEQ9p+0A==
 
 ssri@^6.0.1:
   version "6.0.1"
