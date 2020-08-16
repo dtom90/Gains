@@ -45,3 +45,4 @@ www/
 # Cypress recordings
 cypress/screenshots
 cypress/videos
+cypress/results

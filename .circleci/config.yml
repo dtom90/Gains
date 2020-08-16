@@ -11,7 +11,19 @@ jobs:
           command: docker build -t gainstrack .
       - run:
           name: Run All Tests
-          command: docker run -it --rm gainstrack
+          command: |
+            docker run -it --rm \
+              -v $PWD/cypress/results:/app/cypress/results \
+              -v $PWD/cypress/videos:/app/cypress/videos \
+              -v $PWD/cypress/screenshots:/app/cypress/screenshots \
+              gainstrack \
+              sh -c 'yarn test:basic && yarn serve && yarn run cypress run --reporter junit --reporter-options "mochaFile=cypress/results/test-results.xml"'
+      - store_test_results:
+          path: cypress/results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
   test-ghpages:
     machine:
       docker_layer_caching: true
