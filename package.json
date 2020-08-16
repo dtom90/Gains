@@ -54,7 +54,7 @@
     "build:dev": "cross-env NODE_ENV=development node ./build/build.js",
     "build:prod": "cross-env NODE_ENV=production node ./build/build.js",
     "build:test": "LOAD_SAMPLE_STATE=true yarn run build:prod",
-    "serve": "node server.js",
+    "serve": "node server.js & wait-on http://localhost:8080",
     "ios:lr": "cd cordova && cordova run ios -- --lr",
     "ios:lr:test": "cross-env LOAD_SAMPLE_STATE=true yarn run ios:lr",
     "ios:build": "cd cordova && cordova build ios",
@@ -71,10 +71,9 @@
     "postinstall": "cpy './node_modules/framework7-icons/fonts/*.*' './src/fonts/'",
     "audit:packages": "yarn audit || test $? -eq 0",
     "lint": "./node_modules/.bin/eslint --no-fix --ext .js,.vue src tests",
-    "test:e2e": "testcafe chrome tests/e2e",
-    "test:e2e:prod": "testcafe chrome:headless tests/e2e -c 2 --app 'yarn run serve' --fixture 'Workout Lifecycle'",
-    "test-basic": "yarn audit:packages && yarn lint && yarn build:test",
-    "test": "yarn audit:packages && yarn lint && yarn build:test && yarn test:e2e:prod"
+    "test:e2e": "cypress run",
+    "test:basic": "yarn audit:packages && yarn lint && yarn build:test",
+    "test": "yarn audit:packages && yarn lint && yarn build:test && yarn serve && yarn test:e2e"
   },
   "browserslist": [
     "Android >= 7",
@@ -114,6 +113,7 @@
     "cypress": "^4.12.1",
     "eslint": "^6.7.2",
     "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-node": "^10.0.0",
@@ -138,6 +138,7 @@
     "vue-loader": "^15.7.2",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
+    "wait-on": "^5.2.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.11.0"

@@ -41,3 +41,7 @@ cordova/www/
 
 # Production build
 www/
+
+# Cypress recordings
+cypress/screenshots
+cypress/videos

@@ -1,11 +1,12 @@
 describe('New Workout', () => {
-  it('Should Create a Workout', () => {
+  beforeEach(() => {
     cy.visit('http://localhost:8080/')
     
     cy.get('a.button')
       .contains('New Workout')
       .click()
-    
+  })
+  it('should Create a Workout', () => {
     cy.get('.navbar .title')
       .contains('New Workout')
       .should('be.visible')
@@ -97,5 +98,36 @@ describe('New Workout', () => {
       .should('have.value', 3)
     
     cy.get('.button').contains('Create Workout').click()
+  
+    cy.get('.navbar .title')
+      .contains('My Workout')
+      .should('be.visible')
+  })
+  
+  it('should default blank rest to 0', () => {
+    cy.get('input[placeholder="Workout Name"]')
+      .type('My Workout')
+    
+    cy.get('.item-input .item-label').contains('Exercise 1')
+      .siblings('.item-input-wrap').find('input[type="text"]')
+      .type('Push-Ups')
+    
+    cy.get('.item-input .item-label').contains('Exercise 2')
+      .siblings('.item-input-wrap').find('input[type="text"]')
+      .type('Pull-Ups')
+    
+    cy.get('.item-input .item-label').contains('Rest:')
+      .siblings('.item-input-wrap').find('input[type="number"]')
+      .type('{selectall}{backspace}')
+      .should('have.value', 0)
+    
+    cy.get('.button').contains('Create Workout').click()
+    
+    cy.get('.navbar .title')
+      .contains('My Workout')
+      .should('be.visible')
+    
+    cy.get('.item-content').contains('Rest: 0 seconds')
+      .should('be.visible')
   })
 })
