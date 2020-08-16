@@ -1,3 +1,7 @@
+branches:
+  only:
+    - master
+
 language: node_js
 node_js: lts/*
 
@@ -5,11 +9,7 @@ cache: yarn
 
 script: yarn build:test
 
-after_script: cp -r .circleci www
-
-branches:
-  only:
-    - master
+before_deploy: cp -r .circleci www
 
 deploy:
   - provider: pages
