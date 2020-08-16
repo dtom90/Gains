@@ -1,6 +1,6 @@
 describe('Home Page', () => {
   it('Shows the home page', () => {
-    cy.visit('http://localhost:8080/')
+    cy.visit('/')
     
     cy.get('.navbar .title').contains('GainsTrack').should('be.visible')
     cy.contains('Workouts').should('be.visible')
