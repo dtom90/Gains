@@ -40,4 +40,8 @@ workflows:
       - test
   test-deployment:
     jobs:
-      - test-ghpages
+      - test-ghpages:
+          filters:
+            branches:
+              only:
+                - gh-pages
