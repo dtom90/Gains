@@ -37,7 +37,11 @@ workflows:
   version: 2
   test:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
   test-deployment:
     jobs:
       - test-ghpages:

@@ -9,7 +9,10 @@ cache: yarn
 
 script: yarn build:test
 
-before_deploy: cp -r .circleci www
+before_deploy:
+  - cp -r .circleci www
+  - cp -r cypress.json www
+  - cp -r cypress www
 
 deploy:
   - provider: pages
