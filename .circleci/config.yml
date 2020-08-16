@@ -1,9 +1,9 @@
 version: 2
 
 jobs:
-  test-basic:
+  test:
     docker:
-      - image: cimg/node:lts
+      - image: cypress/base:12
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
@@ -13,10 +13,10 @@ jobs:
           command: yarn
       - run:
           name: Run Packages Audit, Lint, Unit Tests, and E2E Tests
-          command: yarn test-basic
+          command: yarn test
 
 workflows:
   version: 2
   test:
     jobs:
-      - test-basic
+      - test
