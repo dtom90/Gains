@@ -148,9 +148,9 @@ describe('Active Workout', () => {
     
     cy.get('.block-title').contains('Last Workout:').should('be.visible')
       .parent('.block').find('p').contains(/\d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{2}:\d{2} [AP]M/).should('be.visible')
-      .parents('.block').find('li').contains('Push-ups Round 1 2 reps')
-      .parents('.block').find('li').contains('Pull-ups Round 1 15 lbs. × 7 reps')
-      .parents('.block').find('li').contains('Push-ups Round 2 2 reps')
-      .parents('.block').find('li').contains('Pull-ups Round 2 15 lbs. × 7 reps')
+      .parents('.block').find('li').contains('Push-ups Round 1 1 rep')
+      .parents('.block').find('li').contains('Pull-ups Round 1 15 lbs. × 6 reps')
+      .parents('.block').find('li').contains('Push-ups Round 2 1 rep')
+      .parents('.block').find('li').contains('Pull-ups Round 2 15 lbs. × 6 reps')
   })
 })

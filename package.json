@@ -54,7 +54,8 @@
     "build:dev": "cross-env NODE_ENV=development node ./build/build.js",
     "build:prod": "cross-env NODE_ENV=production node ./build/build.js",
     "build:test": "LOAD_SAMPLE_STATE=true yarn run build:prod",
-    "serve": "node server.js & wait-on http://localhost:8080",
+    "serve": "node server.js",
+    "wait": "wait-on http://localhost:8080",
     "ios:lr": "cd cordova && cordova run ios -- --lr",
     "ios:lr:test": "cross-env LOAD_SAMPLE_STATE=true yarn run ios:lr",
     "ios:build": "cd cordova && cordova build ios",
@@ -73,7 +74,7 @@
     "lint": "./node_modules/.bin/eslint --no-fix --ext .js,.vue src tests",
     "test:e2e": "cypress run",
     "test:basic": "yarn audit:packages && yarn lint && yarn build:test",
-    "test": "yarn audit:packages && yarn lint && yarn build:test && yarn serve && yarn test:e2e"
+    "test": "yarn audit:packages && yarn lint && yarn build:test && yarn serve & yarn wait && yarn test:e2e"
   },
   "browserslist": [
     "Android >= 7",

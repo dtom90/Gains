@@ -317,7 +317,7 @@ export default {
       if (window && window.plugins) {
         window.plugins.insomnia.allowSleepAgain()
       }
-      this.$f7router.back('/workout/' + this.workout.id)
+      this.$f7router.navigate('/workout/' + this.workout.id)
     }
   }
 }
