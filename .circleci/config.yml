@@ -15,11 +15,9 @@ jobs:
           name: Run Packages Audit, Lint, Unit Tests, and E2E Tests
           command: yarn test
   test-ghpages:
-    docker:
-      - image: cimg/base:stable
+    machine:
+      docker_layer_caching: true
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Pull Cypress Docker Image
           command: docker pull cypress/included:4.12.1
