@@ -2,18 +2,16 @@ version: 2
 
 jobs:
   test:
-    docker:
-      - image: cypress/base:12
+    machine:
+      docker_layer_caching: true
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
       - checkout
       - run:
-          name: Install Dependencies
-          command: yarn
+          name: Build Docker Image
+          command: docker build -t gainstrack .
       - run:
-          name: Run Packages Audit, Lint, Unit Tests, and E2E Tests
-          command: yarn test
+          name: Run All Tests
+          command: docker run -it --rm gainstrack
   test-ghpages:
     machine:
       docker_layer_caching: true
