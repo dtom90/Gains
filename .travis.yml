@@ -5,6 +5,12 @@ cache: yarn
 
 script: yarn build:test
 
+after_script: cp -r .circleci www
+
+branches:
+  only:
+    - master
+
 deploy:
   - provider: pages
     skip_cleanup: true
