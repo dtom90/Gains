@@ -17,7 +17,7 @@ jobs:
               -v $PWD/cypress/videos:/app/cypress/videos \
               -v $PWD/cypress/screenshots:/app/cypress/screenshots \
               gainstrack \
-              sh -c 'yarn test:basic && yarn serve && yarn run cypress run --reporter junit --reporter-options "mochaFile=cypress/results/test-results.xml"'
+              sh -c 'yarn test:basic && yarn serve & yarn wait && yarn run cypress run --reporter junit --reporter-options "mochaFile=cypress/results/test-results.xml"'
       - store_test_results:
           path: cypress/results
       - store_artifacts:
