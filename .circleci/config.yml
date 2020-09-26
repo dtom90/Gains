@@ -42,7 +42,13 @@ jobs:
               cypress/included:4.12.1 \
               --browser chrome \
               --config baseUrl=https://davidthomason.com/GainsTrack
-
+              --reporter junit --reporter-options "mochaFile=cypress/results/test-results.xml"
+      - store_test_results:
+          path: cypress/results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
 workflows:
   version: 2
   test:
