@@ -1,0 +1,67 @@
+version: 2
+
+jobs:
+  test:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Build Docker Image
+          command: docker build -t gainstrack .
+      - run:
+          name: Run All Tests
+          command: |
+            docker run -it --rm \
+              -v $PWD/cypress/results:/app/cypress/results \
+              -v $PWD/cypress/videos:/app/cypress/videos \
+              -v $PWD/cypress/screenshots:/app/cypress/screenshots \
+              gainstrack \
+              sh -c 'yarn test:basic && yarn serve & yarn wait && yarn run cypress run --reporter junit --reporter-options "mochaFile=cypress/results/test-results.xml"'
+      - store_test_results:
+          path: cypress/results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+  test-ghpages:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - run:
+          name: Pull Cypress Docker Image
+          command: docker pull cypress/included:4.12.1
+      - checkout
+      - run:
+          name: Test Cypress Against GitHub Pages
+          command: |
+            docker run -it \
+              -v $PWD/cypress.json:/e2e/cypress.json \
+              -v $PWD/cypress:/e2e/cypress \
+              -w /e2e \
+              cypress/included:4.12.1 \
+              --browser chrome \
+              --config baseUrl=https://davidthomason.com/GainsTrack
+              --reporter junit --reporter-options "mochaFile=cypress/results/test-results.xml"
+      - store_test_results:
+          path: cypress/results
+      - store_artifacts:
+          path: cypress/videos
+      - store_artifacts:
+          path: cypress/screenshots
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+  test-deployment:
+    jobs:
+      - test-ghpages:
+          filters:
+            branches:
+              only:
+                - gh-pages
